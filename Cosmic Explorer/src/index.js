@@ -7,6 +7,8 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+import routes from './routes.js';
+
 const app = express();
 
 // SET VIEW ENGINE
@@ -21,6 +23,8 @@ app.engine('hbs', engine({
 app.set('view engine', 'hbs');
 app.set('views', __dirname + '/views');
 
-app.get("/", (req, res) => { return res.send("Hello!") });
+// MIDDLEWARES
+app.use(express.static(__dirname + "/public"));
+app.use(routes);
 
 app.listen(3000);
