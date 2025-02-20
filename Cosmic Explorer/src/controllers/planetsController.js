@@ -17,4 +17,9 @@ planetsController.get("/:id/details", (req, res) => {
     return res.render("planet/details");
 });
 
+// EDIT
+planetsController.get("/:id/edit", (req, res) => {
+    return res.render("planet/edit");
+});
+
 export default planetsController;
