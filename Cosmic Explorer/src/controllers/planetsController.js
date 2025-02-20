@@ -22,4 +22,9 @@ planetsController.get("/:id/edit", (req, res) => {
     return res.render("planet/edit");
 });
 
+// SEARCH
+planetsController.get("/search", (req, res) => {
+    return res.render("planet/search");
+});
+
 export default planetsController;
