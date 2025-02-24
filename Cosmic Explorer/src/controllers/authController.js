@@ -53,4 +53,10 @@ authController.post("/login", isGuest, async (req, res) => {
     }
 });
 
+// LOGOUT
+authController.get("/logout", isUser, (req, res) => {
+    res.clearCookie(COOKIE_NAME);
+    return res.redirect("/");
+});
+
 export default authController;
