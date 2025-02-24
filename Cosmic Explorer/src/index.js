@@ -25,6 +25,7 @@ app.set('views', __dirname + '/views');
 
 // MIDDLEWARES
 app.use(express.static(__dirname + "/public"));
+app.use(express.urlencoded({extended:false}));
 app.use(routes);
 
 app.listen(3000);
