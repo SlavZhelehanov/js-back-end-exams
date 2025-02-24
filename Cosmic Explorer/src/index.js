@@ -8,6 +8,15 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 import routes from './routes.js';
+import { PORT } from './util/envConstants.js';
+import { dbConnection } from './util/dbConnection.js';
+import { auth } from './middlewares/authMiddleware.js';
+
+try {
+    await dbConnection();
+} catch (error) {
+    console.log(parseErrorMessage(error));
+}
 
 const app = express();
 
@@ -25,7 +34,9 @@ app.set('views', __dirname + '/views');
 
 // MIDDLEWARES
 app.use(express.static(__dirname + "/public"));
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(auth);
 app.use(routes);
 
-app.listen(3000);
+app.listen(PORT, console.log(`Server listening on: http://localhost:${PORT}/...`));
