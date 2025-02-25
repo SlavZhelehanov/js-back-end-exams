@@ -12,6 +12,7 @@ import routes from './routes.js';
 import { PORT } from './util/envConstants.js';
 import { dbConnection } from './util/dbConnection.js';
 import { auth } from './middlewares/authMiddleware.js';
+import parseErrorMessage from './util/parseErrorMessage.js';
 
 try {
     await dbConnection();
