@@ -1,5 +1,6 @@
 import express from 'express';
 import { engine } from 'express-handlebars';
+import cookieParser from "cookie-parser";
 
 // DEFINE __dirname
 import { dirname } from 'node:path';
