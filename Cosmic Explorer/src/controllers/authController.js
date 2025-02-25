@@ -5,9 +5,12 @@ const authController = Router();
 import authService from "../services/authService.js";
 import jwt from "../lib/jsonwebtoken.js";
 import { COOKIE_NAME, SUPER_SECRET } from "../util/envConstants.js";
+import { isGuest, isUser } from "../middlewares/authMiddleware.js";
+import parseErrorMessage from "../util/parseErrorMessage.js";
+
 
 // REGISTER
-authController.get("/register", (req, res) => {
+authController.get("/register", isGuest, (req, res) => {
     return res.render("auth/register");
 });
 authController.post("/register", isGuest, async (req, res) => {
@@ -24,12 +27,12 @@ authController.post("/register", isGuest, async (req, res) => {
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
         return res.redirect("/planets");
     } catch (error) {
-        return res.render("auth/register", { username, email, messages: [error] });
+        return res.render("auth/register", { username, email, messages: parseErrorMessage(error) });
     }
 });
 
 // LOGIN
-authController.get("/login", (req, res) => {
+authController.get("/login", isGuest, (req, res) => {
     return res.render("auth/login");
 });
 authController.post("/login", isGuest, async (req, res) => {
@@ -49,7 +52,7 @@ authController.post("/login", isGuest, async (req, res) => {
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
         return res.redirect("/planets");
     } catch (error) {
-        return res.render("auth/login", { username, messages: [error] });
+        return res.render("auth/login", { username, messages: parseErrorMessage(error) });
     }
 });
 

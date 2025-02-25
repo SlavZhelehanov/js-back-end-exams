@@ -19,3 +19,13 @@ export const auth = async (req, res, next) => {
     }
     return next();
 }
+
+export const isUser = (req, res, next) => {
+    if (req.user) return next();
+    return res.redirect("/auth/login");
+};
+
+export const isGuest = (req, res, next) => {
+    if (req.user) return res.redirect("/");
+    return next();
+};
