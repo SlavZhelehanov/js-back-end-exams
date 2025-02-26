@@ -68,6 +68,19 @@ planetsController.get("/:id/like", async (req, res) => {
     }
 });
 
+// DELETE
+planetsController.get("/:id/delete", async (req, res) => {
+    try {
+        const planet = await planetService.deleteOnePlanet(req.params.id, req.user.id);
+
+        if (!planet) return res.redirect("/404");
+
+        return res.redirect("/planets");
+    } catch (error) {
+        return res.render("planet/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // EDIT
 planetsController.get("/:id/edit", (req, res) => {
     return res.render("planet/edit");

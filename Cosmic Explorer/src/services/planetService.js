@@ -19,5 +19,8 @@ export default {
     },
     likeOnePlanet(_id, fanId) {
         return Planet.findOneAndUpdate({ _id }, { $push: { likedList: fanId } });
+    },
+    deleteOnePlanet(_id, owner) {
+        return Planet.findOneAndDelete({ _id, owner });
     }
 };
