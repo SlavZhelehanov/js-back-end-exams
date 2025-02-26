@@ -96,6 +96,25 @@ planetsController.get("/:id/edit", async (req, res) => {
         return res.redirect("/404");
     }
 });
+planetsController.post("/:id/edit", async (req, res) => {
+    const formData = req.body;
+    const types = setTypes(formData.type);
+    const rings = setRings(formData.rings);
+    const options = {};
+
+    try {
+        const planet = await planetService.findOnePlanet(req.params.id);
+
+        if (!planet) return res.redirect("/404");
+
+        for (const key in formData) if (formData[key] != planet[key]) options[key] = formData[key];
+
+        await planetService.updateOnePlanet({ _id: req.params.id, owner: req.user.id, options });
+        return res.redirect(`/planets/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("planet/edit", { messages: parseErrorMessage(error), planet: formData, rings, types });
+    }
+});
 
 // SEARCH
 planetsController.get("/search", (req, res) => {

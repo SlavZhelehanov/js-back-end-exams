@@ -22,5 +22,10 @@ export default {
     },
     deleteOnePlanet(_id, owner) {
         return Planet.findOneAndDelete({ _id, owner });
+    },
+    updateOnePlanet({ _id, owner, options }) {
+        for (const key in options) options[key] = options[key].trim();
+
+        return Planet.findOneAndUpdate({ _id, owner }, options, { runValidators: true });
     }
 };
