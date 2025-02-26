@@ -38,8 +38,19 @@ planetsController.post("/create", async (req, res) => {
 });
 
 // DETAILS
-planetsController.get("/:id/details", (req, res) => {
-    return res.render("planet/details");
+planetsController.get("/:id/details", async (req, res) => {
+    try {
+        const planet = await planetService.findOnePlanet(req.params.id);
+
+        if (!planet) return res.redirect("/404");
+
+        const isOwner = planet.owner.equals(req.user?.id);
+        const isLiked = req.user && !isOwner && planet.likedList.some(id => id.equals(req.user.id));
+
+        return res.render("planet/details", { planet, isOwner, isLiked });
+    } catch (error) {
+        return res.render("planet/details", { messages: parseErrorMessage(error) });
+    }
 });
 
 // EDIT

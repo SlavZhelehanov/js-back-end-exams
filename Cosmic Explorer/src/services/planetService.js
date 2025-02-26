@@ -13,5 +13,8 @@ export default {
         for (const key in planet) planet[key] = planet[key].trim();
 
         return Planet.create(planet);
+    },
+    findOnePlanet(id) {
+        return Planet.findById(id);
     }
 };
