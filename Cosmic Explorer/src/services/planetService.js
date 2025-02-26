@@ -16,5 +16,8 @@ export default {
     },
     findOnePlanet(id) {
         return Planet.findById(id);
+    },
+    likeOnePlanet(_id, fanId) {
+        return Planet.findOneAndUpdate({ _id }, { $push: { likedList: fanId } });
     }
 };
