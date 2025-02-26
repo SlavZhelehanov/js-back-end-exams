@@ -82,8 +82,19 @@ planetsController.get("/:id/delete", async (req, res) => {
 });
 
 // EDIT
-planetsController.get("/:id/edit", (req, res) => {
-    return res.render("planet/edit");
+planetsController.get("/:id/edit", async (req, res) => {
+    try {
+        const planet = await planetService.findOnePlanet(req.params.id);
+
+        if (!planet || !planet.owner.equals(req.user.id)) return res.redirect("/404");
+
+        const types = setTypes(planet.type);
+        const rings = setRings(planet.rings);
+
+        return res.render("planet/edit", { planet, types, rings });
+    } catch (error) {
+        return res.redirect("/404");
+    }
 });
 
 // SEARCH

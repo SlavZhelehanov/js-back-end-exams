@@ -2,38 +2,39 @@
 
 <form class="edit-form" method="post">
     <label for="name">Name of Planet:</label>
-    <input type="text" id="name" name="name" value="Planet X">
+    <input type="text" id="name" name="name" value="{{planet.name}}">
 
     <label for="age">Age (in billion years):</label>
-    <input type="number" id="age" name="" value="4.5">
+    <input type="number" id="age" name="age" value="{{planet.age}}">
 
     <label for="solarSystem">Solar System:</label>
-    <input type="text" id="solarSystem" name="" value="Alpha Centauri">
+    <input type="text" id="solarSystem" name="solarSystem" value="{{planet.solarSystem}}">
 
     <label for="type">Type:</label>
-    <select id="type" name="">
-        <option value="Inner" selected>Inner</option>
-        <option value="Outer">Outer</option>
-        <option value="Dwarf">Dwarf</option>
+    <select id="type" name="type">
+        {{#each types}}
+            <option value="{{value}}" {{selected}}>{{option}}</option>
+        {{/each}}
     </select>
 
     <label for="moons">Moons (count):</label>
-    <input type="number" id="moons" name="" value="2">
+    <input type="number" id="moons" name="moons" value="{{planet.moons}}">
 
     <label for="size">Size (in km):</label>
-    <input type="number" id="size" name="" value="12000">
+    <input type="number" id="size" name="size" value="{{planet.size}}">
 
     <label for="rings">Rings:</label>
-    <select id="rings" name="">
-        <option value="Yes">Yes</option>
-        <option value="No" selected>No</option>
+    <select id="rings" name="rings">
+        {{#each rings}}
+            <option value="{{value}}" {{selected}}>{{option}}</option>
+        {{/each}}
     </select>
 
     <label for="description">Description:</label>
-    <textarea id="description" name="" rows="4">Planet X is a rocky planet with 2 moons.</textarea>
+    <textarea id="description" name="description" rows="4">{{planet.description}}</textarea>
 
     <label for="image">Image URL:</label>
-    <input type="url" id="image" name="" value="https://example.com/planetX.jpg">
+    <input type="url" id="image" name="image" value="{{planet.image}}">
 
     <button type="submit">Save Changes</button>
 </form>
