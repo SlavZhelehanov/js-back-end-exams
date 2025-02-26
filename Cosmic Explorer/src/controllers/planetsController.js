@@ -117,8 +117,16 @@ planetsController.post("/:id/edit", async (req, res) => {
 });
 
 // SEARCH
-planetsController.get("/search", (req, res) => {
-    return res.render("planet/search");
+planetsController.get("/search", async (req, res) => {
+    const query = req.query;
+
+    try {
+        const planets = await planetService.getAllPlanets(query);
+
+        return res.render("planet/search", { planets, query });
+    } catch (error) {
+        return res.render("planet/search", { messages: parseErrorMessage(error), query });
+    }
 });
 
 export default planetsController;
