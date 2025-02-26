@@ -5,6 +5,8 @@ const planetsController = Router();
 import planetService from "../services/planetService.js";
 import parseErrorMessage from "../util/parseErrorMessage.js";
 import { setRings, setTypes } from "../util/setOptionsValues.js";
+import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
+import { isUser } from "../middlewares/authMiddleware.js";
 
 // CATALOG
 planetsController.get("/", async (req, res) => {
@@ -18,13 +20,13 @@ planetsController.get("/", async (req, res) => {
 });
 
 // CREATE
-planetsController.get("/create", (req, res) => {
+planetsController.get("/create", isUser, (req, res) => {
     const types = setTypes();
     const rings = setRings();
 
     return res.render("planet/create", { rings, types });
 });
-planetsController.post("/create", async (req, res) => {
+planetsController.post("/create", isUser, async (req, res) => {
     const planet = req.body;
     const types = setTypes(planet.type);
     const rings = setRings(planet.rings);
@@ -38,7 +40,7 @@ planetsController.post("/create", async (req, res) => {
 });
 
 // DETAILS
-planetsController.get("/:id/details", async (req, res) => {
+planetsController.get("/:id/details", isValidId, async (req, res) => {
     try {
         const planet = await planetService.findOnePlanet(req.params.id);
 
@@ -54,7 +56,7 @@ planetsController.get("/:id/details", async (req, res) => {
 });
 
 // LIKE
-planetsController.get("/:id/like", async (req, res) => {
+planetsController.get("/:id/like", isUser, isValidId, async (req, res) => {
     try {
         const planet = await planetService.findOnePlanet(req.params.id);
 
@@ -69,7 +71,7 @@ planetsController.get("/:id/like", async (req, res) => {
 });
 
 // DELETE
-planetsController.get("/:id/delete", async (req, res) => {
+planetsController.get("/:id/delete", isUser, isValidId, async (req, res) => {
     try {
         const planet = await planetService.deleteOnePlanet(req.params.id, req.user.id);
 
@@ -82,7 +84,7 @@ planetsController.get("/:id/delete", async (req, res) => {
 });
 
 // EDIT
-planetsController.get("/:id/edit", async (req, res) => {
+planetsController.get("/:id/edit", isUser, isValidId, async (req, res) => {
     try {
         const planet = await planetService.findOnePlanet(req.params.id);
 
@@ -96,7 +98,7 @@ planetsController.get("/:id/edit", async (req, res) => {
         return res.redirect("/404");
     }
 });
-planetsController.post("/:id/edit", async (req, res) => {
+planetsController.post("/:id/edit", isUser, isValidId, async (req, res) => {
     const formData = req.body;
     const types = setTypes(formData.type);
     const rings = setRings(formData.rings);
