@@ -4,6 +4,7 @@ const planetsController = Router();
 
 import planetService from "../services/planetService.js";
 import parseErrorMessage from "../util/parseErrorMessage.js";
+import { setRings, setTypes } from "../util/setOptionsValues.js";
 
 // CATALOG
 planetsController.get("/", async (req, res) => {
@@ -18,7 +19,22 @@ planetsController.get("/", async (req, res) => {
 
 // CREATE
 planetsController.get("/create", (req, res) => {
-    return res.render("planet/create");
+    const types = setTypes();
+    const rings = setRings();
+
+    return res.render("planet/create", { rings, types });
+});
+planetsController.post("/create", async (req, res) => {
+    const planet = req.body;
+    const types = setTypes(planet.type);
+    const rings = setRings(planet.rings);
+
+    try {
+        await planetService.createPlanet({ ...planet, owner: req.user.id });
+        return res.redirect("/planets");
+    } catch (error) {
+        return res.render("planet/create", { messages: parseErrorMessage(error), planet, rings, types });
+    }
 });
 
 // DETAILS

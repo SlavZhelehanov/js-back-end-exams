@@ -8,5 +8,10 @@ export default {
         } : {};
 
         return Planet.find(search, "name solarSystem image");
+    },
+    createPlanet(planet) {
+        for (const key in planet) planet[key] = planet[key].trim();
+
+        return Planet.create(planet);
     }
 };
