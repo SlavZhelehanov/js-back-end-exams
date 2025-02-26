@@ -2,9 +2,18 @@ import { Router } from "express";
 
 const planetsController = Router();
 
+import planetService from "../services/planetService.js";
+import parseErrorMessage from "../util/parseErrorMessage.js";
+
 // CATALOG
-planetsController.get("/", (req, res) => {
-    return res.render("planet/catalog");
+planetsController.get("/", async (req, res) => {
+    try {
+        const planets = await planetService.getAllPlanets();
+
+        return res.render("planet/catalog", { planets });
+    } catch (error) {
+        return res.render("planet/catalog", { messages: parseErrorMessage(error) });
+    }
 });
 
 // CREATE
