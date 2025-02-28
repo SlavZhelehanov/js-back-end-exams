@@ -10,6 +10,8 @@ routes.use("/", homeController);
 
 routes.use("/auth", authController);
 
+routes.use("/disasters", disasterController);
+
 routes.all("*", (req, res) => { return res.render("404") });
 
 export default routes;
