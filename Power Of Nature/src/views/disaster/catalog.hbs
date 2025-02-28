@@ -1,0 +1,16 @@
+{{setPageTitle "Catalog Page"}}
+
+<section class="catalog">
+    <h1 id="title"><span>Power of Nature</span></h1>
+    {{#if disasters}}
+        <div class="item-list">
+            {{#each disasters}}
+                {{> disaster}}
+            {{/each}}
+        </div>
+    {{else}}
+        <div class="no-event">
+            <p>There are no events found yet!</p>
+        </div>
+    {{/if}}
+</section>
