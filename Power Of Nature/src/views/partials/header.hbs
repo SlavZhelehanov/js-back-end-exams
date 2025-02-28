@@ -1,0 +1,16 @@
+<header class="header">
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/disasters/search">Search</a></li>
+            <li><a href="/disasters">Power of Nature</a></li>
+            {{#if user}}
+                <li><a href="/disasters/create">Create Event</a></li>
+                <li><a href="/auth/logout">Logout</a></li>
+            {{else}}  
+                <li><a href="/auth/login">Login</a></li>
+                <li><a href="/auth/register">Register</a></li>
+            {{/if}}
+        </ul>
+    </nav>
+</header>
