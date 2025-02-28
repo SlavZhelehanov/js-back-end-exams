@@ -1,0 +1,26 @@
+{{setPageTitle "Create Page"}}
+
+<section id="create-container">
+    <div class="create-container-info">
+        <h1>Create Event</h1>
+        <form method="post">
+            <label>Name of the Disaster:</label>
+            <input type="text" id="name" name="nameOfTheDisaster" placeholder="..." value="{{disaster.nameOfTheDisaster}}">
+            <label>Type of Disaster:</label>
+            <select id="type" name="typeOfDisaster">
+                {{#each types}}
+                    <option value="{{label}}" {{selected}}>{{value}}</option>
+                {{/each}}
+            </select>
+            <label>Year of the Event:</label>
+            <input type="number" id="year" name="yearOfTheEvenet" placeholder="..." value="{{disaster.yearOfTheEvenet}}">
+            <label>Location:</label>
+            <input type="text" id="location" name="location" placeholder="..." value="{{disaster.location}}">
+            <label>Image:</label>
+            <input type="text" id="image" name="image" placeholder="http://..." value="{{disaster.image}}">
+            <label>Description:</label>
+            <textarea id="description" name="description" placeholder="...">{{disaster.description}}</textarea>
+            <input type="submit" id="btn" value="Submit"></input>
+        </form>
+    </div>
+</section>
