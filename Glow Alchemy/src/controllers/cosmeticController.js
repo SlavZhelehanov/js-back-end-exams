@@ -15,6 +15,9 @@ cosmeticController.get("/create", (req, res) => {
 });
 
 // DETAILS
+cosmeticController.get("/:id/details", (req, res) => {
+    return res.render("cosmetics/details");
+});
 
 // EDIT
 
