@@ -20,6 +20,9 @@ cosmeticController.get("/:id/details", (req, res) => {
 });
 
 // EDIT
+cosmeticController.get("/:id/edit", (req, res) => {
+    return res.render("cosmetics/edit");
+});
 
 // SEARCH
 
