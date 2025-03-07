@@ -25,5 +25,8 @@ cosmeticController.get("/:id/edit", (req, res) => {
 });
 
 // SEARCH
+cosmeticController.get("/search", (req, res) => {
+    return res.render("cosmetics/search");
+});
 
 export default cosmeticController;
