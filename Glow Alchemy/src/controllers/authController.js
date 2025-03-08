@@ -12,7 +12,7 @@ const authController = Router();
 function generateToken(user) {
     const payload = {
         id: user._id,
-        username: user.username,
+        name: user.name,
         email: user.email
     }
     return jwt.sign(payload, SUPER_SECRET, { expiresIn: "2h" });
@@ -24,15 +24,15 @@ authController.get("/register", isGuest, (req, res) => {
 });
 
 authController.post("/register", isGuest, async (req, res) => {
-    const { username, email, password, rePassword } = req.body;
+    const { name, email, password, rePassword } = req.body;
 
     try {
-        const user = await authService.register({ username, email, password, rePassword });
+        const user = await authService.register({ name, email, password, rePassword });
         const token = generateToken(user);
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
         return res.redirect("/");
     } catch (error) {
-        return res.render("auth/register", { username, email, messages: parseErrorMessage(error) });
+        return res.render("auth/register", { name, email, messages: parseErrorMessage(error) });
     }
 });
 

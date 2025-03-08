@@ -4,10 +4,13 @@
             <li><a href="/">Home</a></li>
             <li><a href="/cosmetics">Products</a></li>
             <li><a href="/cosmetics/search">Search</a></li>
-            <li><a href="/cosmetics/create">Add Product</a></li>
-            <li><a href="/auth/login">Login</a></li>
-            <li><a href="/auth/register">Register</a></li>
-            <li><a href="/auth/logout">Logout</a></li>
+            {{#if user}}
+                <li><a href="/cosmetics/create">Add Product</a></li>
+                <li><a href="/auth/logout">Logout</a></li>
+            {{else}}
+                <li><a href="/auth/login">Login</a></li>
+                <li><a href="/auth/register">Register</a></li>
+            {{/if}}
         </ul>
     </nav>
 </header>

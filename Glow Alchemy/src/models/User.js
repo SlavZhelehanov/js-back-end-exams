@@ -2,10 +2,11 @@ import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 
 const userSchema = new Schema({
-    username: {
+    name: {
         type: String,
-        required: [true, "The username field can't be empty"],
-        minLength: [2, "The username should be at least 2 characters long"]
+        required: [true, "The name field can't be empty"],
+        minLength: [2, "The name should be at least 2 characters long"],
+        maxLength: [20, "The name should be max 20 characters long"]
     },
     email: {
         type: String,
