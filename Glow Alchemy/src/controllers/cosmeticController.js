@@ -1,12 +1,21 @@
 import { Router } from "express";
 
+import cosmeticService from "../services/cosmeticService.js";
+import { parseErrorMessage } from "../util/parseErrorMessage.js";
 
 const cosmeticController = Router();
 
 
 // CATALOG
-cosmeticController.get("/", (req, res) => {
-    return res.render("cosmetics/catalog");
+cosmeticController.get("/", async (req, res) => {
+    try {
+        const cosmetics = await cosmeticService.getAllcosmetics();
+        return console.log(cosmetics);
+        
+        return res.render("cosmetic/catalog", { cosmetics });
+    } catch (error) {
+        return res.render("cosmetics/catalog", { messages: parseErrorMessage(error) });
+    }
 });
 
 // CREATE
