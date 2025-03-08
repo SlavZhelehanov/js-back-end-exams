@@ -6,5 +6,9 @@ export default {
     },
     getAllCosmetics() {
         return Cosmetic.find({}, "name image skin");
+    },
+    createCosmetic(cosmeticData) {
+        for (const key in cosmeticData) cosmeticData[key] = cosmeticData[key].trim();
+        return Cosmetic.create(cosmeticData);
     }
 };

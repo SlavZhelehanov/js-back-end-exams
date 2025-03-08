@@ -9,10 +9,9 @@ const cosmeticController = Router();
 // CATALOG
 cosmeticController.get("/", async (req, res) => {
     try {
-        const cosmetics = await cosmeticService.getAllcosmetics();
-        return console.log(cosmetics);
-        
-        return res.render("cosmetic/catalog", { cosmetics });
+        const cosmetics = await cosmeticService.getAllCosmetics();
+
+        return res.render("cosmetics/catalog", { cosmetics });
     } catch (error) {
         return res.render("cosmetics/catalog", { messages: parseErrorMessage(error) });
     }
@@ -21,6 +20,16 @@ cosmeticController.get("/", async (req, res) => {
 // CREATE
 cosmeticController.get("/create", (req, res) => {
     return res.render("cosmetics/create");
+});
+cosmeticController.post("/create", async (req, res) => {
+    const { name, skin, description, ingredients, benefits, price, image } = req.body;
+
+    try {
+        await cosmeticService.createCosmetic({ name, skin, description, ingredients, benefits, price, image, owner: req.user.id });
+        return res.redirect("/cosmetics");
+    } catch (error) {
+        return res.render("cosmetics/create", { messages: parseErrorMessage(error), cosmetic: { name, skin, description, ingredients, benefits, price, image } });
+    }
 });
 
 // DETAILS
