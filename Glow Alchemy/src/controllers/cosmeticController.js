@@ -43,8 +43,25 @@ cosmeticController.get("/:id/details", isValidId, async (req, res) => {
 
         const isOwner = cosmetic.owner.equals(req.user?.id);
         const isRecommend = req.user && !isOwner && cosmetic.recommendList.some(id => id.equals(req.user.id));
-        
+
         return res.render("cosmetics/details", { cosmetic, isOwner, isRecommend });
+    } catch (error) {
+        return res.render("cosmetics/details", { messages: parseErrorMessage(error) });
+    }
+});
+
+// RECOMMEND
+cosmeticController.get("/:id/recommend", isUser, isValidId, async (req, res) => {
+    try {
+        const cosmetic = await cosmeticService.getOneCosmetic({ _id: req.params.id });
+
+        if (!cosmetic) return res.redirect("/404");
+
+        if (!req.user || cosmetic.owner.equals(req.user.id) || cosmetic.recommendList.some(id => id.equals(req.user.id))) return res.redirect("/404");
+
+        await cosmeticService.recommendCosmetic(req.params.id, req.user.id);
+
+        return res.redirect(`/cosmetics/${req.params.id}/details`);
     } catch (error) {
         return res.render("cosmetics/details", { messages: parseErrorMessage(error) });
     }

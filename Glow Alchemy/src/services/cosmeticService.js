@@ -13,5 +13,8 @@ export default {
     },
     getOneCosmetic(params) {
         return Cosmetic.findOne(params);
+    },
+    recommendCosmetic(cosmeticId, newFanId) {
+        return Cosmetic.findByIdAndUpdate(cosmeticId, { $push: { recommendList: newFanId } }, { new: true });
     }
 };
