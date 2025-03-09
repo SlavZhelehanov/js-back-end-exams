@@ -16,5 +16,8 @@ export default {
     },
     recommendCosmetic(cosmeticId, newFanId) {
         return Cosmetic.findByIdAndUpdate(cosmeticId, { $push: { recommendList: newFanId } }, { new: true });
+    },
+    updateOneCosmetic(_id, owner, options) {
+        return Cosmetic.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
     }
 };

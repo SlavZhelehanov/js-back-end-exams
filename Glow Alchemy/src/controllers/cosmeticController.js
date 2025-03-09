@@ -68,8 +68,15 @@ cosmeticController.get("/:id/recommend", isUser, isValidId, async (req, res) => 
 });
 
 // EDIT
-cosmeticController.get("/:id/edit", (req, res) => {
-    return res.render("cosmetics/edit");
+cosmeticController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const cosmetic = await cosmeticService.getOneCosmetic({ _id: req.params.id, owner: req.user?.id });
+
+        if (!cosmetic) return res.redirect("/404");
+        return res.render("cosmetics/edit", { cosmetic });
+    } catch (error) {
+        return res.render("cosmetics/edit", { messages: parseErrorMessage(error) });
+    }
 });
 
 // SEARCH
