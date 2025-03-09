@@ -10,5 +10,8 @@ export default {
     createCosmetic(cosmeticData) {
         for (const key in cosmeticData) cosmeticData[key] = cosmeticData[key].trim();
         return Cosmetic.create(cosmeticData);
+    },
+    getOneCosmetic(params) {
+        return Cosmetic.findOne(params);
     }
 };

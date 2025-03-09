@@ -2,6 +2,8 @@ import { Router } from "express";
 
 import cosmeticService from "../services/cosmeticService.js";
 import { parseErrorMessage } from "../util/parseErrorMessage.js";
+import { isUser } from "../middlewares/authMiddleware.js";
+import { isValidId } from "../middlewares/utlParamsMiddleware.js";
 
 const cosmeticController = Router();
 
@@ -18,10 +20,10 @@ cosmeticController.get("/", async (req, res) => {
 });
 
 // CREATE
-cosmeticController.get("/create", (req, res) => {
+cosmeticController.get("/create", isUser, (req, res) => {
     return res.render("cosmetics/create");
 });
-cosmeticController.post("/create", async (req, res) => {
+cosmeticController.post("/create", isUser, async (req, res) => {
     const { name, skin, description, ingredients, benefits, price, image } = req.body;
 
     try {
@@ -33,8 +35,19 @@ cosmeticController.post("/create", async (req, res) => {
 });
 
 // DETAILS
-cosmeticController.get("/:id/details", (req, res) => {
-    return res.render("cosmetics/details");
+cosmeticController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const cosmetic = await cosmeticService.getOneCosmetic({ _id: req.params.id });
+
+        if (!cosmetic) return res.redirect("/404");
+
+        const isOwner = cosmetic.owner.equals(req.user?.id);
+        const isRecommend = req.user && !isOwner && cosmetic.recommendList.some(id => id.equals(req.user.id));
+        
+        return res.render("cosmetics/details", { cosmetic, isOwner, isRecommend });
+    } catch (error) {
+        return res.render("cosmetics/details", { messages: parseErrorMessage(error) });
+    }
 });
 
 // EDIT
