@@ -4,6 +4,7 @@ import cosmeticService from "../services/cosmeticService.js";
 import { parseErrorMessage } from "../util/parseErrorMessage.js";
 import { isUser } from "../middlewares/authMiddleware.js";
 import { isValidId } from "../middlewares/utlParamsMiddleware.js";
+import { validateQuery } from "../util/validateUrls.js";
 
 const cosmeticController = Router();
 
@@ -82,9 +83,9 @@ cosmeticController.post("/:id/edit", isUser, isValidId, async (req, res) => {
     const formData = req.body;
 
     try {
-        const cosmetic = await cosmeticService.getOneCosmetic({ _id: req.params.id, owner: req.user?.id });        
+        const cosmetic = await cosmeticService.getOneCosmetic({ _id: req.params.id, owner: req.user?.id });
 
-        if (!cosmetic) return res.redirect("/404");        
+        if (!cosmetic) return res.redirect("/404");
 
         await cosmeticService.updateOneCosmetic(req.params.id, req.user.id, cosmetic, formData);
 
@@ -108,8 +109,16 @@ cosmeticController.get("/:id/delete", isUser, isValidId, async (req, res) => {
 });
 
 // SEARCH
-cosmeticController.get("/search", (req, res) => {
-    return res.render("cosmetics/search");
+cosmeticController.get("/search", async (req, res) => {
+    const search = req.query;
+
+    try {
+        const cosmetics = await cosmeticService.getAllCosmetics(search);
+
+        return res.render("cosmetics/search", { cosmetics, search: search?.search?.trim() })
+    } catch (error) {
+        return res.render("cosmetics/search", { messages: parseErrorMessage(error), search: search?.search?.trim() });
+    }
 });
 
 export default cosmeticController;

@@ -4,8 +4,12 @@ export default {
     getLastTreeAddedCosmetics() {
         return Cosmetic.find({}, "name image skin").sort({ createdAt: -1 }).limit(3);
     },
-    getAllCosmetics() {
-        return Cosmetic.find({}, "name image skin");
+    getAllCosmetics(filter = null) {
+        const search = 0 < filter?.search?.trim().length ? {
+            name: { $regex: filter["search"].trim(), $options: "i" }
+        } : {};
+
+        return Cosmetic.find(search, "name image skin");
     },
     createCosmetic(cosmeticData) {
         for (const key in cosmeticData) cosmeticData[key] = cosmeticData[key].trim();
