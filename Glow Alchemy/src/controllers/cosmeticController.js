@@ -94,6 +94,19 @@ cosmeticController.post("/:id/edit", isUser, isValidId, async (req, res) => {
     }
 });
 
+// DELETE
+cosmeticController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const query = await cosmeticService.deleteOneCosmetic(req.params.id, req.user.id);
+
+        if (!query) return res.redirect("/404");
+
+        return res.redirect("/cosmetics");
+    } catch (error) {
+        return res.render("cosmetics/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // SEARCH
 cosmeticController.get("/search", (req, res) => {
     return res.render("cosmetics/search");

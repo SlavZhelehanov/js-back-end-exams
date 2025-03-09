@@ -24,5 +24,8 @@ export default {
 
         if (0 < Object.keys(options).length) return Cosmetic.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
         return new Promise((resolve, reject) => { setTimeout(() => resolve("done"), 1) });
+    },
+    deleteOneCosmetic(_id, owner) {
+        return Cosmetic.findOneAndDelete({ _id, owner });
     }
 };
