@@ -36,23 +36,23 @@ authController.get("/login", isGuest, (req, res) => {
     return res.render("auth/login");
 });
 authController.post("/login", isGuest, async (req, res) => {
-    const { name, password } = req.body;
+    const { email, password } = req.body;
 
     try {
-        let user = await authService.findOneUser({ name });
+        let user = await authService.findOneUser({ email });
 
-        if (!user) throw ["Wrong name or password!"];
+        if (!user) throw ["Wrong email or password!"];
 
         const isPasswordMatch = await user.comparePassword(password);
 
-        if (!isPasswordMatch) throw ["Wrong name or password!"];
+        if (!isPasswordMatch) throw ["Wrong email or password!"];
 
         const token = await jwt.sign({ id: user.id }, SUPER_SECRET, { expiresIn: "2h" });
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
         return res.redirect("/planets");
     } catch (error) {
-        return res.render("auth/login", { name, messages: parseErrorMessage(error) });
+        return res.render("auth/login", { email, messages: parseErrorMessage(error) });
     }
 });
 
