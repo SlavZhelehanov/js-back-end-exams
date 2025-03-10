@@ -4,10 +4,13 @@ export default {
     findOneUser(params) {
         return User.findOne(params);
     },
-    createUser({ username, email, password, rePassword }) {
-        username = username.trim();
+    createUser({ name, email, password, rePassword }) {
+        name = name.trim();
         email = email.trim();
         password = password.trim();
-        return User.create({ username, email, password, rePassword });
+
+        if(password != rePassword) throw ["The repeat password should be equal to the password"];
+        
+        return User.create({ name, email, password, rePassword });
     }
 };

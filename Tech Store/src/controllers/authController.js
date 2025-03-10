@@ -14,20 +14,20 @@ authController.get("/register", isGuest, (req, res) => {
     return res.render("auth/register");
 });
 authController.post("/register", isGuest, async (req, res) => {
-    const { username, email, password, rePassword } = req.body;
+    const { name, email, password, rePassword } = req.body;
 
     try {
-        let user = await authService.findOneUser({ username });
+        let user = await authService.findOneUser({ email });
 
-        if (user) throw ["This username is already registered"];
+        if (user) throw ["This email is already registered"];
 
-        user = await authService.createUser({ username, email, password, rePassword });
+        user = await authService.createUser({ name, email, password, rePassword });
         const token = await jwt.sign({ id: user.id }, SUPER_SECRET, { expiresIn: "2h" });
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
-        return res.redirect("/planets");
+        return res.redirect("/devices");
     } catch (error) {
-        return res.render("auth/register", { username, email, messages: parseErrorMessage(error) });
+        return res.render("auth/register", { name, email, messages: parseErrorMessage(error) });
     }
 });
 
@@ -36,23 +36,23 @@ authController.get("/login", isGuest, (req, res) => {
     return res.render("auth/login");
 });
 authController.post("/login", isGuest, async (req, res) => {
-    const { username, password } = req.body;
+    const { name, password } = req.body;
 
     try {
-        let user = await authService.findOneUser({ username });
+        let user = await authService.findOneUser({ name });
 
-        if (!user) throw ["Wrong username or password!"];
+        if (!user) throw ["Wrong name or password!"];
 
         const isPasswordMatch = await user.comparePassword(password);
 
-        if (!isPasswordMatch) throw ["Wrong username or password!"];
+        if (!isPasswordMatch) throw ["Wrong name or password!"];
 
         const token = await jwt.sign({ id: user.id }, SUPER_SECRET, { expiresIn: "2h" });
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
         return res.redirect("/planets");
     } catch (error) {
-        return res.render("auth/login", { username, messages: parseErrorMessage(error) });
+        return res.render("auth/login", { name, messages: parseErrorMessage(error) });
     }
 });
 
