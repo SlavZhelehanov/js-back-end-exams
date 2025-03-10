@@ -4,10 +4,8 @@ import cosmeticService from "../services/cosmeticService.js";
 import { parseErrorMessage } from "../util/parseErrorMessage.js";
 import { isUser } from "../middlewares/authMiddleware.js";
 import { isValidId } from "../middlewares/utlParamsMiddleware.js";
-import { validateQuery } from "../util/validateUrls.js";
 
 const cosmeticController = Router();
-
 
 // CATALOG
 cosmeticController.get("/", async (req, res) => {

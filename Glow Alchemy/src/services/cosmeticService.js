@@ -26,8 +26,8 @@ export default {
 
         for (const key in formData) if (formData[key] != cosmetic[key]) options[key] = formData[key].trim();
 
-        if (0 < Object.keys(options).length) return Cosmetic.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
-        return new Promise((resolve, reject) => { setTimeout(() => resolve("done"), 1) });
+        if (0 === Object.keys(options).length) return;
+        return Cosmetic.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
     },
     deleteOneCosmetic(_id, owner) {
         return Cosmetic.findOneAndDelete({ _id, owner });
