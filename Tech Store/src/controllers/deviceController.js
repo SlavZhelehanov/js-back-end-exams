@@ -50,8 +50,30 @@ deviceController.get("/:id/details", isValidId, async (req, res) => {
 });
 
 // EDIT
-deviceController.get("/:id/edit", isUser, (req, res) => {
-    return res.render("device/edit");
+deviceController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const device = await deviceService.getOneDevice({ _id: req.params.id, owner: req.user?.id });
+
+        if (!device) return res.redirect("/404");
+        return res.render("device/edit", { device });
+    } catch (error) {
+        return res.render("device/edit", { messages: parseErrorMessage(error) });
+    }
+});
+deviceController.post("/:id/edit", isUser, isValidId, async (req, res) => {
+    const formData = req.body;
+
+    try {
+        const device = await deviceService.getOneDevice({ _id: req.params.id, owner: req.user?.id });
+
+        if (!device) return res.redirect("/404");
+
+        await deviceService.updateOneDevice(req.params.id, req.user.id, device, formData);
+
+        return res.redirect(`/devices/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("device/edit", { device: formData, messages: parseErrorMessage(error) });
+    }
 });
 
 // PROFILE

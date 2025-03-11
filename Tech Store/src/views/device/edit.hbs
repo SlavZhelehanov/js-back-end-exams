@@ -9,55 +9,54 @@
 
 <section class="edit-form">
     <div class="container">
-        <form action="#" method="">
+        <form method="post">
             <div class="form-group">
                 <label for="brand">Brand:</label>
-                <input type="text" id="brand" name="" value="Acer">
+                <input type="text" id="brand" name="brand" value="{{device.brand}}">
             </div>
             <div class="form-group">
                 <label for="model">Model:</label>
-                <input type="text" id="model" name="" value="Nitro 5 AN515-58">
+                <input type="text" id="model" name="model" value="{{device.model}}">
             </div>
             <div class="form-group">
                 <label for="hard-disk">Hard Disk:</label>
-                <input type="text" id="hard-disk" name="" value="512GB SSD">
+                <input type="text" id="hard-disk" name="hdd" value="{{device.hdd}}">
             </div>
             <div class="form-group">
                 <label for="screen-size">Screen Size:</label>
-                <input type="text" id="screen-size" name="" value="15.6 inch">
+                <input type="text" id="screen-size" name="screenSize" value="{{device.screenSize}}">
             </div>
             <div class="form-group">
                 <label for="ram">RAM:</label>
-                <input type="text" id="ram" name="" value="16GB">
+                <input type="text" id="ram" name="ram" value="{{device.ram}}">
             </div>
             <div class="form-group">
                 <label for="operating-system">Operating System:</label>
-                <input type="text" id="operating-system" name="" value="Windows">
+                <input type="text" id="operating-system" name="os" value="{{device.os}}">
             </div>
             <div class="form-group">
                 <label for="cpu">CPU:</label>
-                <input type="text" id="cpu" name="" value="Intel Core i5-12450H">
+                <input type="text" id="cpu" name="cpu" value="{{device.cpu}}">
             </div>
             <div class="form-group">
                 <label for="gpu">GPU:</label>
-                <input type="text" id="gpu" name="" value="NVIDIA GeForce RTX 3050">
+                <input type="text" id="gpu" name="gpu" value="{{device.gpu}}">
             </div>
             <div class="form-group">
                 <label for="price">Price:</label>
-                <input type="text" id="price" name="" value="1499">
+                <input type="text" id="price" name="price" value="{{device.price}}">
             </div>
             <div class="form-group">
                 <label for="gpu">Color:</label>
-                <input type="text" id="color" name="" value="black">
+                <input type="text" id="color" name="color" value="{{device.color}}">
             </div>
             <div class="form-group">
                 <label for="gpu">Weight:</label>
-                <input type="text" id="weight" name="" value="2.5">
+                <input type="text" id="weight" name="weight" value="{{device.weight}}">
             </div>
             <div class="form-group">
                 <label for="image">Image:</label>
-                <input type="text" id="image" name=""
-                    value="https://s13emagst.akamaized.net/products/53590/53589192/images/res_790dbf4452932f219ec1268b12fc73a3.jpg?width=720&height=720&hash=933FA37D9229954034F5BBF01C2438FA">
+                <input type="text" id="image" name="image" value="{{device.image}}">
             </div>
             <button type="submit" class="btn">Edit Product</button>
         </form>
