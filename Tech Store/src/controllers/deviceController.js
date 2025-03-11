@@ -9,4 +9,9 @@ deviceController.get("/create", isUser, (req, res) => {
     return res.render("device/create");
 });
 
+// CATALOG
+deviceController.get("/", (req, res) => {
+    return res.render("device/catalog");
+});
+
 export default deviceController;
