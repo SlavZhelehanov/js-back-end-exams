@@ -17,11 +17,7 @@ authController.post("/register", isGuest, async (req, res) => {
     const { name, email, password, rePassword } = req.body;
 
     try {
-        let user = await authService.findOneUser({ email });
-
-        if (user) throw ["This email is already registered"];
-
-        user = await authService.createUser({ name, email, password, rePassword });
+        const user = await authService.register({ name, email, password, rePassword });
         const token = await jwt.sign({ id: user.id }, SUPER_SECRET, { expiresIn: "2h" });
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
@@ -36,17 +32,13 @@ authController.get("/login", isGuest, (req, res) => {
     return res.render("auth/login");
 });
 authController.post("/login", isGuest, async (req, res) => {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
+
+    email = email.trim();
+    password = password.trim();
 
     try {
-        let user = await authService.findOneUser({ email });
-
-        if (!user) throw ["Wrong email or password!"];
-
-        const isPasswordMatch = await user.comparePassword(password);
-
-        if (!isPasswordMatch) throw ["Wrong email or password!"];
-
+        const user = await authService.login({ email, password });
         const token = await jwt.sign({ id: user.id }, SUPER_SECRET, { expiresIn: "2h" });
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });

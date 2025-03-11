@@ -27,14 +27,8 @@ userSchema.pre("save", async function () {
     this.password = await bcrypt.hash(this.password, salt);
 });
 
-userSchema.methods.comparePassword = async function (enteredPassword) {
-    if (enteredPassword.trim().length === 0) throw ["The password's field can't be empty"];
-
-    try {
-        return await bcrypt.compare(enteredPassword, this.password);
-    } catch (error) {
-        throw new Error('Password comparison failed');
-    }
+userSchema.methods.comparePassword = function (enteredPassword) {
+    return bcrypt.compare(enteredPassword, this.password);
 };
 
 export default model("User", userSchema);

@@ -1,20 +1,28 @@
 import User from "../models/User.js";
 
 export default {
-    findOneUser(params) {
-        params.email = params.email.trim();
+    async register(userData) {
+        for (const key in userData) userData[key] = userData[key].trim();
 
-        if (0 === params.email.length) throw ["Email field can't be empty"];
+        if (userData.password != userData.rePassword) throw new Error("Password and repeat password must match!");
 
-        return User.findOne(params);
+        const user = await User.findOne({ email: userData.email });
+        if (user) throw new Error("This email is already registered!");
+
+        return User.create(userData);
     },
-    createUser({ name, email, password, rePassword }) {
-        name = name.trim();
-        email = email.trim();
-        password = password.trim();
+    async login(userData) {
+        let messages = [];
+        if (!userData.email || userData.email.length < 1) messages.push("Email field can't be empty!");
+        if (!userData.password || userData.password.length < 1) messages.push("Password field can't be empty!");
+        if (0 < messages.length) throw messages;
 
-        if (password != rePassword) throw ["The repeat password should be equal to the password"];
+        const user = await User.findOne({ email: userData.email });
+        if (!user) throw new Error("Wrong email or password");        
 
-        return User.create({ name, email, password, rePassword });
+        const isValidPassword = await user.comparePassword(userData.password);        
+        if (!isValidPassword) throw new Error("Wrong email or password");
+        
+        return user;
     }
 };
