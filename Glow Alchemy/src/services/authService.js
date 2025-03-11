@@ -20,8 +20,9 @@ export default {
         const user = await User.findOne({ email: userData.email });
         if (!user) throw new Error("Wrong email or password");
 
-        const isValidPassword = await user.checkPassword(userData.password);
+        const isValidPassword = await user.comparePassword(userData.password);
         if (!isValidPassword) throw new Error("Wrong email or password");
+        
         return user;
     }
 };

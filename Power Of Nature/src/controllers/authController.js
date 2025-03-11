@@ -29,6 +29,7 @@ authController.post("/register", isGuest, async (req, res) => {
     try {
         const user = await authService.register({ username, email, password, rePassword });
         const token = generateToken(user);
+
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
         return res.redirect("/");
     } catch (error) {
@@ -42,11 +43,15 @@ authController.get("/login", isGuest, (req, res) => {
 });
 
 authController.post("/login", isGuest, async (req, res) => {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
+
+    email = email.trim();
+    password = password.trim();
 
     try {
         const user = await authService.login({ email, password });
         const token = generateToken(user);
+
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
         return res.redirect("/");
     } catch (error) {

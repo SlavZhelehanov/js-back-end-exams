@@ -35,13 +35,8 @@ userSchema.pre("save", async function (next) {
     }
 });
 
-userSchema.methods.checkPassword = async function (enteredPassword) {
-    try {
-        const isMatch = await bcrypt.compare(enteredPassword, this.password);
-        return isMatch;
-    } catch (err) {
-        throw new Error("Error comparing passwords");
-    }
+userSchema.methods.comparePassword = function (enteredPassword) {
+    return bcrypt.compare(enteredPassword, this.password);
 };
 
 export default model("User", userSchema);
