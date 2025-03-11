@@ -24,4 +24,9 @@ deviceController.get("/:id/edit", isUser, (req, res) => {
     return res.render("device/edit");
 });
 
+// PROFILE
+deviceController.get("/profile", isUser, (req, res) => {
+    return res.render("device/profile");
+});
+
 export default deviceController;
