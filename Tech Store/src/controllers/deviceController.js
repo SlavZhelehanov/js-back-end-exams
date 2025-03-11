@@ -22,8 +22,14 @@ deviceController.post("/create", isUser, async (req, res) => {
 });
 
 // CATALOG
-deviceController.get("/", (req, res) => {
-    return res.render("device/catalog");
+deviceController.get("/", async (req, res) => {
+    try {
+        const devices = await deviceService.getAllDevices();
+
+        return res.render("device/catalog", { devices });
+    } catch (error) {
+        return res.render("device/catalog", { messages: parseErrorMessage(error) });
+    }
 });
 
 // DETAILS
