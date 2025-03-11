@@ -19,4 +19,9 @@ deviceController.get("/:id/details", (req, res) => {
     return res.render("device/details");
 });
 
+// EDIT
+deviceController.get("/:id/edit", isUser, (req, res) => {
+    return res.render("device/edit");
+});
+
 export default deviceController;
