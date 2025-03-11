@@ -42,7 +42,7 @@ authController.post("/login", isGuest, async (req, res) => {
         const token = await jwt.sign({ id: user.id }, SUPER_SECRET, { expiresIn: "2h" });
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
-        return res.redirect("/planets");
+        return res.redirect("/devices");
     } catch (error) {
         return res.render("auth/login", { email, messages: parseErrorMessage(error) });
     }

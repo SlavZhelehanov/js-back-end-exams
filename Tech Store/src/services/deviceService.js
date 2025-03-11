@@ -13,5 +13,8 @@ export default {
         if (isNaN(+deviceData.price)) throw ["The price should be a positive number"];
 
         return Device.create(deviceData);
+    },
+    getOneDevice(params) {
+        return Device.findOne(params);
     }
 };

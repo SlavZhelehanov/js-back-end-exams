@@ -3,6 +3,7 @@ import { Router } from "express";
 import { isUser } from "../middlewares/authMiddleware.js";
 import deviceService from "../services/deviceService.js";
 import parseErrorMessage from "../util/parseErrorMessage.js";
+import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
 
 const deviceController = Router();
 
@@ -33,8 +34,19 @@ deviceController.get("/", async (req, res) => {
 });
 
 // DETAILS
-deviceController.get("/:id/details", (req, res) => {
-    return res.render("device/details");
+deviceController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const device = await deviceService.getOneDevice({ _id: req.params.id });
+
+        if (!device) return res.redirect("/404");
+
+        const isOwner = device.owner.equals(req.user?.id);
+        const isPreferred = req.user && !isOwner && device.preferredList.some(id => id.equals(req.user.id));
+
+        return res.render("device/details", { device, isOwner, isPreferred });
+    } catch (error) {
+        return res.render("device/details", { messages: parseErrorMessage(error) });
+    }
 });
 
 // EDIT
