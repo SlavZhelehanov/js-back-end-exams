@@ -107,8 +107,20 @@ deviceController.get("/:id/delete", isUser, isValidId, async (req, res) => {
 });
 
 // PROFILE
-deviceController.get("/profile", isUser, (req, res) => {
-    return res.render("device/profile");
+deviceController.get("/profile", isUser, async (req, res) => {
+    try {
+        const devices = await deviceService.getAllDevices(req.user.id);
+        let created = [], preferred = [];
+
+        for (const device of devices) {
+            if (device.owner.equals(req.user.id)) created.push(device);
+            else preferred.push(device);
+        }
+
+        return res.render("device/profile", { username: req.user.username, email: req.user.email, created, preferred });
+    } catch (error) {
+        return res.render("device/profile", { messages: parseErrorMessage(error) });
+    }
 });
 
 export default deviceController;

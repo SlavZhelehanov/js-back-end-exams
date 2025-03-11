@@ -4,7 +4,9 @@ export default {
     getLastTreeAddedDevices() {
         return Device.find({}, "brand model price image").sort({ createdAt: -1 }).limit(3);
     },
-    getAllDevices() {
+    getAllDevices(filter = null) {
+        if (filter) return Device.find({ $or: [{ preferredList: { $gte: filter } }, { owner: filter }] }, "brand model image owner").populate("preferredList");
+
         return Device.find({}, "brand model price cpu gpu screenSize price image");
     },
     createDevice(deviceData) {
