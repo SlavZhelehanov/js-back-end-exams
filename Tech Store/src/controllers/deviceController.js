@@ -49,6 +49,23 @@ deviceController.get("/:id/details", isValidId, async (req, res) => {
     }
 });
 
+// PREFER
+deviceController.get("/:id/prefer", isUser, isValidId, async (req, res) => {
+    try {
+        const device = await deviceService.getOneDevice({ _id: req.params.id });
+
+        if (!device) return res.redirect("/404");
+
+        if (!req.user || device.owner.equals(req.user.id) || device.preferredList.some(id => id.equals(req.user.id))) return res.redirect("/404");
+
+        await deviceService.preferDevice(req.params.id, req.user.id);
+
+        return res.redirect(`/devices/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("device/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // EDIT
 deviceController.get("/:id/edit", isUser, isValidId, async (req, res) => {
     try {

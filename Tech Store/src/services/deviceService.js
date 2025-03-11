@@ -24,5 +24,8 @@ export default {
 
         if (0 === Object.keys(options).length) return;
         return Device.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
+    },
+    preferDevice(deviceId, newFanId) {
+        return Device.findByIdAndUpdate(deviceId, { $push: { preferredList: newFanId } }, { new: true });
     }
 };
