@@ -14,4 +14,9 @@ deviceController.get("/", (req, res) => {
     return res.render("device/catalog");
 });
 
+// DETAILS
+deviceController.get("/:id/details", (req, res) => {
+    return res.render("device/details");
+});
+
 export default deviceController;
