@@ -93,6 +93,19 @@ deviceController.post("/:id/edit", isUser, isValidId, async (req, res) => {
     }
 });
 
+// DELETE
+deviceController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const query = await deviceService.deleteOneDevice(req.params.id, req.user.id);
+
+        if (!query) return res.redirect("/404");
+
+        return res.redirect("/devices");
+    } catch (error) {
+        return res.render("device/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // PROFILE
 deviceController.get("/profile", isUser, (req, res) => {
     return res.render("device/profile");

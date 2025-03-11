@@ -27,5 +27,8 @@ export default {
     },
     preferDevice(deviceId, newFanId) {
         return Device.findByIdAndUpdate(deviceId, { $push: { preferredList: newFanId } }, { new: true });
+    },
+    deleteOneDevice(_id, owner) {
+        return Device.findOneAndDelete({ _id, owner });
     }
 };
