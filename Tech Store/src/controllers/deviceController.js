@@ -1,12 +1,24 @@
 import { Router } from "express";
 
 import { isUser } from "../middlewares/authMiddleware.js";
+import deviceService from "../services/deviceService.js";
+import parseErrorMessage from "../util/parseErrorMessage.js";
 
 const deviceController = Router();
 
 // CREATE
 deviceController.get("/create", isUser, (req, res) => {
     return res.render("device/create");
+});
+deviceController.post("/create", isUser, async (req, res) => {
+    const { brand, model, hdd, screenSize, ram, os, cpu, gpu, price, color, weight, image } = req.body;
+
+    try {
+        await deviceService.createDevice({ brand, model, hdd, screenSize, ram, os, cpu, gpu, price, color, weight, image, owner: req.user.id });
+        return res.redirect("/devices");
+    } catch (error) {
+        return res.render("device/create", { messages: parseErrorMessage(error), device: { brand, model, hdd, screenSize, ram, os, cpu, gpu, price, color, weight, image } });
+    }
 });
 
 // CATALOG
