@@ -9,6 +9,6 @@ routes.use("/", homeController);
 
 routes.use("/auth", authController);
 
-routes.all("*", (req, res) => { return res.render("404"); });
+routes.all("*", (req, res) => { return res.render("404", { pageTitle: "Page Not Found - " }); });
 
 export default routes;
