@@ -11,7 +11,7 @@ import parseErrorMessage from "../util/parseErrorMessage.js";
 
 // REGISTER
 authController.get("/register", isGuest, (req, res) => {
-    return res.render("auth/register");
+    return res.render("auth/register", { pageTitle: "Register - " });
 });
 authController.post("/register", isGuest, async (req, res) => {
     const { name, email, password, rePassword } = req.body;
