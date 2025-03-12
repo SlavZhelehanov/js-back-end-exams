@@ -44,7 +44,7 @@ authController.post("/login", isGuest, async (req, res) => {
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
         return res.redirect("/");
     } catch (error) {
-        return res.render("auth/login", { email, messages: parseErrorMessage(error) });
+        return res.render("auth/login", { pageTitle: "Login - ", email, messages: parseErrorMessage(error) });
     }
 });
 
