@@ -29,7 +29,7 @@ authController.post("/register", isGuest, async (req, res) => {
 
 // LOGIN
 authController.get("/login", isGuest, (req, res) => {
-    return res.render("auth/login");
+    return res.render("auth/login", { pageTitle: "Login - " });
 });
 authController.post("/login", isGuest, async (req, res) => {
     let { email, password } = req.body;
