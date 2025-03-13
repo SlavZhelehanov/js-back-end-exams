@@ -6,8 +6,12 @@ export default {
 
         return Recipe.create(recipeData);
     },
-    getAllRecipes() {
-        return Recipe.find({}, "title image description");
+    getAllRecipes(filter = null) {
+        const search = filter ? {
+            title: { $regex: filter.trim(), $options: "i" }
+        } : {};
+
+        return Recipe.find(search, "title image description");
     },
     getLastTreeAddedRecipes() {
         return Recipe.find({}).sort({ createdAt: -1 }).limit(3);

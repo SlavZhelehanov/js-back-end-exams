@@ -107,7 +107,15 @@ recipeController.get("/:id/delete", isUser, isValidId, async (req, res) => {
 
 // SEARCH
 recipeController.get("/search", async (req, res) => {
-    return res.render("recipe/search", { pageTitle: "Search Recipes - " });
+    const search = req.query.search;
+
+    try {
+        const recipes = await recipeService.getAllRecipes(search);
+
+        return res.render("recipe/search", { pageTitle: "Search Recipes - ", recipes, search: search?.trim() });
+    } catch (error) {
+        return res.render("recipe/search", { pageTitle: "Search Recipes - ", messages: parseErrorMessage(error), search: search?.trim() });
+    }
 });
 
 export default recipeController;
