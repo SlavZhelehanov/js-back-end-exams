@@ -8,7 +8,13 @@ const recipeController = Router();
 
 // CATALOG
 recipeController.get("/", async (req, res) => {
-    return res.render("recipe/catalog", { pageTitle: "Recipe Catalog - " });
+    try {
+        const recipes = await recipeService.getAllRecipes();
+
+        return res.render("recipe/catalog", { pageTitle: "Recipe Catalog - ", recipes });
+    } catch (error) {
+        return res.render("recipe/catalog", { pageTitle: "Recipe Catalog - ", messages: parseErrorMessage(error) });
+    }
 });
 
 // CREATE
