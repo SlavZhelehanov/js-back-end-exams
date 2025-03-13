@@ -22,7 +22,7 @@ export default {
     updateOneDevice(_id, owner, device, formData) {
         const options = {};
 
-        for (const key in formData) if (formData[key] != device[key]) options[key] = formData[key].trim();
+        for (const key in formData) if (formData[key].trim() != device[key]) options[key] = formData[key].trim();
 
         if (0 === Object.keys(options).length) return;
         return Device.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
