@@ -17,4 +17,9 @@ recipeController.get("/:id/details", async (req, res) => {
     return res.render("recipe/details", { pageTitle: `{Spaghetti Carbonara} - ` });
 });
 
+// EDIT
+recipeController.get("/:id/edit", async (req, res) => {
+    return res.render("recipe/edit", { pageTitle: "Edit Recipe - " });
+});
+
 export default recipeController;
