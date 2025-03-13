@@ -22,4 +22,9 @@ recipeController.get("/:id/edit", async (req, res) => {
     return res.render("recipe/edit", { pageTitle: "Edit Recipe - " });
 });
 
+// SEARCH
+recipeController.get("/search", async (req, res) => {
+    return res.render("recipe/search", { pageTitle: "Search Recipes - " });
+});
+
 export default recipeController;
