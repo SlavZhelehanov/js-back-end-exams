@@ -65,8 +65,16 @@ recipeController.get("/:id/recommend", isUser, isValidId, async (req, res) => {
 });
 
 // EDIT
-recipeController.get("/:id/edit", async (req, res) => {
-    return res.render("recipe/edit", { pageTitle: "Edit Recipe - " });
+recipeController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const recipe = await recipeService.getOneRecipe({ _id: req.params.id, owner: req.user?.id });
+
+        if (!recipe) return res.redirect("/404");
+
+        return res.render("recipe/edit", { pageTitle: "Edit Recipe - ", recipe });
+    } catch (error) {
+        return res.render("recipe/edit", { pageTitle: "Edit Recipe - ", messages: parseErrorMessage(error) });
+    }
 });
 
 // SEARCH
