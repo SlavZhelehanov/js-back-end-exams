@@ -76,6 +76,21 @@ recipeController.get("/:id/edit", isUser, isValidId, async (req, res) => {
         return res.render("recipe/edit", { pageTitle: "Edit Recipe - ", messages: parseErrorMessage(error) });
     }
 });
+recipeController.post("/:id/edit", isUser, isValidId, async (req, res) => {
+    const formData = req.body;
+
+    try {
+        const recipe = await recipeService.getOneRecipe({ _id: req.params.id, owner: req.user?.id });
+
+        if (!recipe) return res.redirect("/404");
+
+        await recipeService.updateOneRecipe(req.params.id, req.user.id, recipe, formData);
+
+        return res.redirect(`/recipes/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("recipe/edit", { pageTitle: "Edit Recipe - ", recipe: formData, messages: parseErrorMessage(error) });
+    }
+});
 
 // SEARCH
 recipeController.get("/search", async (req, res) => {
