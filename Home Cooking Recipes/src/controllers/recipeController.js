@@ -1,5 +1,9 @@
 import { Router } from "express";
 
+import recipeService from "../services/recipeService.js";
+import parseErrorMessage from "../util/parseErrorMessage.js";
+import { isUser } from "../middlewares/authMiddleware.js";
+
 const recipeController = Router();
 
 // CATALOG
@@ -8,8 +12,18 @@ recipeController.get("/", async (req, res) => {
 });
 
 // CREATE
-recipeController.get("/create", (req, res) => {
+recipeController.get("/create", isUser, (req, res) => {
     return res.render("recipe/create", { pageTitle: "Create Recipe - " });
+});
+recipeController.post("/create", isUser, async (req, res) => {
+    const { title, ingredients, instructions, description, image } = req.body;
+
+    try {
+        await recipeService.createRecipe({ title, ingredients, instructions, description, image, owner: req.user.id });
+        return res.redirect("/recipes");
+    } catch (error) {
+        return res.render("recipe/create", { pageTitle: "Create Recipe - ", messages: parseErrorMessage(error), title, ingredients, instructions, description, image });
+    }
 });
 
 // DETAILS
