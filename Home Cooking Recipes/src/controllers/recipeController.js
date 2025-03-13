@@ -8,8 +8,13 @@ recipeController.get("/", async (req, res) => {
 });
 
 // CREATE
-recipeController.get("/create", async (req, res) => {
+recipeController.get("/create", (req, res) => {
     return res.render("recipe/create", { pageTitle: "Create Recipe - " });
+});
+
+// DETAILS
+recipeController.get("/:id/details", async (req, res) => {
+    return res.render("recipe/details", { pageTitle: `{Spaghetti Carbonara} - ` });
 });
 
 export default recipeController;
