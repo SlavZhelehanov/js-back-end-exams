@@ -92,6 +92,19 @@ recipeController.post("/:id/edit", isUser, isValidId, async (req, res) => {
     }
 });
 
+// DELETE
+recipeController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const query = await recipeService.deleteOneRecipe(req.params.id, req.user.id);
+
+        if (!query) return res.redirect("/404");
+
+        return res.redirect("/recipes");
+    } catch (error) {
+        return res.render("recipe/details", { pageTitle: `Details Page Error - `, messages: parseErrorMessage(error) });
+    }
+});
+
 // SEARCH
 recipeController.get("/search", async (req, res) => {
     return res.render("recipe/search", { pageTitle: "Search Recipes - " });
