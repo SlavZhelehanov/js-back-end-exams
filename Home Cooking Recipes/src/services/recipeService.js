@@ -14,5 +14,8 @@ export default {
     },
     getOneRecipe(params) {
         return Recipe.findOne(params);
+    },
+    recommendRecipe(recipeId, newFanId) {
+        return Recipe.findByIdAndUpdate(recipeId, { $push: { recommendList: newFanId } }, { new: true });
     }
 };

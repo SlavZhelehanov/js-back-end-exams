@@ -9,9 +9,6 @@ homeController.get("/", async (req, res) => {
     try {
         const recipes = await recipeService.getLastTreeAddedRecipes();
 
-        console.log(recipes);
-        
-
         return res.render("home/home", { recipes });
     } catch (error) {
         return res.render("home/home", { messages: parseErrorMessage(error) });

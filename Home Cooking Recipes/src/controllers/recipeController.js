@@ -49,6 +49,21 @@ recipeController.get("/:id/details", isValidId, async (req, res) => {
     }
 });
 
+// RECOMMEND
+recipeController.get("/:id/recommend", isUser, isValidId, async (req, res) => {
+    try {
+        const recipe = await recipeService.getOneRecipe({ _id: req.params.id });
+
+        if (!req.user || !recipe || recipe.owner.equals(req.user.id) || recipe.recommendList.some(id => id.equals(req.user.id))) return res.redirect("/404");
+
+        await recipeService.recommendRecipe(req.params.id, req.user.id);
+
+        return res.redirect(`/recipes/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("recipe/details", { pageTitle: `Details Page Error - `, messages: parseErrorMessage(error) });
+    }
+});
+
 // EDIT
 recipeController.get("/:id/edit", async (req, res) => {
     return res.render("recipe/edit", { pageTitle: "Edit Recipe - " });
