@@ -3,6 +3,7 @@ import { Router } from "express";
 import recipeService from "../services/recipeService.js";
 import parseErrorMessage from "../util/parseErrorMessage.js";
 import { isUser } from "../middlewares/authMiddleware.js";
+import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
 
 const recipeController = Router();
 
@@ -33,8 +34,19 @@ recipeController.post("/create", isUser, async (req, res) => {
 });
 
 // DETAILS
-recipeController.get("/:id/details", async (req, res) => {
-    return res.render("recipe/details", { pageTitle: `{Spaghetti Carbonara} - ` });
+recipeController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const recipe = await recipeService.getOneRecipe({ _id: req.params.id });
+
+        if (!recipe) return res.redirect("/404");
+
+        const isOwner = recipe.owner.equals(req.user?.id);
+        const isRecommend = req.user && !isOwner && recipe.recommendList.some(id => id.equals(req.user.id));
+
+        return res.render("recipe/details", { pageTitle: `${recipe.title} - `, recipe, isOwner, isRecommend });
+    } catch (error) {
+        return res.render("recipe/details", { pageTitle: `Details Page Error - `, messages: parseErrorMessage(error) });
+    }
 });
 
 // EDIT

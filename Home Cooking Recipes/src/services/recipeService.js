@@ -11,5 +11,8 @@ export default {
     },
     getLastTreeAddedRecipes() {
         return Recipe.find({}).sort({ createdAt: -1 }).limit(3);
+    },
+    getOneRecipe(params) {
+        return Recipe.findOne(params);
     }
 };
