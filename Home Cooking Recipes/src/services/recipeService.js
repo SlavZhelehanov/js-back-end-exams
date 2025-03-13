@@ -8,5 +8,8 @@ export default {
     },
     getAllRecipes() {
         return Recipe.find({}, "title image description");
+    },
+    getLastTreeAddedRecipes() {
+        return Recipe.find({}).sort({ createdAt: -1 }).limit(3);
     }
 };
