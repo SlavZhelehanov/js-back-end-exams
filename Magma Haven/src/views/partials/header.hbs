@@ -5,10 +5,13 @@
             <li><a href="/">Home</a></li>
             <li><a href="/volcanos/search">Search</a></li>
             <li><a href="/volcanos">All Volcanoes</a></li>
-            <li><a href="/volcanos/create">Create Volcano Wiki</a></li>
-            <li><a href="/auth/login">Login</a></li>
-            <li><a href="/auth/register">Register</a></li>
-            <li><a href="/auth/logout">Logout</a></li>
+            {{#if user}}
+                <li><a href="/volcanos/create">Create Volcano Wiki</a></li>
+                <li><a href="/auth/logout">Logout</a></li>
+            {{else}}    
+                <li><a href="/auth/login">Login</a></li>
+                <li><a href="/auth/register">Register</a></li>
+            {{/if}}
         </ul>
     </nav>
 </header>
