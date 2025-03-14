@@ -1,0 +1,22 @@
+{
+  "name": "magma-heaven",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch ./src/index.js",
+    "start": "node ./src/index.js"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "Slav Zhelehanov",
+  "license": "MIT",
+  "description": "Application for the beauty of volcanoes.",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2",
+    "express-handlebars": "^8.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.10.1"
+  }
+}
