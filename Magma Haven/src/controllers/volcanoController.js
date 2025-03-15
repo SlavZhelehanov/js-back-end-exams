@@ -19,4 +19,9 @@ volcanoController.get("/:id/details", async (req, res) => {
     return res.render("volcano/details");
 });
 
+// EDIT
+volcanoController.get("/:id/edit", isUser, async (req, res) => {
+    return res.render("volcano/edit");
+});
+
 export default volcanoController;
