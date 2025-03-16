@@ -1,6 +1,9 @@
 import { Router } from "express";
 
 import { isUser } from "../middlewares/authMiddleware.js";
+import { getTypeOfVolcano } from "../util/getTypeOfVolcano.js";
+import volcanoService from "../services/volcanoService.js";
+import { parseErrorMessage } from "../util/parseErrorMessage.js";
 
 const volcanoController = Router();
 
@@ -11,7 +14,19 @@ volcanoController.get("/", async (req, res) => {
 
 // CREATE
 volcanoController.get("/create", isUser, (req, res) => {
-    return res.render("volcano/create");
+    const volcanoTypes = getTypeOfVolcano();
+    return res.render("volcano/create", { volcanoTypes });
+});
+volcanoController.post("/create", isUser, async (req, res) => {
+    const { nameOfTheVolcano, location, elevation, lastEruption, image, typeOfVolcano, description } = req.body;
+
+    try {
+        await volcanoService.createVolcano({ nameOfTheVolcano, location, elevation, lastEruption, image, typeOfVolcano, description, owner: req.user.id });
+        return res.redirect("/volcanos");
+    } catch (error) {
+        const volcanoTypes = getTypeOfVolcano(typeOfVolcano);
+        return res.render("volcano/create", { messages: parseErrorMessage(error), volcanoTypes, nameOfTheVolcano, location, elevation, lastEruption, image, typeOfVolcano, description });
+    }
 });
 
 // DETAILS
