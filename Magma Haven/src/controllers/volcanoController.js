@@ -69,6 +69,19 @@ volcanoController.get("/:id/vote", isUser, isValidId, async (req, res) => {
     }
 });
 
+// DELETE
+volcanoController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const query = await volcanoService.deleteOneVolcano(req.params.id, req.user.id);
+
+        if (!query) return res.redirect("/404");
+
+        return res.redirect("/volcanos");
+    } catch (error) {
+        return res.render("volcano/details", { messages: parseErrorMessage(error), volcano, isOwner: volcano && volcano.owner.equals(req.user?.id), isVoted: volcano && req.user && !volcano.owner.equals(req.user?.id) && volcano.voteList.some(id => id.equals(req.user.id)) });
+    }
+});
+
 // EDIT
 volcanoController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("volcano/edit");

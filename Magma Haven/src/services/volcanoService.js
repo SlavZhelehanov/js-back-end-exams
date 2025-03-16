@@ -13,5 +13,8 @@ export default {
     },
     voteToVolcano(volcanoId, newFanId) {
         return Volcano.findByIdAndUpdate(volcanoId, { $push: { voteList: newFanId } }, { new: true });
+    },
+    deleteOneVolcano(_id, owner) {
+        return Volcano.findOneAndDelete({ _id, owner });
     }
 };
