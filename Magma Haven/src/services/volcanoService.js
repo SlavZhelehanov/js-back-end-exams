@@ -7,5 +7,8 @@ export default {
     },
     getAllVolcanos() {
         return Volcano.find({}, "nameOfTheVolcano image location typeOfVolcano");
+    },
+    getOneVolcano(params) {
+        return Volcano.findOne(params);
     }
 };

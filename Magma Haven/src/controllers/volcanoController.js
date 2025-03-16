@@ -4,6 +4,7 @@ import { isUser } from "../middlewares/authMiddleware.js";
 import { getTypeOfVolcano } from "../util/getTypeOfVolcano.js";
 import volcanoService from "../services/volcanoService.js";
 import { parseErrorMessage } from "../util/parseErrorMessage.js";
+import { isValidId } from "../middlewares/utlParamsMiddleware.js";
 
 const volcanoController = Router();
 
@@ -36,8 +37,19 @@ volcanoController.post("/create", isUser, async (req, res) => {
 });
 
 // DETAILS
-volcanoController.get("/:id/details", async (req, res) => {
-    return res.render("volcano/details");
+volcanoController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const volcano = await volcanoService.getOneVolcano({ _id: req.params.id });
+
+        if (!volcano) return res.redirect("/404");
+
+        const isOwner = volcano.owner.equals(req.user?.id);
+        const isVoted = req.user && !isOwner && volcano.voteList.some(id => id.equals(req.user.id));
+
+        return res.render("volcano/details", { volcano, isOwner, isVoted });
+    } catch (error) {
+        return res.render("volcano/details", { messages: parseErrorMessage(error) });
+    }
 });
 
 // EDIT
