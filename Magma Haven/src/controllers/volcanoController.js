@@ -83,8 +83,18 @@ volcanoController.get("/:id/delete", isUser, isValidId, async (req, res) => {
 });
 
 // EDIT
-volcanoController.get("/:id/edit", isUser, async (req, res) => {
-    return res.render("volcano/edit");
+volcanoController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const volcano = await volcanoService.getOneVolcano({ _id: req.params.id, owner: req.user?.id });
+
+        if (!volcano) return res.redirect("/404");
+
+        const volcanoTypes = getTypeOfVolcano(volcano.typeOfVolcano);
+
+        return res.render("volcano/edit", { volcano, volcanoTypes });
+    } catch (error) {
+        return res.render("volcano/edit", { messages: parseErrorMessage(error) });
+    }
 });
 
 // SEARCH
