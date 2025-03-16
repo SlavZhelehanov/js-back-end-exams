@@ -39,8 +39,6 @@ disasterController.post("/create", isUser, async (req, res) => {
 
 // DETAILS
 disasterController.get("/:id/details", isValidId, async (req, res) => {
-    // if (!isValidId(req.params.id)) return res.redirect("/404");
-
     try {
         const disaster = await disasterService.getOneDisaster({ _id: req.params.id });
 
@@ -56,8 +54,6 @@ disasterController.get("/:id/details", isValidId, async (req, res) => {
 
 // INTERESTED
 disasterController.get("/:id/interested", isUser, isValidId, async (req, res) => {
-    // if (!isValidId(req.params.id)) return res.redirect("/404");
-
     try {
         const disaster = await disasterService.getOneDisaster({ _id: req.params.id });
 
@@ -75,8 +71,6 @@ disasterController.get("/:id/interested", isUser, isValidId, async (req, res) =>
 
 // DELETE
 disasterController.get("/:id/delete", isUser, isValidId, async (req, res) => {
-    // if (!isValidId(req.params.id)) return res.redirect("/404");
-
     try {
         const query = await disasterService.deleteOneDisaster(req.params.id, req.user.id);
 
@@ -90,8 +84,6 @@ disasterController.get("/:id/delete", isUser, isValidId, async (req, res) => {
 
 // EDIT
 disasterController.get("/:id/edit", isUser, isValidId, async (req, res) => {
-    // if (!isValidId(req.params.id)) return res.redirect("/404");
-
     try {
         const disaster = await disasterService.getOneDisaster({ _id: req.params.id, owner: req.user?.id });
 
@@ -105,18 +97,14 @@ disasterController.get("/:id/edit", isUser, isValidId, async (req, res) => {
     }
 });
 disasterController.post("/:id/edit", isUser, isValidId, async (req, res) => {
-    // if (!isValidId(req.params.id)) return res.redirect("/404");
     const formData = req.body;
 
     try {
         const disaster = await disasterService.getOneDisaster({ _id: req.params.id, owner: req.user?.id });
-        const options = {};
 
         if (!disaster) return res.redirect("/404");
 
-        for (const key in formData) if (formData[key] != disaster[key]) options[key] = formData[key].trim();
-
-        if (0 < Object.keys(options).length) await disasterService.updateOneDisaster(req.params.id, req.user.id, options);
+        await disasterService.updateOneDisaster(req.params.id, req.user.id, disaster, formData);
 
         return res.redirect(`/disasters/${req.params.id}/details`);
     } catch (error) {

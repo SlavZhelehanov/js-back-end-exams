@@ -21,7 +21,12 @@ export default {
     deleteOneDisaster(_id, owner) {
         return Disaster.findOneAndDelete({ _id, owner });
     },
-    updateOneDisaster(_id, owner, options) {
+    updateOneDisaster(_id, owner, disaster, formData) {
+        const options = {};
+
+        for (const key in formData) if (formData[key].trim() != disaster[key]) options[key] = formData[key].trim();
+
+        if (0 === Object.keys(options).length) return;
         return Disaster.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
     }
 };
