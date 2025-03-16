@@ -16,5 +16,13 @@ export default {
     },
     deleteOneVolcano(_id, owner) {
         return Volcano.findOneAndDelete({ _id, owner });
+    },
+    updateOneVolcano(_id, owner, volcano, formData) {
+        const options = {};
+
+        for (const key in formData) if (formData[key].trim() != volcano[key]) options[key] = formData[key].trim();
+
+        if (0 === Object.keys(options).length) return;
+        return Volcano.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
     }
 };

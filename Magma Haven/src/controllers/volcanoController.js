@@ -96,6 +96,22 @@ volcanoController.get("/:id/edit", isUser, isValidId, async (req, res) => {
         return res.render("volcano/edit", { messages: parseErrorMessage(error) });
     }
 });
+volcanoController.post("/:id/edit", isUser, isValidId, async (req, res) => {
+    const formData = req.body;
+
+    try {
+        const volcano = await volcanoService.getOneVolcano({ _id: req.params.id, owner: req.user?.id });
+
+        if (!volcano) return res.redirect("/404");
+
+        await volcanoService.updateOneVolcano(req.params.id, req.user.id, volcano, formData);
+
+        return res.redirect(`/volcanos/${req.params.id}/details`);
+    } catch (error) {
+        const volcanoTypes = getTypeOfVolcano(formData.typeOfvolcano);
+        return res.render("volcano/edit", { volcano: formData, volcanoTypes, messages: parseErrorMessage(error) });
+    }
+});
 
 // SEARCH
 volcanoController.get("/search", async (req, res) => {
