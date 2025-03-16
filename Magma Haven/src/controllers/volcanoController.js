@@ -5,6 +5,7 @@ import { getTypeOfVolcano } from "../util/getTypeOfVolcano.js";
 import volcanoService from "../services/volcanoService.js";
 import { parseErrorMessage } from "../util/parseErrorMessage.js";
 import { isValidId } from "../middlewares/utlParamsMiddleware.js";
+import { validateQuery } from "../util/validateUrls.js";
 
 const volcanoController = Router();
 
@@ -115,7 +116,16 @@ volcanoController.post("/:id/edit", isUser, isValidId, async (req, res) => {
 
 // SEARCH
 volcanoController.get("/search", async (req, res) => {
-    return res.render("volcano/search");
+    const search = validateQuery(req.query) ? req.query : null;
+    const volcanoTypes = getTypeOfVolcano(req.query?.typeOfVolcano);
+
+    try {
+        const volcanos = await volcanoService.getAllVolcanos(search);
+
+        return res.render("volcano/search", { volcanoTypes, volcanos, nameOfTheVolcano: search?.nameOfTheVolcano });
+    } catch (error) {
+        return res.render("volcano/search", { messages: parseErrorMessage(error), nameOfTheVolcano: search?.nameOfTheVolcano, volcanoTypes });
+    }
 });
 
 export default volcanoController;

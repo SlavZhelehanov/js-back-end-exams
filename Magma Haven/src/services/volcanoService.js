@@ -5,8 +5,13 @@ export default {
         for (const key in volcanoData) volcanoData[key] = volcanoData[key].trim();
         return Volcano.create(volcanoData);
     },
-    getAllVolcanos() {
-        return Volcano.find({}, "nameOfTheVolcano image location typeOfVolcano");
+    getAllVolcanos(filter = null) {
+        const search = filter?.nameOfTheVolcano ? {
+            nameOfTheVolcano: { $regex: filter["nameOfTheVolcano"], $options: "i" },
+            typeOfVolcano: { $regex: filter["typeOfVolcano"], $options: "i" },
+        } : {};
+
+        return Volcano.find(search, "nameOfTheVolcano image location typeOfVolcano");
     },
     getOneVolcano(params) {
         return Volcano.findOne(params);
