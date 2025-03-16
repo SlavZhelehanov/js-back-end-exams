@@ -9,7 +9,13 @@ const volcanoController = Router();
 
 // CATALOG
 volcanoController.get("/", async (req, res) => {
-    return res.render("volcano/catalog");
+    try {
+        const volcanos = await volcanoService.getAllVolcanos();
+
+        return res.render("volcano/catalog", { volcanos });
+    } catch (error) {
+        return res.render("volcano/catalog", { messages: parseErrorMessage(error) });
+    }
 });
 
 // CREATE
