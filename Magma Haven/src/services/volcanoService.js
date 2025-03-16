@@ -10,5 +10,8 @@ export default {
     },
     getOneVolcano(params) {
         return Volcano.findOne(params);
+    },
+    voteToVolcano(volcanoId, newFanId) {
+        return Volcano.findByIdAndUpdate(volcanoId, { $push: { voteList: newFanId } }, { new: true });
     }
 };

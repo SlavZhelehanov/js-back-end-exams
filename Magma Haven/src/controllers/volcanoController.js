@@ -52,6 +52,23 @@ volcanoController.get("/:id/details", isValidId, async (req, res) => {
     }
 });
 
+// VOTE
+volcanoController.get("/:id/vote", isUser, isValidId, async (req, res) => {
+    let volcano;
+
+    try {
+        volcano = await volcanoService.getOneVolcano({ _id: req.params.id });
+
+        if (!volcano || !req.user || volcano.owner.equals(req.user.id) || volcano.voteList.some(id => id.equals(req.user.id))) return res.redirect("/404");
+
+        await volcanoService.voteToVolcano(req.params.id, req.user.id);
+
+        return res.redirect(`/volcanos/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("volcano/details", { messages: parseErrorMessage(error), volcano, isOwner: volcano && volcano.owner.equals(req.user?.id), isVoted: volcano && req.user && !volcano.owner.equals(req.user?.id) && volcano.voteList.some(id => id.equals(req.user.id)) });
+    }
+});
+
 // EDIT
 volcanoController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("volcano/edit");
