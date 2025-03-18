@@ -9,4 +9,9 @@ stoneController.get("/create", isUser, (req, res) => {
     return res.render("stone/create");
 });
 
+// DASHBOARD
+stoneController.get("/", async (req, res) => {
+    return res.render("stone/dashboard");
+});
+
 export default stoneController;
