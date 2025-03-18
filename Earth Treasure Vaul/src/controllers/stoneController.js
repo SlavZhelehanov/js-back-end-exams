@@ -14,4 +14,9 @@ stoneController.get("/", async (req, res) => {
     return res.render("stone/dashboard");
 });
 
+// DETAILS
+stoneController.get("/:id/details", async (req, res) => {
+    return res.render("stone/details");
+});
+
 export default stoneController;
