@@ -19,4 +19,9 @@ stoneController.get("/:id/details", async (req, res) => {
     return res.render("stone/details");
 });
 
+// EDIT
+stoneController.get("/:id/edit", isUser, async (req, res) => {
+    return res.render("stone/edit");
+});
+
 export default stoneController;
