@@ -15,7 +15,7 @@ stoneController.post("/create", isUser, async (req, res) => {
 
     try {
         await stoneService.createStone({ name, category, color, image, location, formula, description, owner: req.user.id });
-        return res.redirect("/dashboard");
+        return res.redirect("/stones");
     } catch (error) {
         return res.render("stone/create", { messages: parseErrorMessage(error), name, category, color, image, location, formula, description });
     }

@@ -7,5 +7,8 @@ export default {
     },
     getAllStones() {
         return Stone.find({}, "name image category formula");
+    },
+    getLastTreeAddedStones() {
+        return Stone.find({}).sort({ createdAt: -1 }).limit(3);
     }
 };
