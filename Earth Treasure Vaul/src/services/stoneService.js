@@ -19,5 +19,13 @@ export default {
     },
     deleteOneStone(_id, owner) {
         return Stone.findOneAndDelete({ _id, owner });
+    },
+    updateOneStone(_id, owner, stone, formData) {
+        const options = {};
+
+        for (const key in formData) if (formData[key].trim() != stone[key]) options[key] = formData[key].trim();
+
+        if (0 === Object.keys(options).length) return;
+        return Stone.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
     }
 };

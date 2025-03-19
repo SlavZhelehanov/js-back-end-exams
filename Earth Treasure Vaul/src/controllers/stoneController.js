@@ -80,8 +80,16 @@ stoneController.get("/:id/delete", isUser, isValidId, async (req, res) => {
 });
 
 // EDIT
-stoneController.get("/:id/edit", isUser, async (req, res) => {
-    return res.render("stone/edit");
+stoneController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const stone = await stoneService.getOneStone({ _id: req.params.id, owner: req.user?.id });
+
+        if (!stone) return res.redirect("/404");
+
+        return res.render("stone/edit", { stone });
+    } catch (error) {
+        return res.render("stone/edit", { messages: parseErrorMessage(error) });
+    }
 });
 
 // SEARCH
