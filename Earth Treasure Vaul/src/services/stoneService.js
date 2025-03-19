@@ -5,8 +5,12 @@ export default {
         for (const key in stoneData) stoneData[key] = stoneData[key].trim();
         return Stone.create(stoneData);
     },
-    getAllStones() {
-        return Stone.find({}, "name image category formula");
+    getAllStones(filter = null) {
+        const search = filter ? {
+            name: { $regex: filter, $options: "i" }
+        } : {};
+        
+        return Stone.find(search, "name image category formula");
     },
     getLastTreeAddedStones() {
         return Stone.find({}).sort({ createdAt: -1 }).limit(3);

@@ -109,7 +109,15 @@ stoneController.post("/:id/edit", isUser, isValidId, async (req, res) => {
 
 // SEARCH
 stoneController.get("/search", async (req, res) => {
-    return res.render("stone/search");
+    const search = req.query.search ? req.query.search.trim() : null;
+
+    try {
+        const stones = await stoneService.getAllStones(search);
+
+        return res.render("stone/search", { stones, search });
+    } catch (error) {
+        return res.render("stone/search", { messages: parseErrorMessage(error), search });
+    }
 });
 
 export default stoneController;
