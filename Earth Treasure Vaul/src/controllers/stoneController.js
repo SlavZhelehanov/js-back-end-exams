@@ -23,7 +23,13 @@ stoneController.post("/create", isUser, async (req, res) => {
 
 // DASHBOARD
 stoneController.get("/", async (req, res) => {
-    return res.render("stone/dashboard");
+    try {
+        const stones = await stoneService.getAllStones();
+
+        return res.render("stone/dashboard", { stones });
+    } catch (error) {
+        return res.render("stone/dashboard", { messages: parseErrorMessage(error) });
+    }
 });
 
 // DETAILS

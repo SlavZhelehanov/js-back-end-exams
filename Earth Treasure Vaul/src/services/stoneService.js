@@ -5,4 +5,7 @@ export default {
         for (const key in stoneData) stoneData[key] = stoneData[key].trim();
         return Stone.create(stoneData);
     },
+    getAllStones() {
+        return Stone.find({}, "name image category formula");
+    }
 };
