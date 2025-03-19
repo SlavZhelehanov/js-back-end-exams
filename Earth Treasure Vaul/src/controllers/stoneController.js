@@ -3,6 +3,7 @@ import { Router } from "express";
 import { isUser } from "../middlewares/authMiddleware.js";
 import stoneService from "../services/stoneService.js";
 import { parseErrorMessage } from "../util/parseErrorMessage.js";
+import { isValidId } from "../middlewares/utlParamsMiddleware.js";
 
 const stoneController = Router();
 
@@ -33,8 +34,19 @@ stoneController.get("/", async (req, res) => {
 });
 
 // DETAILS
-stoneController.get("/:id/details", async (req, res) => {
-    return res.render("stone/details");
+stoneController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const stone = await stoneService.getOneStone({ _id: req.params.id });
+
+        if (!stone) return res.redirect("/404");
+
+        const isOwner = stone.owner.equals(req.user?.id);
+        const isLiked = req.user && !isOwner && stone.likedList.some(id => id.equals(req.user.id));
+
+        return res.render("stone/details", { stone, isOwner, isLiked });
+    } catch (error) {
+        return res.render("stone/details", { messages: parseErrorMessage(error) });
+    }
 });
 
 // EDIT

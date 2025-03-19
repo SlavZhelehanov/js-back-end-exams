@@ -10,5 +10,8 @@ export default {
     },
     getLastTreeAddedStones() {
         return Stone.find({}).sort({ createdAt: -1 }).limit(3);
+    },
+    getOneStone(params) {
+        return Stone.findOne(params);
     }
 };

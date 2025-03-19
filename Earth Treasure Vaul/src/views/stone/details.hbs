@@ -1,55 +1,51 @@
 {{setPageTitle "Details Page"}}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./static/styles/styles.css" />
-    <title>Details Page</title>
-</head>
-
 <main class="details">
     <!-- Details page -->
     <section id="details">
         <div id="details-wrapper">
-            <p id="details-title">Name: Beryl</p>
+            <p id="details-title">Name: {{stone.name}}</p>
             <div id="img-wrapper">
-                <img src="../../images/beryl.webp" />
+                <img src="{{stone.image}}" />
             </div>
             <div id="info-wrapper">
                 <table>
                     <tr>
                         <td>
                             <p>
-                                Category: <span id="details-category">Cyclosilicate</span>
+                                Category: <span id="details-category">{{stone.category}}</span>
                             </p>
                         </td>
                         <td>
-                            <p>Color: <span id="details-color">Green</span></p>
+                            <p>Color: <span id="details-color">{{stone.color}}</span></p>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <p>Location: <span id="details-location">Colombia</span></p>
+                            <p>Location: <span id="details-location">{{stone.location}}</span></p>
                         </td>
                         <td>
-                            <p>Formula: <span id="details-formula">Be3Al2Si6O18</span></p>
+                            <p>Formula: <span id="details-formula">{{stone.formula}}</span></p>
                         </td>
                     </tr>
                 </table>
-                <p>Description: <span id="details-description">Beryl is a common mineral, and it is widely distributed
-                        in nature. It is found most commonly in granitic pegmatites, but also occurs in mica schists,
-                        such as those of the Ural Mountains, and in limestone in Colombia. It is less common in ordinary
-                        granite and is only infrequently found in nepheline syenite.</span></p>
+                <p>Description: <span id="details-description">{{stone.description}}</span></p>
             </div>
 
-            <!--Edit and Delete are only for creator-->
-            <div id="action-buttons">
-                <a href="#" id="edit-btn">Edit</a>
-                <a href="#" id="delete-btn">Delete</a>
-                <a href="#" id="like-btn">Like</a>
-                <p id="already-liked">You already liked this stone!</p>
-            </div>
+            {{#if user}}
+                <div id="action-buttons">
+                    {{#if isOwner}}
+                    <a href="/stones/{{stone.id}}/edit" id="edit-btn">Edit</a>
+                    <a href="/stones/{{stone.id}}/delete" id="delete-btn">Delete</a>
+                    {{else}}
+                        {{#if isLiked}}
+                            <p id="already-liked">You already liked this stone!</p>
+                        {{else}}
+                            <a href="/stones/{{stone.id}}/like" id="like-btn">Like</a>
+                        {{/if}}
+                    {{/if}}
+                </div>
+            {{/if}}
         </div>
     </section>
 </main>
