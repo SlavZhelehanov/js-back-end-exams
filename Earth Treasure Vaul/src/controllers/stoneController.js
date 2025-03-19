@@ -49,6 +49,23 @@ stoneController.get("/:id/details", isValidId, async (req, res) => {
     }
 });
 
+// LIKE
+stoneController.get("/:id/like", isUser, isValidId, async (req, res) => {
+    let stone;
+
+    try {
+        stone = await stoneService.getOneStone({ _id: req.params.id });
+
+        if (!stone || !req.user || stone.owner.equals(req.user.id) || stone.likedList.some(id => id.equals(req.user.id))) return res.redirect("/404");
+
+        await stoneService.likeToStone(req.params.id, req.user.id);
+
+        return res.redirect(`/stones/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("stone/details", { messages: parseErrorMessage(error), stone, isOwner: stone && stone.owner.equals(req.user?.id), isLiked: stone && req.user && !stone.owner.equals(req.user?.id) && stone.likedList.some(id => id.equals(req.user.id)) });
+    }
+});
+
 // EDIT
 stoneController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("stone/edit");

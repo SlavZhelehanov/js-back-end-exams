@@ -13,5 +13,8 @@ export default {
     },
     getOneStone(params) {
         return Stone.findOne(params);
+    },
+    likeToStone(stoneId, newFanId) {
+        return Stone.findByIdAndUpdate(stoneId, { $push: { likedList: newFanId } }, { new: true });
     }
 };
