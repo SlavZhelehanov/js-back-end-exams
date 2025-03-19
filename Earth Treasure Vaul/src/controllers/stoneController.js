@@ -66,6 +66,19 @@ stoneController.get("/:id/like", isUser, isValidId, async (req, res) => {
     }
 });
 
+// DELETE
+stoneController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const query = await stoneService.deleteOneStone(req.params.id, req.user.id);
+
+        if (!query) return res.redirect("/404");
+
+        return res.redirect("/stones");
+    } catch (error) {
+        return res.render("stone/details", { messages: parseErrorMessage(error), stone, isOwner: stone && stone.owner.equals(req.user?.id), isLiked: stone && req.user && !stone.owner.equals(req.user?.id) && stone.likedList.some(id => id.equals(req.user.id)) });
+    }
+});
+
 // EDIT
 stoneController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("stone/edit");

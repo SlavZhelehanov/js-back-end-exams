@@ -16,5 +16,8 @@ export default {
     },
     likeToStone(stoneId, newFanId) {
         return Stone.findByIdAndUpdate(stoneId, { $push: { likedList: newFanId } }, { new: true });
+    },
+    deleteOneStone(_id, owner) {
+        return Stone.findOneAndDelete({ _id, owner });
     }
 };
