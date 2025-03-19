@@ -91,6 +91,21 @@ stoneController.get("/:id/edit", isUser, isValidId, async (req, res) => {
         return res.render("stone/edit", { messages: parseErrorMessage(error) });
     }
 });
+stoneController.post("/:id/edit", isUser, isValidId, async (req, res) => {
+    const formData = req.body;
+
+    try {
+        const stone = await stoneService.getOneStone({ _id: req.params.id, owner: req.user?.id });
+
+        if (!stone) return res.redirect("/404");
+
+        await stoneService.updateOneStone(req.params.id, req.user.id, stone, formData);
+
+        return res.redirect(`/stones/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("stone/edit", { stone: formData, messages: parseErrorMessage(error) });
+    }
+});
 
 // SEARCH
 stoneController.get("/search", async (req, res) => {
