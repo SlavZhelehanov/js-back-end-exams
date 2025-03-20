@@ -2,16 +2,16 @@
 
 <div class="register-box">
     <h1>Register</h1>
-    <form action="#">
+    <form method="post">
         <label>Username</label>
-        <input type="text" placeholder="Username.." name="">
+        <input type="text" placeholder="Username.." name="username" value="{{username}}">
         <label>Email</label>
-        <input type="text" placeholder="Email.." name="">
+        <input type="text" placeholder="Email.." name="email" value="{{email}}">
         <label>Password</label>
-        <input type="password" placeholder="Password.." name="">
+        <input type="password" placeholder="Password.." name="password">
         <label>Confirm Password</label>
-        <input type="password" placeholder="Confirm Password.." name="">
+        <input type="password" placeholder="Confirm Password.." name="rePassword">
         <input type="submit" value="Submit">
     </form>
-    <p>Already have an account? <a href="#">Login here</a></p>
+    <p>Already have an account? <a href="/auth/login">Login here</a></p>
 </div>

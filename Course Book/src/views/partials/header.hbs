@@ -5,13 +5,14 @@
             <!-- Guest users and Logged users -->
             <li><a href="/">Home</a></li>
             <li><a href="/courses">All Courses</a></li>
-            <!--For guest users-->
-            <li><a href="/auth/login">Login</a></li>
-            <li><a href="/auth/register">Register</a></li>
-            <!--For loggin users-->
-            <li><a href="/courses/profile">Profile</a></li>
-            <li><a href="/courses/create">Create Course Offers</a></li>
-            <li><a href="/auth/logout">Logout</a></li>
+            {{#unless user}}
+                <li><a href="/auth/login">Login</a></li>
+                <li><a href="/auth/register">Register</a></li>
+            {{else}}
+                <li><a href="/courses/profile">Profile</a></li>
+                <li><a href="/courses/create">Create Course Offers</a></li>
+                <li><a href="/auth/logout">Logout</a></li>
+            {{/unless}}
         </ul>
     </nav>
 </div>
