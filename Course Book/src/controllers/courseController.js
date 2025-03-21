@@ -95,6 +95,19 @@ courseController.post("/:id/edit", isUser, isValidId, async (req, res) => {
     }
 });
 
+// DELETE
+courseController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const query = await courseService.deleteOneCourse(req.params.id, req.user.id);
+
+        if (!query) return res.redirect("/404");
+
+        return res.redirect("/courses");
+    } catch (error) {
+        return res.render("course/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // PROFILE
 courseController.get("/profile", isUser, async (req, res) => {
     return res.render("course/profile");

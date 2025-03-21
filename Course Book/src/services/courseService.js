@@ -28,7 +28,10 @@ export default {
         for (const key in formData) if (formData[key].trim() != course[key]) options[key] = formData[key].trim();
 
         if (0 === Object.keys(options).length) return;
-        
+
         return Course.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
+    },
+    deleteOneCourse(_id, owner) {
+        return Course.findOneAndDelete({ _id, owner });
     }
 };
