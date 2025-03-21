@@ -23,7 +23,13 @@ courseController.post("/create", isUser, async (req, res) => {
 
 // CATALOG
 courseController.get("/", async (req, res) => {
-    return res.render("course/catalog");
+    try {
+        const courses = await courseService.getAllCourses();
+
+        return res.render("course/catalog", { courses });
+    } catch (error) {
+        return res.render("course/catalog", { messages: parseErrorMessage(error) });
+    }
 });
 
 // DETAILS

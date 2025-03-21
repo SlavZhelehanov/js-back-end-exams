@@ -10,5 +10,8 @@ export default {
     },
     getLastTreeAddedCourses() {
         return Course.find({}, "title type certificate price").sort({ createdAt: -1 }).limit(3);
+    },
+    getAllCourses() {
+        return Course.find({}, "image title type price");
     }
 };
