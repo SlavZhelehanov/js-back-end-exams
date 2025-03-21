@@ -7,5 +7,8 @@ export default {
         if (isNaN(+courseData.price)) throw ["The price should be a number"];
 
         return Course.create(courseData);
+    },
+    getLastTreeAddedCourses() {
+        return Course.find({}, "title type certificate price").sort({ createdAt: -1 }).limit(3);
     }
 };
