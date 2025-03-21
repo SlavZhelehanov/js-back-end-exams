@@ -21,5 +21,14 @@ export default {
     },
     signUpToCourse(courseId, newFanId) {
         return Course.findByIdAndUpdate(courseId, { $push: { signUpList: newFanId } }, { new: true });
+    },
+    updateOneCourse(_id, owner, course, formData) {
+        const options = {};
+
+        for (const key in formData) if (formData[key].trim() != course[key]) options[key] = formData[key].trim();
+
+        if (0 === Object.keys(options).length) return;
+        
+        return Course.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
     }
 };

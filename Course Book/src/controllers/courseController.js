@@ -79,6 +79,21 @@ courseController.get("/:id/edit", isUser, isValidId, async (req, res) => {
         return res.render("course/edit", { messages: parseErrorMessage(error) });
     }
 });
+courseController.post("/:id/edit", isUser, isValidId, async (req, res) => {
+    const formData = req.body;
+
+    try {
+        const course = await courseService.getOneCourse({ _id: req.params.id, owner: req.user?.id });
+
+        if (!course) return res.redirect("/404");
+
+        await courseService.updateOneCourse(req.params.id, req.user.id, course, formData);
+
+        return res.redirect(`/courses/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("course/edit", { course: formData, messages: parseErrorMessage(error) });
+    }
+});
 
 // PROFILE
 courseController.get("/profile", isUser, async (req, res) => {
