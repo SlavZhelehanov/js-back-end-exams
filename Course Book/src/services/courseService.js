@@ -18,5 +18,8 @@ export default {
         if (details) return Course.findOne(params).populate("signUpList").populate("owner");
 
         return Course.findOne(params);
+    },
+    signUpToCourse(courseId, newFanId) {
+        return Course.findByIdAndUpdate(courseId, { $push: { signUpList: newFanId } }, { new: true });
     }
 };

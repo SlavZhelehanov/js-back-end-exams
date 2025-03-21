@@ -40,11 +40,28 @@ courseController.get("/:id/details", isValidId, async (req, res) => {
 
         if (!course) return res.redirect("/404");
 
-        const signedBy = 0 < course.signUpList.length ? course.signUpList.map(usr => usr = usr.username).join(" ") : false;
+        const signedBy = 0 < course.signUpList.length ? course.signUpList.map(usr => usr = usr.username).join(", ") : false;
         const isOwner = course.owner.equals(req.user?.id);
         const isSignUp = req.user && !isOwner && course.signUpList.some(id => id.equals(req.user.id));
 
         return res.render("course/details", { course, isOwner, isSignUp, signedBy });
+    } catch (error) {
+        return res.render("course/details", { messages: parseErrorMessage(error) });
+    }
+});
+
+// SIGN-Up
+courseController.get("/:id/signUp", isUser, isValidId, async (req, res) => {
+    try {
+        const course = await courseService.getOneCourse({ _id: req.params.id }, false);
+
+        if (!course) return res.redirect("/404");
+
+        if (!req.user || course.owner.equals(req.user.id) || course.signUpList.some(id => id.equals(req.user.id))) return res.redirect("/404");
+
+        await courseService.signUpToCourse(req.params.id, req.user.id);
+
+        return res.redirect(`/courses/${req.params.id}/details`);
     } catch (error) {
         return res.render("course/details", { messages: parseErrorMessage(error) });
     }

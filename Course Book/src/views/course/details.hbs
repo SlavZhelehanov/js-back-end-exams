@@ -26,7 +26,7 @@
                 <a href="/courses/{{course.id}}/edit">Edit</a>
                 <a href="/courses/{{course.id}}/delete">Delete</a>
             {{else}}
-                {{#unless signUpList}}
+                {{#unless isSignUp}}
                     <a href="/courses/{{course.id}}/signUp">Sign up</a>
                 {{else}}
                     <p class="sign-up">You've already signed up for this course!</p>
