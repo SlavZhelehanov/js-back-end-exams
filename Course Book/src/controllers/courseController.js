@@ -19,4 +19,9 @@ courseController.get("/:id/details", async (req, res) => {
     return res.render("course/details");
 });
 
+// EDIT
+courseController.get("/:id/edit", isUser, async (req, res) => {
+    return res.render("course/edit");
+});
+
 export default courseController;
