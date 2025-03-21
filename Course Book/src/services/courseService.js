@@ -11,7 +11,20 @@ export default {
     getLastTreeAddedCourses() {
         return Course.find({}, "title type certificate price").sort({ createdAt: -1 }).limit(3);
     },
-    getAllCourses() {
+    async getAllCourses(filter = null) {
+        if (filter) {
+            let createdCourses = [], signUpeCourses = [];
+
+            const courses = await Course.find({ $or: [{ signUpList: { $gte: filter } }, { owner: filter }] }).populate("signUpList");
+
+            for (const course of courses) {
+                if (course.owner.equals(filter)) createdCourses.push(course);
+                else signUpeCourses.push(course);
+            }
+
+            return { createdCourses, signUpeCourses };
+        }
+
         return Course.find({}, "image title type price");
     },
     getOneCourse(params, details) {

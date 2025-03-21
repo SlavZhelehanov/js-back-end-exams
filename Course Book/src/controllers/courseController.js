@@ -110,7 +110,13 @@ courseController.get("/:id/delete", isUser, isValidId, async (req, res) => {
 
 // PROFILE
 courseController.get("/profile", isUser, async (req, res) => {
-    return res.render("course/profile");
+    try {
+        const { createdCourses, signUpeCourses } = await courseService.getAllCourses(req.user.id);
+
+        return res.render("course/profile", { email: req.user.email, createdCourses, signUpeCourses });
+    } catch (error) {
+        return res.render("course/profile", { messages: parseErrorMessage(error) });
+    }
 });
 
 export default courseController;
