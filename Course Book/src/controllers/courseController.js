@@ -24,4 +24,9 @@ courseController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("course/edit");
 });
 
+// PROFILE
+courseController.get("/profile", isUser, async (req, res) => {
+    return res.render("course/profile");
+});
+
 export default courseController;
