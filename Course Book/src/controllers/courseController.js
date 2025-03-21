@@ -68,8 +68,16 @@ courseController.get("/:id/signUp", isUser, isValidId, async (req, res) => {
 });
 
 // EDIT
-courseController.get("/:id/edit", isUser, async (req, res) => {
-    return res.render("course/edit");
+courseController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const course = await courseService.getOneCourse({ _id: req.params.id, owner: req.user?.id }, false);
+
+        if (!course) return res.redirect("/404");
+
+        return res.render("course/edit", { course });
+    } catch (error) {
+        return res.render("course/edit", { messages: parseErrorMessage(error) });
+    }
 });
 
 // PROFILE
