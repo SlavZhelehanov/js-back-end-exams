@@ -13,5 +13,10 @@ export default {
     },
     getAllCourses() {
         return Course.find({}, "image title type price");
+    },
+    getOneCourse(params, details) {
+        if (details) return Course.findOne(params).populate("signUpList").populate("owner");
+
+        return Course.findOne(params);
     }
 };

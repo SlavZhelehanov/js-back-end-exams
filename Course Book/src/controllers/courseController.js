@@ -3,6 +3,7 @@ import { Router } from "express";
 import { isUser } from "../middlewares/authMiddleware.js";
 import courseService from "../services/courseService.js";
 import parseErrorMessage from "../util/parseErrorMessage.js";
+import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
 
 const courseController = Router();
 
@@ -33,8 +34,20 @@ courseController.get("/", async (req, res) => {
 });
 
 // DETAILS
-courseController.get("/:id/details", async (req, res) => {
-    return res.render("course/details");
+courseController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const course = await courseService.getOneCourse({ _id: req.params.id }, true);
+
+        if (!course) return res.redirect("/404");
+
+        const signedBy = 0 < course.signUpList.length ? course.signUpList.map(usr => usr = usr.username).join(" ") : false;
+        const isOwner = course.owner.equals(req.user?.id);
+        const isSignUp = req.user && !isOwner && course.signUpList.some(id => id.equals(req.user.id));
+
+        return res.render("course/details", { course, isOwner, isSignUp, signedBy });
+    } catch (error) {
+        return res.render("course/details", { messages: parseErrorMessage(error) });
+    }
 });
 
 // EDIT
