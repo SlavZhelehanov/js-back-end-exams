@@ -33,19 +33,19 @@ authController.get("/login", isGuest, (req, res) => {
     return res.render("auth/login");
 });
 authController.post("/login", isGuest, async (req, res) => {
-    let { username, password } = req.body;
+    let { email, password } = req.body;
 
-    username = username.trim();
+    email = email.trim();
     password = password.trim();
 
     try {
-        const user = await authService.login({ username, password });
+        const user = await authService.login({ email, password });
         const token = await jwt.sign({ id: user.id }, SUPER_SECRET, { expiresIn: "2h" });
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
         return res.redirect("/");
     } catch (error) {
-        return res.render("auth/login", { username, messages: parseErrorMessage(error) });
+        return res.render("auth/login", { email, messages: parseErrorMessage(error) });
     }
 });
 
