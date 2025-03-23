@@ -24,4 +24,9 @@ electronicController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("electronic/edit");
 });
 
+// SEARCH
+electronicController.get("/search", async (req, res) => {
+    return res.render("electronic/search");
+});
+
 export default electronicController;
