@@ -14,4 +14,9 @@ electronicController.get("/create", isUser, (req, res) => {
     return res.render("electronic/create");
 });
 
+// DETAILS
+electronicController.get("/:id/details", async (req, res) => {
+    return res.render("electronic/details");
+});
+
 export default electronicController;
