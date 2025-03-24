@@ -62,7 +62,7 @@ planetsController.get("/:id/like", isUser, isValidId, async (req, res) => {
 
         if (!planet || planet.owner.equals(req.user.id) || planet.likedList.some(id => id.equals(req.user.id))) return res.redirect("/404");
 
-        const update = await planetService.likeOnePlanet(req.params.id, req.user.id);
+        await planetService.likeOnePlanet(req.params.id, req.user.id);
 
         return res.redirect(`/planets/${req.params.id}/details`);
     } catch (error) {

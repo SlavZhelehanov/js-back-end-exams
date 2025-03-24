@@ -14,5 +14,8 @@ export default {
     },
     buyOneElectronic(_id, fanId) {
         return Electronic.findOneAndUpdate({ _id }, { $push: { buyingList: fanId } });
+    },
+    deleteOneElectronic(_id, owner) {
+        return Electronic.findOneAndDelete({ _id, owner });
     }
 };
