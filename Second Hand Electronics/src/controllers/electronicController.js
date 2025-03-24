@@ -1,6 +1,8 @@
 import { Router } from "express";
 
 import { isUser } from "../middlewares/authMiddleware.js";
+import electronicService from "../services/electronicService.js";
+import parseErrorMessage from "../util/parseErrorMessage.js";
 
 const electronicController = Router();
 
@@ -12,6 +14,16 @@ electronicController.get("/", async (req, res) => {
 // CREATE
 electronicController.get("/create", isUser, (req, res) => {
     return res.render("electronic/create");
+});
+electronicController.post("/create", isUser, async (req, res) => {
+    const electronic = req.body;
+
+    try {
+        await electronicService.createElectronic({ ...electronic, owner: req.user.id });
+        return res.redirect("/electronics");
+    } catch (error) {
+        return res.render("electronic/create", { messages: parseErrorMessage(error), ...electronic });
+    }
 });
 
 // DETAILS
