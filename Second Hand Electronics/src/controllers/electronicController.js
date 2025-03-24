@@ -78,8 +78,16 @@ electronicController.get("/:id/delete", isUser, isValidId, async (req, res) => {
 });
 
 // EDIT
-electronicController.get("/:id/edit", isUser, async (req, res) => {
-    return res.render("electronic/edit");
+electronicController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const electronic = await electronicService.findOneElectronic(req.params.id);
+
+        if (!electronic || !electronic.owner.equals(req.user.id)) return res.redirect("/404");
+
+        return res.render("electronic/edit", { electronic });
+    } catch (error) {
+        return res.redirect("/404");
+    }
 });
 
 // SEARCH
