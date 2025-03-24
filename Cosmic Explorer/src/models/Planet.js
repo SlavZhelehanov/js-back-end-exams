@@ -3,18 +3,18 @@ import { Schema, model } from "mongoose";
 const planetsSchema = new Schema({
     name: {
         type: String,
-        required: [true, "The username's field can't be empty"],
-        minLength: [2, "The username should be between 2 and 20 characters long"],
-        maxLength: [20, "The username should be between 2 and 20 characters long"]
+        required: [true, "The name's field can't be empty"],
+        minLength: [2, "The Name should be between 2 and 20 characters long"],
+        maxLength: [20, "The Name should be between 2 and 20 characters long"]
     },
     age: {
         type: Number,
-        required: [true, "The email's field can't be empty"],
-        minLength: [10, "The email should be at least 10 characters long"]
+        required: [true, "The age's field can't be empty"],
+        minLength: [10, "The Age should be at least 10 characters long"]
     },
     solarSystem: {
         type: String,
-        required: [true, "The password's field can't be empty"]
+        required: [true, "The solarSystem's field can't be empty"]
     },
     type: {
         type: String,
