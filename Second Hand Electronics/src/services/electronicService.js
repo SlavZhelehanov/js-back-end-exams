@@ -11,5 +11,8 @@ export default {
     },
     findOneElectronic(id) {
         return Electronic.findById(id);
+    },
+    buyOneElectronic(_id, fanId) {
+        return Electronic.findOneAndUpdate({ _id }, { $push: { buyingList: fanId } });
     }
 };

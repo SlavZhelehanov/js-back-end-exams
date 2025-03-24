@@ -49,6 +49,21 @@ electronicController.get("/:id/details", isValidId, async (req, res) => {
     }
 });
 
+// BUY
+electronicController.get("/:id/buy", isUser, isValidId, async (req, res) => {
+    try {
+        const electronic = await electronicService.findOneElectronic(req.params.id);
+
+        if (!electronic || electronic.owner.equals(req.user.id) || electronic.buyingList.some(id => id.equals(req.user.id))) return res.redirect("/404");
+
+        const update = await electronicService.buyOneElectronic(req.params.id, req.user.id);
+
+        return res.redirect(`/electronics/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("electronic/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // EDIT
 electronicController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("electronic/edit");
