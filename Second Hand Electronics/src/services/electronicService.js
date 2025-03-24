@@ -17,5 +17,12 @@ export default {
     },
     deleteOneElectronic(_id, owner) {
         return Electronic.findOneAndDelete({ _id, owner });
+    },
+    updateOneElectronic({ _id, owner, formData, electronic }) {
+        const options = {};
+
+        for (const key in formData) if (formData[key].trim() != electronic[key]) options[key] = formData[key].trim();
+
+        return Electronic.findOneAndUpdate({ _id, owner }, options, { runValidators: true });
     }
 };

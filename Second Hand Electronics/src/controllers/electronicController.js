@@ -89,6 +89,21 @@ electronicController.get("/:id/edit", isUser, isValidId, async (req, res) => {
         return res.redirect("/404");
     }
 });
+electronicController.post("/:id/edit", isUser, isValidId, async (req, res) => {
+    const formData = req.body;
+
+    try {
+        const electronic = await electronicService.findOneElectronic(req.params.id);
+
+        if (!electronic) return res.redirect("/404");
+
+        await electronicService.updateOneElectronic({ _id: req.params.id, owner: req.user.id, formData, electronic });
+
+        return res.redirect(`/electronics/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("electronic/edit", { messages: parseErrorMessage(error), electronic: formData });
+    }
+});
 
 // SEARCH
 electronicController.get("/search", async (req, res) => {
