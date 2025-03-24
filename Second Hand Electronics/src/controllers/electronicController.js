@@ -107,7 +107,15 @@ electronicController.post("/:id/edit", isUser, isValidId, async (req, res) => {
 
 // SEARCH
 electronicController.get("/search", async (req, res) => {
-    return res.render("electronic/search");
+    const query = req.query;
+
+    try {
+        const electronics = await electronicService.getAllElectronics(query);
+
+        return res.render("electronic/search", { electronics, name: query?.name?.trim(), type: query?.type?.trim() });
+    } catch (error) {
+        return res.render("electronic/search", { messages: parseErrorMessage(error), name: query?.name?.trim(), type: query?.type?.trim() });
+    }
 });
 
 export default electronicController;

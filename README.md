@@ -9,4 +9,4 @@ Solutions to Softuni's JS-Back-End exams
 - [x] 6. Magma Haven - retake exam 10.04.2024
 - [x] 7. Earth Treasure Vaul - regular exam 18.02.2024
 - [x] 8. Course Book - reatake exam 13.12.2023
-- [ ] 9. Second Hand Electronics - regular exam 21.10.2023
+- [x] 9. Second Hand Electronics - regular exam 21.10.2023

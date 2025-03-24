@@ -6,8 +6,21 @@ export default {
 
         return Electronic.create(electronic);
     },
-    getAllElectronics() {
-        return Electronic.find({}, "name price image");
+    getAllElectronics(filter = null) {
+        let search = {};
+
+        if (filter && 0 < Object.keys(filter).length) {
+            if (filter.name && 0 < filter.name.trim().length && 0 === filter.type.trim().length) search = { name: new RegExp(filter.name.trim(), 'i') }
+            else if (filter.name && 0 === filter.name.trim().length && 0 < filter.type.trim().length) search = { type: new RegExp(filter.type.trim(), 'i') }
+            else if (filter.name && 0 < filter.name.trim().length && 0 < filter.type.trim().length) search = {
+                $or: [
+                    { name: new RegExp(filter.name.trim(), 'i') },
+                    { type: new RegExp(filter.type.trim(), 'i') }
+                ]
+            }
+        } 
+        
+        return Electronic.find(search, "name price image");
     },
     findOneElectronic(id) {
         return Electronic.findById(id);
