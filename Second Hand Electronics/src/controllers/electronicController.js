@@ -8,7 +8,13 @@ const electronicController = Router();
 
 // CATALOG
 electronicController.get("/", async (req, res) => {
-    return res.render("electronic/catalog");
+    try {
+        const electronics = await electronicService.getAllElectronics();
+
+        return res.render("electronic/catalog", { electronics });
+    } catch (error) {
+        return res.render("electronic/catalog", { messages: parseErrorMessage(error) });
+    }
 });
 
 // CREATE
