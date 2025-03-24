@@ -3,6 +3,7 @@ import { Router } from "express";
 import { isUser } from "../middlewares/authMiddleware.js";
 import electronicService from "../services/electronicService.js";
 import parseErrorMessage from "../util/parseErrorMessage.js";
+import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
 
 const electronicController = Router();
 
@@ -33,8 +34,19 @@ electronicController.post("/create", isUser, async (req, res) => {
 });
 
 // DETAILS
-electronicController.get("/:id/details", async (req, res) => {
-    return res.render("electronic/details");
+electronicController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const electronic = await electronicService.findOneElectronic(req.params.id);
+
+        if (!electronic) return res.redirect("/404");
+
+        const isOwner = electronic.owner.equals(req.user?.id);
+        const isBought = req.user && !isOwner && electronic.buyingList.some(id => id.equals(req.user.id));
+
+        return res.render("electronic/details", { electronic, isOwner, isBought });
+    } catch (error) {
+        return res.render("electronic/details", { messages: parseErrorMessage(error) });
+    }
 });
 
 // EDIT

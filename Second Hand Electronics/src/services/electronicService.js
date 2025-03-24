@@ -8,5 +8,8 @@ export default {
     },
     getAllElectronics() {
         return Electronic.find({}, "name price image");
+    },
+    findOneElectronic(id) {
+        return Electronic.findById(id);
     }
 };
