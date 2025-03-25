@@ -14,16 +14,16 @@ authController.get("/register", isGuest, (req, res) => {
     return res.render("auth/register");
 });
 authController.post("/register", isGuest, async (req, res) => {
-    const { name, email, password, rePassword } = req.body;
+    const {firstName, lastName, email, password, rePassword } = req.body;
 
     try {
-        const user = await authService.register({ name, email, password, rePassword });
+        const user = await authService.register({firstName, lastName, email, password, rePassword });
         const token = await jwt.sign({ id: user.id, username: user.name, email }, SUPER_SECRET, { expiresIn: "2h" });
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
-        return res.redirect("/devices");
+        return res.redirect("/");
     } catch (error) {
-        return res.render("auth/register", { name, email, messages: parseErrorMessage(error) });
+        return res.render("auth/register", {firstName, lastName, email, messages: parseErrorMessage(error) });
     }
 });
 
@@ -42,7 +42,7 @@ authController.post("/login", isGuest, async (req, res) => {
         const token = await jwt.sign({ id: user.id, username: user.name, email }, SUPER_SECRET, { expiresIn: "2h" });
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
-        return res.redirect("/devices");
+        return res.redirect("/");
     } catch (error) {
         return res.render("auth/login", { email, messages: parseErrorMessage(error) });
     }
