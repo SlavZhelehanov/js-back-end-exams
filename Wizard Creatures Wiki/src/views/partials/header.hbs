@@ -5,13 +5,14 @@
     <ul class="menu">
         <li><a href="/">Home</a></li>
         <li><a href="/creatures">All Posts</a></li>
-        <!-- Logged users -->
-        <li><a href="/creatures/create">Create Post</a></li>
-        <li><a href="/creatures/profile">Profile</a></li>
-        <li><a href="/auth/logout">Logout</a></li>
-        <!-- Guest users -->
-        <li><a href="/auth/register">Register</a></li>
-        <li><a href="/auth/login">Login</a></li>
+        {{#if user}}
+            <li><a href="/creatures/create">Create Post</a></li>
+            <li><a href="/creatures/profile">Profile</a></li>
+            <li><a href="/auth/logout">Logout</a></li>
+        {{else}}
+            <li><a href="/auth/register">Register</a></li>
+            <li><a href="/auth/login">Login</a></li>
+        {{/if}}
     </ul>
 
 </nav>
