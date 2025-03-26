@@ -24,4 +24,9 @@ creatureController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("creature/edit");
 });
 
+// PROFILE
+creatureController.get("/profile", isUser, async (req, res) => {
+    return res.render("creature/profile");
+});
+
 export default creatureController;
