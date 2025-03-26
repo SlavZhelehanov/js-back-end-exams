@@ -14,4 +14,9 @@ creatureController.get("/create", isUser, (req, res) => {
     return res.render("creature/create");
 });
 
+// DETAILS
+creatureController.get("/:id/details", async (req, res) => {
+    return res.render("creature/details");
+});
+
 export default creatureController;
