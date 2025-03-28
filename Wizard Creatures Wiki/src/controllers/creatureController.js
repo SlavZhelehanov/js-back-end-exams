@@ -78,6 +78,21 @@ creatureController.get("/:id/edit", isUser, isValidId, async (req, res) => {
         return res.render("creature/edit", { messages: parseErrorMessage(error) });
     }
 });
+creatureController.post("/:id/edit", isUser, isValidId, async (req, res) => {
+    const formData = req.body;
+
+    try {
+        const creature = await creatureService.getOneCreature({ _id: req.params.id, owner: req.user?.id });
+
+        if (!creature) return res.redirect("/404");
+
+        await creatureService.updateOneCreature(req.params.id, req.user.id, creature, formData);
+
+        return res.redirect(`/creatures/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("creature/edit", { creature: formData, messages: parseErrorMessage(error) });
+    }
+});
 
 // PROFILE
 creatureController.get("/profile", isUser, async (req, res) => {
