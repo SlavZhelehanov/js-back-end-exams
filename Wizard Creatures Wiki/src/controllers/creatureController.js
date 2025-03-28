@@ -68,8 +68,15 @@ creatureController.get("/:id/vote", isUser, isValidId, async (req, res) => {
 });
 
 // EDIT
-creatureController.get("/:id/edit", isUser, async (req, res) => {
-    return res.render("creature/edit");
+creatureController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const creature = await creatureService.getOneCreature({ _id: req.params.id, owner: req.user?.id });
+
+        if (!creature) return res.redirect("/404");
+        return res.render("creature/edit", { creature });
+    } catch (error) {
+        return res.render("creature/edit", { messages: parseErrorMessage(error) });
+    }
 });
 
 // PROFILE
