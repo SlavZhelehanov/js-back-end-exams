@@ -1,6 +1,8 @@
 import { Router } from "express";
 
 import { isUser } from "../middlewares/authMiddleware.js";
+import creatureService from "../services/creatureService.js";
+import parseErrorMessage from "../util/parseErrorMessage.js";
 
 const creatureController = Router();
 
@@ -12,6 +14,16 @@ creatureController.get("/", async (req, res) => {
 // CREATE
 creatureController.get("/create", isUser, (req, res) => {
     return res.render("creature/create");
+});
+creatureController.post("/create", isUser, async (req, res) => {
+    const { name, species, skinColor, eyeColor, image, description } = req.body;
+
+    try {
+        await creatureService.createCreature({ name, species, skinColor, eyeColor, image, description, owner: req.user.id });
+        return res.redirect("/creatures");
+    } catch (error) {
+        return res.render("creature/create", { messages: parseErrorMessage(error), name, species, skinColor, eyeColor, image, description });
+    }
 });
 
 // DETAILS
