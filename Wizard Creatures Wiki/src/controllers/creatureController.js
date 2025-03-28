@@ -8,7 +8,13 @@ const creatureController = Router();
 
 // CATALOG
 creatureController.get("/", async (req, res) => {
-    return res.render("creature/catalog");
+    try {
+        const creatures = await creatureService.getAllCreatures();
+
+        return res.render("creature/catalog", { creatures });
+    } catch (error) {
+        return res.render("creature/catalog", { messages: parseErrorMessage(error) });
+    }
 });
 
 // CREATE

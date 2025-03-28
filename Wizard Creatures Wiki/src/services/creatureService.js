@@ -6,4 +6,7 @@ export default {
 
         return Creature.create(creatureData);
     },
+    getAllCreatures() {
+        return Creature.find({}, "image name species description");
+    }
 };
