@@ -22,5 +22,8 @@ export default {
 
         if (0 === Object.keys(options).length) return;
         return Creature.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
+    },
+    deleteOneCreature(_id, owner) {
+        return Creature.findOneAndDelete({ _id, owner });
     }
 };

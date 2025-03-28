@@ -94,6 +94,19 @@ creatureController.post("/:id/edit", isUser, isValidId, async (req, res) => {
     }
 });
 
+// DELETE
+creatureController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const query = await creatureService.deleteOneCreature(req.params.id, req.user.id);
+
+        if (!query) return res.redirect("/404");
+
+        return res.redirect("/creatures");
+    } catch (error) {
+        return res.render("creature/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // PROFILE
 creatureController.get("/profile", isUser, async (req, res) => {
     return res.render("creature/profile");
