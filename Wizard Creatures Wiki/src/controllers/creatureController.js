@@ -3,6 +3,7 @@ import { Router } from "express";
 import { isUser } from "../middlewares/authMiddleware.js";
 import creatureService from "../services/creatureService.js";
 import parseErrorMessage from "../util/parseErrorMessage.js";
+import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
 
 const creatureController = Router();
 
@@ -33,8 +34,20 @@ creatureController.post("/create", isUser, async (req, res) => {
 });
 
 // DETAILS
-creatureController.get("/:id/details", async (req, res) => {
-    return res.render("creature/details");
+creatureController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const creature = await creatureService.getOneCreature({ _id: req.params.id });
+
+        if (!creature) return res.redirect("/404");
+
+        const isOwner = creature.owner.equals(req.user?.id);
+        const isVoted = req.user && !isOwner && creature.votes.some(id => id.equals(req.user.id));
+        const hasVoters = 0 < creature.votes.length ? creature.votes.join(", ") : null;
+
+        return res.render("creature/details", { creature, isOwner, isVoted, hasVoters });
+    } catch (error) {
+        return res.render("creature/details", { messages: parseErrorMessage(error) });
+    }
 });
 
 // EDIT

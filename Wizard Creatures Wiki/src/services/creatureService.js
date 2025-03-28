@@ -8,5 +8,8 @@ export default {
     },
     getAllCreatures() {
         return Creature.find({}, "image name species description");
+    },
+    getOneCreature(params) {
+        return Creature.findOne(params).populate("owner");
     }
 };
