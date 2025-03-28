@@ -11,5 +11,8 @@ export default {
     },
     getOneCreature(params) {
         return Creature.findOne(params).populate("owner");
+    },
+    voteForCreature(creatureId, newFanId) {
+        return Creature.findByIdAndUpdate(creatureId, { $push: { votes: newFanId } }, { new: true });
     }
 };
