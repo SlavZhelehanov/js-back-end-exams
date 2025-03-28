@@ -109,7 +109,13 @@ creatureController.get("/:id/delete", isUser, isValidId, async (req, res) => {
 
 // PROFILE
 creatureController.get("/profile", isUser, async (req, res) => {
-    return res.render("creature/profile");
+    try {
+        const creatures = await creatureService.getAllCreatures(req.user.id);
+
+        return res.render("creature/profile", { creatures });
+    } catch (error) {
+        return res.render("creature/profile", { messages: parseErrorMessage(error) });
+    }
 });
 
 export default creatureController;

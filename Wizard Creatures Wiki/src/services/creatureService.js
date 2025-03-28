@@ -6,7 +6,9 @@ export default {
 
         return Creature.create(creatureData);
     },
-    getAllCreatures() {
+    getAllCreatures(filter = null) {
+        if (filter) return Creature.find({ owner: filter }, "image name species votes owner").populate("owner");
+
         return Creature.find({}, "image name species description");
     },
     getOneCreature(params) {

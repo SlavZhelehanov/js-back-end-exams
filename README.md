@@ -10,4 +10,4 @@ Solutions to Softuni's JS-Back-End exams
 - [x] 7. Earth Treasure Vaul - regular exam 18.02.2024
 - [x] 8. Course Book - retake exam 13.12.2023
 - [x] 9. Second Hand Electronics - regular exam 21.10.2023
-- [ ] 10. Wizard Creatures Wiki - retake exam 10.08.2023
+- [x] 10. Wizard Creatures Wiki - retake exam 10.08.2023
