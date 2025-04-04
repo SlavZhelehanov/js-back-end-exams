@@ -6,8 +6,8 @@ export default {
 
         if (userData.password != userData.rePassword) throw new Error("Password and repeat password must match!");
 
-        const user = await User.findOne({ username: userData.username });
-        if (user) throw new Error("This username is already registered!");
+        const user = await User.findOne({ email: userData.email });
+        if (user) throw new Error("This email is already registered!");
 
         return User.create(userData);
     },

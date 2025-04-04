@@ -14,17 +14,17 @@ authController.get("/register", isGuest, (req, res) => {
     return res.render("auth/register");
 });
 authController.post("/register", isGuest, async (req, res) => {
-    const { username, email, password, rePassword } = req.body;
+    const { email, password, rePassword } = req.body;
 
     try {
-        let user = await authService.register({ username, email, password, rePassword });
+        let user = await authService.register({ email, password, rePassword });
 
         const token = await jwt.sign({ id: user.id }, SUPER_SECRET, { expiresIn: "2h" });
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
-        return res.redirect("/planets");
+        return res.redirect("/");
     } catch (error) {
-        return res.render("auth/register", { username, email, messages: parseErrorMessage(error) });
+        return res.render("auth/register", { email, messages: parseErrorMessage(error) });
     }
 });
 
