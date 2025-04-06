@@ -22,4 +22,9 @@ animalController.get("/create", isUser, (req, res) => {
     return res.render("animal/create");
 });
 
+// EDIT
+animalController.get("/:id/edit", isUser, async (req, res) => {
+    return res.render("animal/edit");
+});
+
 export default animalController;
