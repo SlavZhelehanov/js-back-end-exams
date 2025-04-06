@@ -12,4 +12,9 @@ animalController.get("/", async (req, res) => {
     return res.render("animal/catalog");
 });
 
+// DETAILS
+animalController.get("/:id/details", async (req, res) => {
+    return res.render("animal/details");
+});
+
 export default animalController;
