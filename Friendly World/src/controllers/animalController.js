@@ -27,4 +27,11 @@ animalController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("animal/edit");
 });
 
+// SEARCH
+animalController.get("/search", async (req, res) => {
+    const query = req.query;
+
+    return res.render("animal/search");
+});
+
 export default animalController;
