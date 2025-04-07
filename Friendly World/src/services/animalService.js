@@ -8,4 +8,7 @@ export default {
 
         return Animal.create(animal);
     },
+    getAllAnimals() {
+        return Animal.find({}, "name image need location");
+    },
 };

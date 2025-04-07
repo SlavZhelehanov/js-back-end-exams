@@ -9,7 +9,13 @@ import { isUser } from "../middlewares/authMiddleware.js";
 
 // CATALOG
 animalController.get("/", async (req, res) => {
-    return res.render("animal/catalog");
+    try {
+        const animals = await animalService.getAllAnimals();
+
+        return res.render("animal/catalog", { animals });
+    } catch (error) {
+        return res.render("animal/catalog", { messages: parseErrorMessage(error) });
+    }
 });
 
 // DETAILS
