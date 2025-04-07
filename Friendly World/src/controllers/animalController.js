@@ -34,6 +34,21 @@ animalController.get("/:id/details", isValidId, async (req, res) => {
     }
 });
 
+// DONATE
+animalController.get("/:id/donate", isUser, isValidId, async (req, res) => {
+    try {
+        const animal = await animalService.findOneAnimal(req.params.id);
+
+        if (!animal || animal.owner.equals(req.user.id) || animal.donations.some(id => id.equals(req.user.id))) return res.redirect("/404");
+
+        await animalService.donateToOneAnimal(req.params.id, req.user.id);
+
+        return res.redirect(`/animals/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("animal/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // CREATE
 animalController.get("/create", isUser, (req, res) => {
     return res.render("animal/create");

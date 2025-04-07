@@ -13,5 +13,8 @@ export default {
     },
     findOneAnimal(id) {
         return Animal.findById(id);
+    },
+    donateToOneAnimal(_id, fanId) {
+        return Animal.findOneAndUpdate({ _id }, { $push: { donations: fanId } });
     }
 };
