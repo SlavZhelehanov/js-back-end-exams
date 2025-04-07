@@ -2,8 +2,8 @@ import { Router } from "express";
 
 const animalController = Router();
 
-// import animalService from "../services/animalService.js";
-// import parseErrorMessage from "../util/parseErrorMessage.js";
+import animalService from "../services/animalService.js";
+import parseErrorMessage from "../util/parseErrorMessage.js";
 // import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
 import { isUser } from "../middlewares/authMiddleware.js";
 
@@ -20,6 +20,16 @@ animalController.get("/:id/details", async (req, res) => {
 // CREATE
 animalController.get("/create", isUser, (req, res) => {
     return res.render("animal/create");
+});
+animalController.post("/create", isUser, async (req, res) => {
+    const animal = req.body;
+
+    try {
+        await animalService.createAnimal({ ...animal, owner: req.user.id });
+        return res.redirect("/animals");
+    } catch (error) {
+        return res.render("animal/create", { messages: parseErrorMessage(error), ...animal });
+    }
 });
 
 // EDIT
