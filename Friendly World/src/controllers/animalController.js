@@ -10,7 +10,7 @@ import { isUser } from "../middlewares/authMiddleware.js";
 // CATALOG
 animalController.get("/", async (req, res) => {
     try {
-        const animals = await animalService.getAllAnimals();
+        const animals = await animalService.getAllAnimals({}, "name image need location");
 
         return res.render("animal/catalog", { animals });
     } catch (error) {

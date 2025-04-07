@@ -4,11 +4,11 @@ export default {
     createAnimal(animal) {
         for (const key in animal) animal[key] = animal[key].trim();
 
-        if(isNaN(animal.years)) throw new Error("The years should be a number between 1 and  100.");
+        if (isNaN(animal.years)) throw new Error("The years should be a number between 1 and  100.");
 
         return Animal.create(animal);
     },
-    getAllAnimals() {
-        return Animal.find({}, "name image need location");
+    getAllAnimals(search, filter) {
+        return Animal.find(search, filter);
     },
 };
