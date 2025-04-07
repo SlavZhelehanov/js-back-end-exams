@@ -16,5 +16,8 @@ export default {
     },
     donateToOneAnimal(_id, fanId) {
         return Animal.findOneAndUpdate({ _id }, { $push: { donations: fanId } });
+    },
+    deleteOneAnimal(_id, owner) {
+        return Animal.findOneAndDelete({ _id, owner });
     }
 };

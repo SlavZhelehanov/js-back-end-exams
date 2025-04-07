@@ -49,6 +49,19 @@ animalController.get("/:id/donate", isUser, isValidId, async (req, res) => {
     }
 });
 
+// DELETE
+animalController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const animal = await animalService.deleteOneAnimal(req.params.id, req.user.id);
+
+        if (!animal) return res.redirect("/404");
+
+        return res.redirect("/animals");
+    } catch (error) {
+        return res.render("animal/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // CREATE
 animalController.get("/create", isUser, (req, res) => {
     return res.render("animal/create");
