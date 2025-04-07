@@ -78,8 +78,19 @@ animalController.post("/create", isUser, async (req, res) => {
 });
 
 // EDIT
-animalController.get("/:id/edit", isUser, async (req, res) => {
-    return res.render("animal/edit");
+animalController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const animal = await animalService.findOneAnimal(req.params.id).lean();
+
+        if (!animal || !animal.owner.equals(req.user.id)) return res.redirect("/404");
+
+        console.log({ ...animal });
+
+
+        return res.render("animal/edit", { ...animal });
+    } catch (error) {
+        return res.redirect("/404");
+    }
 });
 
 // SEARCH
