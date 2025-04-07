@@ -4,7 +4,7 @@ const animalController = Router();
 
 import animalService from "../services/animalService.js";
 import parseErrorMessage from "../util/parseErrorMessage.js";
-// import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
+import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
 import { isUser } from "../middlewares/authMiddleware.js";
 
 // CATALOG
@@ -19,8 +19,19 @@ animalController.get("/", async (req, res) => {
 });
 
 // DETAILS
-animalController.get("/:id/details", async (req, res) => {
-    return res.render("animal/details");
+animalController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const animal = await animalService.findOneAnimal(req.params.id);
+
+        if (!animal) return res.redirect("/404");
+
+        const isOwner = animal.owner.equals(req.user?.id);
+        const isDonated = req.user && !isOwner && animal.donations.some(id => id.equals(req.user.id));
+
+        return res.render("animal/details", { animal, isOwner, isDonated });
+    } catch (error) {
+        return res.render("animal/details", { messages: parseErrorMessage(error) });
+    }
 });
 
 // CREATE

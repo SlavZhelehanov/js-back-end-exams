@@ -11,4 +11,7 @@ export default {
     getAllAnimals(search, filter) {
         return Animal.find(search, filter);
     },
+    findOneAnimal(id) {
+        return Animal.findById(id);
+    }
 };
