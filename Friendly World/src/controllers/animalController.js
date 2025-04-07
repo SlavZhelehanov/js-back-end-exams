@@ -109,9 +109,16 @@ animalController.post("/:id/edit", isUser, isValidId, async (req, res) => {
 
 // SEARCH
 animalController.get("/search", async (req, res) => {
-    const query = req.query;
+    const query = req.query?.location?.trim();
+    const filter = query ? { location: { $regex: query, $options: "i" } } : {};
 
-    return res.render("animal/search");
+    try {
+        const animals = await animalService.getAllAnimals(filter, "name image need location");
+
+        return res.render("animal/search", { animals, location: query });
+    } catch (error) {
+        return res.render("animal/search", { messages: parseErrorMessage(error), location: query });
+    }
 });
 
 export default animalController;
