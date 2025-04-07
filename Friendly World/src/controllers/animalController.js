@@ -92,6 +92,20 @@ animalController.get("/:id/edit", isUser, isValidId, async (req, res) => {
         return res.redirect("/404");
     }
 });
+animalController.post("/:id/edit", isUser, isValidId, async (req, res) => {
+    const formData = req.body;
+
+    try {
+        const animal = await animalService.findOneAnimal(req.params.id).lean();
+
+        if (!animal) return res.redirect("/404");
+
+        await animalService.updateOneAnimal({ _id: req.params.id, owner: req.user.id, animal, formData });
+        return res.redirect(`/animals/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("animal/edit", { messages: parseErrorMessage(error), ...formData });
+    }
+});
 
 // SEARCH
 animalController.get("/search", async (req, res) => {

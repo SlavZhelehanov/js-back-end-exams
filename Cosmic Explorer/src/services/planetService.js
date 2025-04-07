@@ -23,8 +23,10 @@ export default {
     deleteOnePlanet(_id, owner) {
         return Planet.findOneAndDelete({ _id, owner });
     },
-    updateOnePlanet({ _id, owner, options }) {
-        for (const key in options) options[key] = options[key].trim();
+    updateOnePlanet({ _id, owner, planet, formData }) {
+		const options = {};
+		
+        for (const key in formData) if (formData[key].trim() != planet[key]) options[key] = formData[key].trim();
 
         return Planet.findOneAndUpdate({ _id, owner }, options, { runValidators: true });
     }

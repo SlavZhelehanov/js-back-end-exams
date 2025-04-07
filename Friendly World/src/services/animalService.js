@@ -19,5 +19,14 @@ export default {
     },
     deleteOneAnimal(_id, owner) {
         return Animal.findOneAndDelete({ _id, owner });
+    },
+    updateOneAnimal({ _id, owner, animal, formData }) {
+        const options = {};
+
+        for (const key in formData) if (formData[key].trim() != animal[key]) options[key] = formData[key].trim();
+
+        if (options.years && isNaN(options.years)) throw new Error("The years should be a number between 1 and  100.");
+
+        return Animal.findOneAndUpdate({ _id, owner }, options, { runValidators: true });
     }
 };
