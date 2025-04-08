@@ -28,7 +28,10 @@ app.engine('hbs', engine({
     layoutsDir: __dirname + '/views/layouts',
     extname: 'hbs',
     defaultLayout: 'main',
-    helpers: { setPageTitle(title) { this.pageTitle = title; } },
+    helpers: {
+        setPageTitle(title) { this.pageTitle = title; },
+        setPageMain(main) { this.pageMain = main; }
+    },
     runtimeOptions: { allowProtoPropertiesByDefault: true },
     partialsDir: __dirname + '/views/partials/'
 }));
