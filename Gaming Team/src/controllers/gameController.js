@@ -22,4 +22,9 @@ gameController.get("/:id/details", async (req, res) => {
     return res.render("game/details");
 });
 
+// EDIT
+gameController.get("/:id/edit", isUser, async (req, res) => {
+    return res.render("game/edit");
+});
+
 export default gameController;
