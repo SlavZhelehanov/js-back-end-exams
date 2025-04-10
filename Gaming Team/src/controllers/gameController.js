@@ -27,4 +27,9 @@ gameController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("game/edit");
 });
 
+// SEARCH
+gameController.get("/search", async (req, res) => {
+    return res.render("game/search");
+});
+
 export default gameController;
