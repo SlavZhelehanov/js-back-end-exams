@@ -5,6 +5,11 @@
   background-position: center;
   background-size: cover;
   padding-top: 30px;
+
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  flex-direction: column; /* Optional: Stack children vertically */
 }
 
 .game-search h1 {
@@ -14,15 +19,16 @@
 }
 
 .search-form {
-  display: inline;
+  display: flex;
   width: 500px;
   height: 40px;
   background: #444;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 3px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
-  margin-left: 15%;
-  margin-top: 100%;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
 }
 
 .search-form input,
