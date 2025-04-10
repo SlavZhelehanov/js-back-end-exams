@@ -17,4 +17,9 @@ gameController.get("/create", isUser, (req, res) => {
     return res.render("game/create");
 });
 
+// DETAILS
+gameController.get("/:id/details", async (req, res) => {
+    return res.render("game/details");
+});
+
 export default gameController;
