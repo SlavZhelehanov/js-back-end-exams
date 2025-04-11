@@ -10,7 +10,13 @@ const gameController = Router();
 
 // CATALOG
 gameController.get("/", async (req, res) => {
-    return res.render("game/catalog");
+    try {
+        const games = await gameService.getAllGames();
+
+        return res.render("game/catalog", { games });
+    } catch (error) {
+        return res.render("game/catalog", { messages: parseErrorMessage(error) });
+    }
 });
 
 // CREATE
