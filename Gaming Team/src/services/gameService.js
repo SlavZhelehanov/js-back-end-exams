@@ -5,8 +5,13 @@ export default {
         for (const key in gameData) gameData[key] = gameData[key].trim();
         return Game.create(gameData);
     },
-    getAllGames() {
-        return Game.find({}, "name image platform genre price");
+    getAllGames(filter = null) {
+        const search = filter?.name ? {
+            name: { $regex: filter["name"], $options: "i" },
+            platform: { $regex: filter["platform"], $options: "i" },
+        } : {};
+
+        return Game.find(search, "name image platform genre price");
     },
     getOneGame(params) {
         return Game.findOne(params);

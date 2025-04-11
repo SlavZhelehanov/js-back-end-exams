@@ -12,4 +12,4 @@ Solutions to Softuni's JS-Back-End exams
 - [x] 9. Second Hand Electronics - regular exam 21.10.2023
 - [x] 10. Wizard Creatures Wiki - retake exam 10.08.2023
 - [x] 11. Friendly World - regular exam 18.06.2023
-- [ ] 12. Gaming Team - retake exam 13.04.2023
+- [x] 12. Gaming Team - retake exam 13.04.2023

@@ -5,6 +5,7 @@ import { isUser } from "../middlewares/authMiddleware.js";
 import gameService from "../services/gameService.js";
 import { isValidId } from "../middlewares/utlParamsMiddleware.js";
 import { getTypeOfPlatform } from "../util/getTypeOfPlatform.js";
+import { validateQuery } from "../util/validateUrls.js";
 
 const gameController = Router();
 
@@ -113,7 +114,16 @@ gameController.post("/:id/edit", isUser, isValidId, async (req, res) => {
 
 // SEARCH
 gameController.get("/search", async (req, res) => {
-    return res.render("game/search");
+    const search = validateQuery(req.query) ? req.query : null;
+    const types = getTypeOfPlatform(req.query?.platform);
+
+    try {
+        const games = await gameService.getAllGames(search);
+
+        return res.render("game/search", { types, games, name: search?.name });
+    } catch (error) {
+        return res.render("game/search", { messages: parseErrorMessage(error), search, types });
+    }
 });
 
 export default gameController;
