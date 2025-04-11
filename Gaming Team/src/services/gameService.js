@@ -11,4 +11,7 @@ export default {
     getOneGame(params) {
         return Game.findOne(params);
     },
+    buyGame(gameId, newFanId) {
+        return Game.findByIdAndUpdate(gameId, { $push: { boughtBy: newFanId } }, { new: true });
+    },
 };

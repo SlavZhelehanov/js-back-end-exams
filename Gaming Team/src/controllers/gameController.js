@@ -52,6 +52,21 @@ gameController.get("/:id/details", isValidId, async (req, res) => {
     }
 });
 
+// BUY
+gameController.get("/:id/buy", isUser, isValidId, async (req, res) => {
+    try {
+        const game = await gameService.getOneGame({ _id: req.params.id });
+
+        if (!game || game.owner.equals(req.user.id) || game.boughtBy.some(id => id.equals(req.user.id))) return res.redirect("/404");
+
+        await gameService.buyGame(req.params.id, req.user.id);
+
+        return res.redirect(`/games/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("game/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // EDIT
 gameController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("game/edit");
