@@ -94,6 +94,22 @@ gameController.get("/:id/edit", isUser, isValidId, async (req, res) => {
         return res.render("game/edit", { messages: parseErrorMessage(error) });
     }
 });
+gameController.post("/:id/edit", isUser, isValidId, async (req, res) => {
+    const formData = req.body;
+
+    try {
+        const game = await gameService.getOneGame({ _id: req.params.id, owner: req.user?.id });
+
+        if (!game) return res.redirect("/404");
+
+        await gameService.updateOneGame(req.params.id, req.user.id, game, formData);
+
+        return res.redirect(`/games/${req.params.id}/details`);
+    } catch (error) {
+        const types = getTypeOfPlatform(formData.platform);
+        return res.render("game/edit", { ...formData, types, messages: parseErrorMessage(error) });
+    }
+});
 
 // SEARCH
 gameController.get("/search", async (req, res) => {

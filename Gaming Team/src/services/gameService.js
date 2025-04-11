@@ -17,4 +17,12 @@ export default {
     deleteOneGame(_id, owner) {
         return Game.findOneAndDelete({ _id, owner });
     },
+    updateOneGame(_id, owner, game, formData) {
+        const options = {};
+
+        for (const key in formData) if (formData[key].trim() != game[key]) options[key] = formData[key].trim();
+
+        if (0 === Object.keys(options).length) return;
+        return Game.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
+    }
 };
