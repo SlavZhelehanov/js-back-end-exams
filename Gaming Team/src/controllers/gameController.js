@@ -3,7 +3,7 @@ import { Router } from "express";
 import { parseErrorMessage } from "../util/parseErrorMessage.js";
 import { isUser } from "../middlewares/authMiddleware.js";
 import gameService from "../services/gameService.js";
-// import { isValidId } from "../middlewares/utlParamsMiddleware.js";
+import { isValidId } from "../middlewares/utlParamsMiddleware.js";
 import { getTypeOfPlatform } from "../util/getTypeOfPlatform.js";
 
 const gameController = Router();
@@ -38,8 +38,18 @@ gameController.post("/create", isUser, async (req, res) => {
 });
 
 // DETAILS
-gameController.get("/:id/details", async (req, res) => {
-    return res.render("game/details");
+gameController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const game = await gameService.getOneGame({ _id: req.params.id }).lean();
+
+        if (!game) return res.redirect("/404");
+
+        const isOwner = game.owner.equals(req.user?.id);
+        const isBought = req.user && !isOwner && game.boughtBy.some(id => id.equals(req.user.id));
+        return res.render("game/details", { ...game, isOwner, isBought });
+    } catch (error) {
+        return res.render("game/details", { messages: parseErrorMessage(error) });
+    }
 });
 
 // EDIT

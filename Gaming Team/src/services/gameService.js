@@ -8,4 +8,7 @@ export default {
     getAllGames() {
         return Game.find({}, "name image platform genre price");
     },
+    getOneGame(params) {
+        return Game.findOne(params);
+    },
 };
