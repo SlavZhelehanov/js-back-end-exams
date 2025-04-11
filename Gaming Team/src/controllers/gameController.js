@@ -81,8 +81,18 @@ gameController.get("/:id/delete", isUser, isValidId, async (req, res) => {
 });
 
 // EDIT
-gameController.get("/:id/edit", isUser, async (req, res) => {
-    return res.render("game/edit");
+gameController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const game = await gameService.getOneGame({ _id: req.params.id, owner: req.user?.id }).lean();
+
+        if (!game) return res.redirect("/404");
+
+        const types = getTypeOfPlatform(game.platform);
+
+        return res.render("game/edit", { ...game, types });
+    } catch (error) {
+        return res.render("game/edit", { messages: parseErrorMessage(error) });
+    }
 });
 
 // SEARCH
