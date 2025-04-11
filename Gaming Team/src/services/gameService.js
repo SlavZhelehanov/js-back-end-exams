@@ -14,4 +14,7 @@ export default {
     buyGame(gameId, newFanId) {
         return Game.findByIdAndUpdate(gameId, { $push: { boughtBy: newFanId } }, { new: true });
     },
+    deleteOneGame(_id, owner) {
+        return Game.findOneAndDelete({ _id, owner });
+    },
 };

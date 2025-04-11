@@ -67,6 +67,19 @@ gameController.get("/:id/buy", isUser, isValidId, async (req, res) => {
     }
 });
 
+// DELETE
+gameController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const query = await gameService.deleteOneGame(req.params.id, req.user.id);
+
+        if (!query) return res.redirect("/404");
+
+        return res.redirect("/games");
+    } catch (error) {
+        return res.render("game/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // EDIT
 gameController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("game/edit");
