@@ -2,11 +2,10 @@ import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 
 const userSchema = new Schema({
-    name: {
+    username: {
         type: String,
-        required: [true, "The name's field can't be empty"],
-        minLength: [2, "The name should be between 2 and 20 characters long"],
-        maxLength: [20, "The name should be between 2 and 20 characters long"]
+        required: [true, "The username's field can't be empty"],
+        minLength: [4, "The username should be at least 4 characters long"]
     },
     email: {
         type: String,
@@ -21,7 +20,7 @@ const userSchema = new Schema({
 
 userSchema.pre("save", async function () {
     if (this.password.length === 0) throw ["The password's field can't be empty"];
-    if (this.password.length < 4) throw ["The password should be at least 4 characters long"];
+    if (this.password.length < 3) throw ["The password should be at least 3 characters long"];
 
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
