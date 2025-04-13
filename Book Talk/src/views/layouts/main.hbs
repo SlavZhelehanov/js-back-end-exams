@@ -12,6 +12,10 @@
 
 <body>
 
+    {{#if messages}}
+        {{> messages}}
+    {{/if}}
+
     {{> header}}
 
     {{{body}}}
