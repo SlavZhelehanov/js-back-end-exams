@@ -152,7 +152,7 @@ html::-webkit-scrollbar-thumb {
   padding: 1rem 0;
 }
 
-.errorContainer {
+.error-box {
   position: fixed;
   right: 100px;
   min-width: 100px;
@@ -167,7 +167,7 @@ html::-webkit-scrollbar-thumb {
   box-shadow: 0 5px 10px black;
 }
 
-.errorContainer>p {
+.error-box>p {
   background: #219150;
   font-size: 20px;
   padding: 20px;
@@ -175,7 +175,7 @@ html::-webkit-scrollbar-thumb {
   border-radius: 20px;
 }
 
-.errorContainer {
+.error-box {
   -moz-animation: cssAnimation 0s ease-in 2s forwards;
   /* Firefox */
   -webkit-animation: cssAnimation 0s ease-in 2s forwards;
