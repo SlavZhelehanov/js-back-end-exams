@@ -17,4 +17,9 @@ bookController.get("/", async (req, res) => {
     return res.render("book/catalog");
 });
 
+// DETAILS
+bookController.get("/:id/details", async (req, res) => {
+    return res.render("book/details");
+});
+
 export default bookController;
