@@ -27,4 +27,9 @@ bookController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("book/edit");
 });
 
+// PROFILE
+bookController.get("/profile", isUser, async (req, res) => {
+    return res.render("book/profile");
+});
+
 export default bookController;
