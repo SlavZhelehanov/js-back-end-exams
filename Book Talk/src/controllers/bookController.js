@@ -12,5 +12,9 @@ bookController.get("/create", isUser, (req, res) => {
     return res.render("book/create");
 });
 
+// CATALOG
+bookController.get("/", async (req, res) => {
+    return res.render("book/catalog");
+});
 
 export default bookController;
