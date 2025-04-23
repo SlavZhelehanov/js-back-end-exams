@@ -65,8 +65,16 @@ bookController.get("/:id/wish", isUser, isValidId, async (req, res) => {
 });
 
 // EDIT
-bookController.get("/:id/edit", isUser, async (req, res) => {
-    return res.render("book/edit");
+bookController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const book = await bookService.getOneBook({ _id: req.params.id, owner: req.user?.id }).lean();
+
+        if (!book) return res.redirect("/404");
+
+        return res.render("book/edit", { ...book });
+    } catch (error) {
+        return res.render("book/edit", { messages: parseErrorMessage(error) });
+    }
 });
 
 // PROFILE
