@@ -107,7 +107,13 @@ bookController.get("/:id/delete", isUser, isValidId, async (req, res) => {
 
 // PROFILE
 bookController.get("/profile", isUser, async (req, res) => {
-    return res.render("book/profile");
+    try {
+        const books = await bookService.getAllBooks(req.user.id);
+
+        return res.render("book/profile", { books });
+    } catch (error) {
+        return res.render("book/profile", { messages: parseErrorMessage(error) });
+    }
 });
 
 export default bookController;

@@ -8,8 +8,10 @@ export default {
 
         return Book.create(bookData);
     },
-    getAllBooks() {
-        return Book.find({}, "image title");
+    getAllBooks(userId = null) {
+        const filter = userId ? { wishingList: userId } : {};
+
+        return Book.find(filter, "image title");
     },
     getOneBook(params) {
         return Book.findOne(params);
