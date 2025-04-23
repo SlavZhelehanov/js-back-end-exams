@@ -7,5 +7,8 @@ export default {
         if (isNaN(+bookData.stars)) throw ["The stars should be a number"];
 
         return Book.create(bookData);
+    },
+    getAllBooks() {
+        return Book.find({}, "image title");
     }
 };

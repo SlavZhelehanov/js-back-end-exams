@@ -24,7 +24,13 @@ bookController.post("/create", isUser, async (req, res) => {
 
 // CATALOG
 bookController.get("/", async (req, res) => {
-    return res.render("book/catalog");
+    try {
+        const books = await bookService.getAllBooks();
+
+        return res.render("book/catalog", { books });
+    } catch (error) {
+        return res.render("book/catalog", { messages: parseErrorMessage(error) });
+    }
 });
 
 // DETAILS
