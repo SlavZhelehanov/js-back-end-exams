@@ -16,5 +16,14 @@ export default {
     },
     wishBook(bookId, newFanId) {
         return Book.findByIdAndUpdate(bookId, { $push: { wishingList: newFanId } }, { new: true });
+    },
+    updateOneBook(_id, owner, book, formData) {
+        const options = {};
+
+        for (const key in formData) if (formData[key].trim() != book[key]) options[key] = formData[key].trim();
+
+        if (0 === Object.keys(options).length) return;
+
+        return Book.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
     }
 };
