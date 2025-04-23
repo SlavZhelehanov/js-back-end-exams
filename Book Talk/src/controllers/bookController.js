@@ -49,6 +49,21 @@ bookController.get("/:id/details", isValidId, async (req, res) => {
     }
 });
 
+// WISH
+bookController.get("/:id/wish", isUser, isValidId, async (req, res) => {
+    try {
+        const book = await bookService.getOneBook({ _id: req.params.id });
+
+        if (!book || !req.user || book.owner.equals(req.user.id) || book.wishingList.some(id => id.equals(req.user.id))) return res.redirect("/404");
+
+        await bookService.wishBook(req.params.id, req.user.id);
+
+        return res.redirect(`/books/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("book/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // EDIT
 bookController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("book/edit");

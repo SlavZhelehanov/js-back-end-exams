@@ -13,5 +13,8 @@ export default {
     },
     getOneBook(params) {
         return Book.findOne(params);
+    },
+    wishBook(bookId, newFanId) {
+        return Book.findByIdAndUpdate(bookId, { $push: { wishingList: newFanId } }, { new: true });
     }
 };
