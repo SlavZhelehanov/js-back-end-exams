@@ -10,5 +10,8 @@ export default {
     },
     getAllBooks() {
         return Book.find({}, "image title");
+    },
+    getOneBook(params) {
+        return Book.findOne(params);
     }
 };

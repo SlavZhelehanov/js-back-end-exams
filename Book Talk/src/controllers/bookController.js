@@ -3,7 +3,7 @@ import { Router } from "express";
 import { isUser } from "../middlewares/authMiddleware.js";
 import bookService from "../services/bookService.js";
 import parseErrorMessage from "../util/parseErrorMessage.js";
-// import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
+import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
 
 const bookController = Router();
 
@@ -34,8 +34,19 @@ bookController.get("/", async (req, res) => {
 });
 
 // DETAILS
-bookController.get("/:id/details", async (req, res) => {
-    return res.render("book/details");
+bookController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const book = await bookService.getOneBook({ _id: req.params.id }).lean();
+
+        if (!book) return res.redirect("/404");
+        
+        const isOwner = book.owner.equals(req.user?.id);
+        const isWished = req.user && !isOwner && book.wishingList.some(id => id.equals(req.user.id));
+
+        return res.render("book/details", { ...book, isOwner, isWished });
+    } catch (error) {
+        return res.render("book/details", { messages: parseErrorMessage(error) });
+    }
 });
 
 // EDIT
