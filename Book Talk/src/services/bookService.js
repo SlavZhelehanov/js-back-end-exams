@@ -25,5 +25,8 @@ export default {
         if (0 === Object.keys(options).length) return;
 
         return Book.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
+    },
+    deleteOneBook(_id, owner) {
+        return Book.findOneAndDelete({ _id, owner });
     }
 };

@@ -92,6 +92,19 @@ bookController.post("/:id/edit", isUser, isValidId, async (req, res) => {
     }
 });
 
+// DELETE
+bookController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const query = await bookService.deleteOneBook(req.params.id, req.user.id);
+
+        if (!query) return res.redirect("/404");
+
+        return res.redirect("/books");
+    } catch (error) {
+        return res.render("book/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // PROFILE
 bookController.get("/profile", isUser, async (req, res) => {
     return res.render("book/profile");
