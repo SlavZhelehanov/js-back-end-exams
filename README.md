@@ -14,3 +14,4 @@ Solutions to Softuni's JS-Back-End exams
 - [x] 11. Friendly World - regular exam 18.06.2023
 - [x] 12. Gaming Team - retake exam 13.04.2023
 - [x] 13. Book Talk - retake exam 18.08.2022
+- [ ] 14. Crypto Trade - exam 25.06.2022
