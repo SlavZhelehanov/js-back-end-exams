@@ -4,11 +4,14 @@
         <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/cryptos">All Crypto</a></li>
-            <li><a href="/cryptos/search">Search</a></li>
-            <li><a href="/cryptos/create">Create Offer</a></li>
-            <li><a href="/auth/login">Login</a></li>
-            <li><a href="/auth/register">Register</a></li>
-            <li><a href="/auth/logout">Logout</a></li>
+            {{#if user}}
+                <li><a href="/cryptos/search">Search</a></li>
+                <li><a href="/cryptos/create">Create Offer</a></li>
+                <li><a href="/auth/logout">Logout</a></li>
+            {{else}}
+                <li><a href="/auth/login">Login</a></li>
+                <li><a href="/auth/register">Register</a></li>
+            {{/if}}
         </ul>
     </nav>
 </header>
