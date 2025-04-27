@@ -30,4 +30,9 @@ cryptoController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("crypto/edit");
 });
 
+// SEARCH
+cryptoController.get("/search", async (req, res) => {
+    return res.render("crypto/search");
+});
+
 export default cryptoController;
