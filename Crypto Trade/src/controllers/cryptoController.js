@@ -20,4 +20,9 @@ cryptoController.get("/create", isUser, (req, res) => {
     return res.render("crypto/create");
 });
 
+// DETAILS
+cryptoController.get("/:id/details", async (req, res) => {
+    return res.render("crypto/details");
+});
+
 export default cryptoController;
