@@ -57,9 +57,7 @@ disasterController.get("/:id/interested", isUser, isValidId, async (req, res) =>
     try {
         const disaster = await disasterService.getOneDisaster({ _id: req.params.id });
 
-        if (!disaster) return res.redirect("/404");
-
-        if (!req.user || disaster.owner.equals(req.user.id) || disaster.interestedList.some(id => id.equals(req.user.id))) return res.redirect("/404");
+        if (!disaster || !req.user || disaster.owner.equals(req.user.id) || disaster.interestedList.some(id => id.equals(req.user.id))) return res.redirect("/404");
 
         await disasterService.interestedToDisaster(req.params.id, req.user.id);
 
