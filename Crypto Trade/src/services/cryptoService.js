@@ -13,5 +13,8 @@ export default {
     },
     buyCrypto(cryptoId, newFanId) {
         return Crypto.findByIdAndUpdate(cryptoId, { $push: { cryptoBuyers: newFanId } }, { new: true });
+    },
+    deleteOneCrypto(_id, owner) {
+        return Crypto.findOneAndDelete({ _id, owner });
     }
 };
