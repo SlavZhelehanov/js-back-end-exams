@@ -7,5 +7,8 @@ export default {
     createCrypto(cryptoData) {
         for (const key in cryptoData) cryptoData[key] = cryptoData[key].trim();
         return Crypto.create(cryptoData);
+    },
+    getOneCrypto(params) {
+        return Crypto.findOne(params);
     }
 };

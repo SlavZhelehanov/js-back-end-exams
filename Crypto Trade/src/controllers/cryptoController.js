@@ -5,7 +5,7 @@ import { isUser } from "../middlewares/authMiddleware.js";
 import cryptoService from "../services/cryptoService.js";
 import { getTypeOfCrypto } from "../util/getTypeOfCrypto.js";
 // import { validateQuery } from "../util/validateUrls.js";
-// import { isValidId } from "../middlewares/utlParamsMiddleware.js";
+import { isValidId } from "../middlewares/utlParamsMiddleware.js";
 
 const cryptoController = Router();
 
@@ -38,8 +38,18 @@ cryptoController.post("/create", isUser, async (req, res) => {
 });
 
 // DETAILS
-cryptoController.get("/:id/details", async (req, res) => {
-    return res.render("crypto/details");
+cryptoController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const crypto = await cryptoService.getOneCrypto({ _id: req.params.id }).lean();
+
+        if (!crypto) return res.redirect("/404");
+
+        const isOwner = crypto.owner.equals(req.user?.id);
+        const isBuyer = req.user && !isOwner && crypto.cryptoBuyers.some(id => id.equals(req.user.id));
+        return res.render("crypto/details", { ...crypto, isOwner, isBuyer });
+    } catch (error) {
+        return res.render("crypto/details", { messages: parseErrorMessage(error) });
+    }
 });
 
 // EDIT
