@@ -16,5 +16,13 @@ export default {
     },
     deleteOneCrypto(_id, owner) {
         return Crypto.findOneAndDelete({ _id, owner });
+    },
+    updateOneCrypto(_id, owner, crypto, formData) {
+        const options = {};
+
+        for (const key in formData) if (formData[key].trim() != crypto[key]) options[key] = formData[key].trim();
+
+        if (0 === Object.keys(options).length) return;
+        return Crypto.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
     }
 };

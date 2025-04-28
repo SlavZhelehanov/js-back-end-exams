@@ -94,6 +94,22 @@ cryptoController.get("/:id/edit", isValidId, isUser, async (req, res) => {
         return res.render("crypto/edit", { messages: parseErrorMessage(error) });
     }
 });
+cryptoController.post("/:id/edit", isUser, isValidId, async (req, res) => {
+    const formData = req.body;
+
+    try {
+        const crypto = await cryptoService.getOneCrypto({ _id: req.params.id, owner: req.user?.id }).lean();
+
+        if (!crypto) return res.redirect("/404");
+
+        await cryptoService.updateOneCrypto(req.params.id, req.user.id, crypto, formData);
+
+        return res.redirect(`/cryptos/${req.params.id}/details`);
+    } catch (error) {
+        const types = getTypeOfCrypto(formData.payment);
+        return res.render("crypto/edit", { ...formData, types, messages: parseErrorMessage(error) });
+    }
+});
 
 // SEARCH
 cryptoController.get("/search", async (req, res) => {
