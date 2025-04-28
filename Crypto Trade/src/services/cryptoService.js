@@ -10,5 +10,8 @@ export default {
     },
     getOneCrypto(params) {
         return Crypto.findOne(params);
+    },
+    buyCrypto(cryptoId, newFanId) {
+        return Crypto.findByIdAndUpdate(cryptoId, { $push: { cryptoBuyers: newFanId } }, { new: true });
     }
 };

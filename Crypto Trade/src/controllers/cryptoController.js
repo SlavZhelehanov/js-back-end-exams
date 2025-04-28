@@ -52,6 +52,21 @@ cryptoController.get("/:id/details", isValidId, async (req, res) => {
     }
 });
 
+// BUY
+cryptoController.get("/:id/buy", isUser, isValidId, async (req, res) => {
+    try {
+        const crypto = await cryptoService.getOneCrypto({ _id: req.params.id });
+
+        if (!crypto || !req.user || crypto.owner.equals(req.user.id) || crypto.cryptoBuyers.some(id => id.equals(req.user.id))) return res.redirect("/404");
+
+        await cryptoService.buyCrypto(req.params.id, req.user.id);
+
+        return res.redirect(`/cryptos/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("crypto/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // EDIT
 cryptoController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("crypto/edit");
