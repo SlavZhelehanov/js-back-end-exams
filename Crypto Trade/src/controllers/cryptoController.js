@@ -81,8 +81,18 @@ cryptoController.get("/:id/delete", isUser, isValidId, async (req, res) => {
 });
 
 // EDIT
-cryptoController.get("/:id/edit", isUser, async (req, res) => {
-    return res.render("crypto/edit");
+cryptoController.get("/:id/edit", isValidId, isUser, async (req, res) => {
+    try {
+        const crypto = await cryptoService.getOneCrypto({ _id: req.params.id, owner: req.user?.id }).lean();
+
+        if (!crypto) return res.redirect("/404");
+
+        const types = getTypeOfCrypto(crypto.payment);
+
+        return res.render("crypto/edit", { ...crypto, types });
+    } catch (error) {
+        return res.render("crypto/edit", { messages: parseErrorMessage(error) });
+    }
 });
 
 // SEARCH
