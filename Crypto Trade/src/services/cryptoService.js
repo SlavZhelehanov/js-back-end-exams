@@ -1,8 +1,13 @@
 import Crypto from "../models/Crypto.js";
 
 export default {
-    getAllCryptos() {
-        return Crypto.find({}, "name image price payment");
+    getAllCryptos(filter = null) {
+        const search = filter?.name ? {
+            name: { $regex: filter["name"], $options: "i" },
+            payment: { $regex: filter["payment"], $options: "i" },
+        } : {};
+        
+        return Crypto.find(search, "name image price payment");
     },
     createCrypto(cryptoData) {
         for (const key in cryptoData) cryptoData[key] = cryptoData[key].trim();

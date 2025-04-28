@@ -4,7 +4,7 @@ import { parseErrorMessage } from "../util/parseErrorMessage.js";
 import { isUser } from "../middlewares/authMiddleware.js";
 import cryptoService from "../services/cryptoService.js";
 import { getTypeOfCrypto } from "../util/getTypeOfCrypto.js";
-// import { validateQuery } from "../util/validateUrls.js";
+import { validateQuery } from "../util/validateUrls.js";
 import { isValidId } from "../middlewares/utlParamsMiddleware.js";
 
 const cryptoController = Router();
@@ -113,7 +113,16 @@ cryptoController.post("/:id/edit", isUser, isValidId, async (req, res) => {
 
 // SEARCH
 cryptoController.get("/search", async (req, res) => {
-    return res.render("crypto/search");
+    const search = validateQuery(req.query) ? req.query : null;
+    const types = getTypeOfCrypto(req.query?.payment);
+
+    try {
+        const cryptos = await cryptoService.getAllCryptos(search);
+
+        return res.render("crypto/search", { types, cryptos, name: search?.name });
+    } catch (error) {
+        return res.render("crypto/search", { messages: parseErrorMessage(error), search, types });
+    }
 });
 
 export default cryptoController;
