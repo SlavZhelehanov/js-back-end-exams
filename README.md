@@ -15,3 +15,4 @@ Solutions to Softuni's JS-Back-End exams
 - [x] 12. Gaming Team - retake exam 13.04.2023
 - [x] 13. Book Talk - retake exam 18.08.2022
 - [x] 14. Crypto Trade - exam 25.06.2022
+- [ ] 15. Auction House - exam 19.04.2022
