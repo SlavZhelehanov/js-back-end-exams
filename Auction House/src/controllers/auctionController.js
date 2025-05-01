@@ -27,4 +27,9 @@ auctionController.get("/closed", async (req, res) => {
     return res.render("auction/closed-auctions");
 });
 
+// EDIT
+auctionController.get("/:id/edit", isUser, async (req, res) => {
+    return res.render("auction/edit");
+});
+
 export default auctionController;
