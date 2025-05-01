@@ -22,4 +22,9 @@ auctionController.get("/:id/details", async (req, res) => {
     return res.render("auction/details");
 });
 
+// Closed Auctions
+auctionController.get("/closed", async (req, res) => {
+    return res.render("auction/closed-auctions");
+});
+
 export default auctionController;
