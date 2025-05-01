@@ -17,4 +17,9 @@ auctionController.get("/", async (req, res) => {
     return res.render("auction/browse");
 });
 
+// DETAILS
+auctionController.get("/:id/details", async (req, res) => {
+    return res.render("auction/details");
+});
+
 export default auctionController;
