@@ -119,5 +119,23 @@ auctionController.get("/:id/edit", isUser, isValidId, async (req, res) => {
         return res.render("auction/edit", { messages: parseErrorMessage(error) });
     }
 });
+auctionController.post("/:id/edit", isUser, isValidId, async (req, res) => {
+    const formData = req.body;
+
+    try {
+        const auction = await auctionService.getOneAuction({ _id: req.params.id, author: req.user?.id }).lean();
+
+        if (!auction) return res.redirect("/404");
+        if (auction.isClosed) throw new Error("You can't edit a closed auction");
+        if (auction.bidder) formData.price = auction.price + '';
+
+        await auctionService.updateOneAuction(req.params.id, req.user.id, auction, formData);
+
+        return res.redirect(`/auctions/${req.params.id}/details`);
+    } catch (error) {
+        const types = getTypeOfCategory(formData.category);
+        return res.render("auction/edit", { ...formData, types, messages: parseErrorMessage(error) });
+    }
+});
 
 export default auctionController;
