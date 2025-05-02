@@ -7,5 +7,8 @@ export default {
         if (isNaN(+auctionData.price)) throw ["The price should be a positive number"];
 
         return Auction.create(auctionData);
+    },
+    getAllAuctions() {
+        return Auction.find({}, "title image price");
     }
 };

@@ -27,7 +27,13 @@ auctionController.post("/publish", isUser, async (req, res) => {
 
 // CATALOG
 auctionController.get("/", async (req, res) => {
-    return res.render("auction/browse");
+    try {
+        const auctions = await auctionService.getAllAuctions();
+
+        return res.render("auction/browse", { auctions });
+    } catch (error) {
+        return res.render("auction/browse", { messages: parseErrorMessage(error) });
+    }
 });
 
 // DETAILS
