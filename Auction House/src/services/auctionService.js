@@ -13,5 +13,8 @@ export default {
     },
     getOneAuction(params) {
         return Auction.findOne(params).populate("bidder").populate("author");
+    },
+    bidAuction(auctionId, newFanId, price) {
+        return Auction.findByIdAndUpdate(auctionId, { bidder: newFanId, price }, { new: true });
     }
 };

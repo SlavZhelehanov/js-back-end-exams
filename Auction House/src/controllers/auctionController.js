@@ -43,11 +43,36 @@ auctionController.get("/:id/details", isValidId, async (req, res) => {
 
         if (!auction) return res.redirect("/404");
 
-        const isAuthor = auction.author._id.equals(req.user?.id);
-        const isBidder = req.user && !isAuthor && auction?.bidder?._id.equals(req.user.id);
+        const isAuthor = auction.author._id.equals(req.user.id);
+        const isBidder = req.user && !isAuthor && auction?.bidder === req.user.id;
+
         return res.render("auction/details", { ...auction, isAuthor, isBidder });
     } catch (error) {
         return res.render("auction/details", { messages: parseErrorMessage(error) });
+    }
+});
+
+// BID
+auctionController.post("/:id/bid", isUser, isValidId, async (req, res) => {
+    const bidPrice = req.body.bidPrice;
+    let auction = {};
+    let isAuthor, isBidder;
+
+    try {
+        auction = await auctionService.getOneAuction({ _id: req.params.id }).lean();
+
+        isAuthor = auction.author._id.equals(req.user.id);
+        isBidder = req.user && !isAuthor && auction?.bidder?._id?.equals(req.user.id);
+
+        if (isNaN(+bidPrice) || +bidPrice < 0) throw new Error("The bid price should be a positive number");
+        if (!auction || !req.user || auction.author._id.equals(req.user.id)) return res.redirect("/404");
+        if (+bidPrice <= auction.price) throw new Error("The bid price should be higher than the current price");
+
+        await auctionService.bidAuction(req.params.id, req.user.id, bidPrice);
+
+        return res.redirect(`/auctions/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("auction/details", { messages: parseErrorMessage(error), ...auction, isAuthor, isBidder, bidPrice });
     }
 });
 

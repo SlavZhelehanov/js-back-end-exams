@@ -42,7 +42,7 @@
                         {{else}}
                             {{#unless isBidder}}
                                 <form class="vertical" method="post" action="/auctions/{{_id}}/bid">
-                                    <label><span>Bid amount</span><input type="number" name="price" value="{{price}}"></label>
+                                    <label><span>Bid amount</span><input type="number" name="bidPrice" value="{{bidPrice}}"></label>
                                     <input class="action" type="submit" value="Place bid">
                                 </form>
                             {{else}}
