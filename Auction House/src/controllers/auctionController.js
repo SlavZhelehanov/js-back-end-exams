@@ -4,7 +4,7 @@ import { isUser } from "../middlewares/authMiddleware.js";
 import { getTypeOfCategory } from "../util/getTypeOfCategory.js";
 import auctionService from "../services/auctionService.js";
 import parseErrorMessage from "../util/parseErrorMessage.js";
-// import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
+import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
 
 const auctionController = Router();
 
@@ -37,8 +37,18 @@ auctionController.get("/", async (req, res) => {
 });
 
 // DETAILS
-auctionController.get("/:id/details", async (req, res) => {
-    return res.render("auction/details");
+auctionController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const auction = await auctionService.getOneAuction({ _id: req.params.id }).lean();
+
+        if (!auction) return res.redirect("/404");
+
+        const isAuthor = auction.author._id.equals(req.user?.id);
+        const isBidder = req.user && !isAuthor && auction?.bidder?._id.equals(req.user.id);
+        return res.render("auction/details", { ...auction, isAuthor, isBidder });
+    } catch (error) {
+        return res.render("auction/details", { messages: parseErrorMessage(error) });
+    }
 });
 
 // Closed Auctions

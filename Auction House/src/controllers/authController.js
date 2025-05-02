@@ -18,7 +18,7 @@ authController.post("/register", isGuest, async (req, res) => {
 
     try {
         const user = await authService.register({ firstName, lastName, email, password, rePassword });
-        const token = await jwt.sign({ id: user.id, email }, SUPER_SECRET, { expiresIn: "2h" });
+        const token = await jwt.sign({ id: user.id, email, fullName: `${firstName} ${lastName}` }, SUPER_SECRET, { expiresIn: "2h" });
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
         return res.redirect("/");
@@ -39,7 +39,7 @@ authController.post("/login", isGuest, async (req, res) => {
 
     try {
         const user = await authService.login({ email, password });
-        const token = await jwt.sign({ id: user.id, email }, SUPER_SECRET, { expiresIn: "2h" });
+        const token = await jwt.sign({ id: user.id, email, fullName: `${user.firstName} ${user.lastName}` }, SUPER_SECRET, { expiresIn: "2h" });
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
         return res.redirect("/");

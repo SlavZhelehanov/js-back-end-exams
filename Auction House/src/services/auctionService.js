@@ -10,5 +10,8 @@ export default {
     },
     getAllAuctions() {
         return Auction.find({}, "title image price");
+    },
+    getOneAuction(params) {
+        return Auction.findOne(params).populate("bidder").populate("author");
     }
 };
