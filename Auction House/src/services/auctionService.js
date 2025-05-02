@@ -8,7 +8,8 @@ export default {
 
         return Auction.create(auctionData);
     },
-    getAllAuctions(filter = {}) {
+    getAllAuctions(filter = {}, author = null) {
+        if (author) return Auction.find(filter).populate("bidder");
         return Auction.find(filter, "title image price");
     },
     getOneAuction(params) {

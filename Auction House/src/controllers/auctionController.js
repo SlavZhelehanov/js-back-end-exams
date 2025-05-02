@@ -82,21 +82,27 @@ auctionController.get("/:id/close", isUser, isValidId, async (req, res) => {
         const auction = await auctionService.getOneAuction({ _id: req.params.id }).lean();
 
         console.log(auction.isClosed);
-        
 
-        if(!auction || auction.isClosed || !auction.author._id.equals(req.user.id)) return res.redirect("/404");
+
+        if (!auction || auction.isClosed || !auction.author._id.equals(req.user.id)) return res.redirect("/404");
 
         await auctionService.closeAuction(req.params.id);
 
         return res.redirect("/auctions/closed");
     } catch (error) {
-        return res.render("auction/details", { messages: parseErrorMessage(error)});
+        return res.render("auction/details", { messages: parseErrorMessage(error) });
     }
 });
 
 // Closed Auctions
 auctionController.get("/closed", async (req, res) => {
-    return res.render("auction/closed-auctions");
+    try {
+        const auctions = await auctionService.getAllAuctions({ author: req.user.id, isClosed: true }, "author");
+
+        return res.render("auction/closed-auctions", { auctions });
+    } catch (error) {
+        return res.render("auction/closed-auctions", { messages: parseErrorMessage(error) });
+    }
 });
 
 // EDIT
