@@ -29,8 +29,9 @@ const auctionSchema = new Schema({
         required: [true, "The price's field can't be empty"],
         min: [0, "The price should be a positive number"]
     },
-    bidder : {
-        type: { type: Schema.Types.ObjectId, ref: "User" }
+    bidder: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
     },
     author: {
         type: Schema.Types.ObjectId,

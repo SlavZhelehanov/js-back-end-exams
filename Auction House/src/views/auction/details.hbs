@@ -32,7 +32,7 @@
                     {{#if user}}
                         {{#if isAuthor}}
                             <div>
-                                {{#if bidder._id}}
+                                {{#if bidder}}
                                     Bid by <strong>{{bidder.firstName}} {{bidder.lastName}}</strong>
                                     <a class="action pad-med cta" href="/auctions/{{_id}}/close">Close Auction</a>
                                 {{else}}

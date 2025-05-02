@@ -8,10 +8,10 @@ import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
 
 const auctionController = Router();
 
-// CREATE
+// PUBLISH
 auctionController.get("/publish", isUser, (req, res) => {
     const types = getTypeOfCategory();
-    return res.render("auction/create", { types });
+    return res.render("auction/publish", { types });
 });
 auctionController.post("/publish", isUser, async (req, res) => {
     const { title, description, category, image, price } = req.body;
@@ -21,7 +21,7 @@ auctionController.post("/publish", isUser, async (req, res) => {
         return res.redirect("/auctions");
     } catch (error) {
         const types = getTypeOfCategory(category);
-        return res.render("auction/create", { messages: parseErrorMessage(error), types, title, category, image, price, description });
+        return res.render("auction/publish", { messages: parseErrorMessage(error), types, title, category, image, price, description });
     }
 });
 
@@ -44,7 +44,7 @@ auctionController.get("/:id/details", isValidId, async (req, res) => {
         if (!auction) return res.redirect("/404");
 
         const isAuthor = auction.author._id.equals(req.user.id);
-        const isBidder = req.user && !isAuthor && auction?.bidder === req.user.id;
+        const isBidder = req.user && !isAuthor && auction?.bidder._id.equals(req.user.id);
 
         return res.render("auction/details", { ...auction, isAuthor, isBidder });
     } catch (error) {
