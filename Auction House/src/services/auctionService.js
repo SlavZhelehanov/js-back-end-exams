@@ -20,5 +20,13 @@ export default {
     },
     closeAuction(auctionId) {
         return Auction.findByIdAndUpdate(auctionId, { isClosed: true }, { new: true });
+    },
+    updateOneAuction(_id, owner, Auction, formData) {
+        const options = {};
+
+        for (const key in formData) if (formData[key].trim() != Auction[key]) options[key] = formData[key].trim();
+
+        if (0 === Object.keys(options).length) return;
+        return Auction.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
     }
 };

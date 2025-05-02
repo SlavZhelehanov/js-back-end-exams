@@ -106,8 +106,18 @@ auctionController.get("/closed", async (req, res) => {
 });
 
 // EDIT
-auctionController.get("/:id/edit", isUser, async (req, res) => {
-    return res.render("auction/edit");
+auctionController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const auction = await auctionService.getOneAuction({ _id: req.params.id, author: req.user?.id }).lean();
+
+        if (!auction) return res.redirect("/404");
+
+        const types = getTypeOfCategory(auction.category);
+
+        return res.render("auction/edit", { ...auction, types });
+    } catch (error) {
+        return res.render("auction/edit", { messages: parseErrorMessage(error) });
+    }
 });
 
 export default auctionController;
