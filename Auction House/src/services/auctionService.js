@@ -28,5 +28,8 @@ export default {
 
         if (0 === Object.keys(options).length) return;
         return Auction.findOneAndUpdate({ _id, author }, options, { new: true, runValidators: true });
+    },
+    deleteOneAuction(_id, author) {
+        return Auction.findOneAndDelete({ _id, author });
     }
 };

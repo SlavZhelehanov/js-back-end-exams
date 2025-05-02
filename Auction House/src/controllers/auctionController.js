@@ -138,4 +138,17 @@ auctionController.post("/:id/edit", isUser, isValidId, async (req, res) => {
     }
 });
 
+// DELETE
+auctionController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const query = await auctionService.deleteOneAuction(req.params.id, req.user.id);
+
+        if (!query) return res.redirect("/404");
+
+        return res.redirect("/auctions");
+    } catch (error) {
+        return res.render("auction/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 export default auctionController;
