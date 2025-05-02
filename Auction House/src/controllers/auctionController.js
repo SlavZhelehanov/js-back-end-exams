@@ -28,7 +28,7 @@ auctionController.post("/publish", isUser, async (req, res) => {
 // CATALOG
 auctionController.get("/", async (req, res) => {
     try {
-        const auctions = await auctionService.getAllAuctions();
+        const auctions = await auctionService.getAllAuctions({ isClosed: false });
 
         return res.render("auction/browse", { auctions });
     } catch (error) {
@@ -41,7 +41,7 @@ auctionController.get("/:id/details", isValidId, async (req, res) => {
     try {
         const auction = await auctionService.getOneAuction({ _id: req.params.id }).lean();
 
-        if (!auction) return res.redirect("/404");
+        if (!auction || auction.isClosed) return res.redirect("/404");
 
         const isAuthor = auction.author._id.equals(req.user.id);
         const isBidder = req.user && !isAuthor && auction?.bidder._id.equals(req.user.id);
@@ -65,7 +65,7 @@ auctionController.post("/:id/bid", isUser, isValidId, async (req, res) => {
         isBidder = req.user && !isAuthor && auction?.bidder?._id?.equals(req.user.id);
 
         if (isNaN(+bidPrice) || +bidPrice < 0) throw new Error("The bid price should be a positive number");
-        if (!auction || !req.user || auction.author._id.equals(req.user.id)) return res.redirect("/404");
+        if (!auction || auction.isClosed || !req.user || auction.author._id.equals(req.user.id)) return res.redirect("/404");
         if (+bidPrice <= auction.price) throw new Error("The bid price should be higher than the current price");
 
         await auctionService.bidAuction(req.params.id, req.user.id, bidPrice);
@@ -73,6 +73,24 @@ auctionController.post("/:id/bid", isUser, isValidId, async (req, res) => {
         return res.redirect(`/auctions/${req.params.id}/details`);
     } catch (error) {
         return res.render("auction/details", { messages: parseErrorMessage(error), ...auction, isAuthor, isBidder, bidPrice });
+    }
+});
+
+// CLOSE
+auctionController.get("/:id/close", isUser, isValidId, async (req, res) => {
+    try {
+        const auction = await auctionService.getOneAuction({ _id: req.params.id }).lean();
+
+        console.log(auction.isClosed);
+        
+
+        if(!auction || auction.isClosed || !auction.author._id.equals(req.user.id)) return res.redirect("/404");
+
+        await auctionService.closeAuction(req.params.id);
+
+        return res.redirect("/auctions/closed");
+    } catch (error) {
+        return res.render("auction/details", { messages: parseErrorMessage(error)});
     }
 });
 

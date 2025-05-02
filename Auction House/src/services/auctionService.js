@@ -8,13 +8,16 @@ export default {
 
         return Auction.create(auctionData);
     },
-    getAllAuctions() {
-        return Auction.find({}, "title image price");
+    getAllAuctions(filter = {}) {
+        return Auction.find(filter, "title image price");
     },
     getOneAuction(params) {
         return Auction.findOne(params).populate("bidder").populate("author");
     },
     bidAuction(auctionId, newFanId, price) {
         return Auction.findByIdAndUpdate(auctionId, { bidder: newFanId, price }, { new: true });
+    },
+    closeAuction(auctionId) {
+        return Auction.findByIdAndUpdate(auctionId, { isClosed: true }, { new: true });
     }
 };

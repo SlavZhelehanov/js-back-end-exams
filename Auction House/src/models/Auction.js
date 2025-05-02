@@ -36,6 +36,10 @@ const auctionSchema = new Schema({
     author: {
         type: Schema.Types.ObjectId,
         ref: "User"
+    },
+    isClosed: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true });
 
