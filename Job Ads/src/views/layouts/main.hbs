@@ -3,26 +3,29 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{pageTitle}}</title>
-    <link rel="stylesheet" href="../../css/styles.css">
+    <title>Home Page</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
 </head>
 
 <body>
-    {{> header}}
 
-    <main>
+    <div class="box">
+
         {{#if messages}}
             {{> messages}}
         {{/if}}
-        
-        {{{body}}}
-    </main>
 
-    <footer>
-        <p>&copy JS Back-End 2025</p>
-    </footer>
+        {{> header}}
+
+        <main>
+            {{{body}}}
+        </main>
+
+        <footer>
+            <p>©Js Back-End Final Exam 2022</p>
+        </footer>
+    </div>
 
 </body>
 

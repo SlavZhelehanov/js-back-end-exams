@@ -1,16 +1,36 @@
 <header class="header">
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/disasters/search">Search</a></li>
-            <li><a href="/disasters">Power of Nature</a></li>
-            {{#if user}}
-                <li><a href="/disasters/create">Create Event</a></li>
-                <li><a href="/auth/logout">Logout</a></li>
-            {{else}}  
-                <li><a href="/auth/login">Login</a></li>
-                <li><a href="/auth/register">Register</a></li>
-            {{/if}}
+    <article class="header-logo">
+        <!-- Do not forget to change the path to the image -->
+        <img src="../../img/logo.png">
+    </article>
+    <nav class="header-nav">
+        <ul class="header-nav-list">
+
+            <li class="header-nav-list-item active">
+                <a href="#" class="header-nav-list-item-link active">Home Page</a>
+            </li>
+
+            <li class="header-nav-list-item">
+                <a href="#" class="header-nav-list-item-link">All ads</a>
+            </li>
+            <!-- Logged users -->
+            <li class="header-nav-list-item">
+                <a href="#" class="header-nav-list-item-link">Create Ad</a>
+            </li>
+            <li class="header-nav-list-item">
+                <a href="#" class="header-nav-list-item-link">Search</a>
+            </li>
+            <li class="header-nav-list-item">
+                <a href="#" class="header-nav-list-item-link">Logout</a>
+            </li>
+
+            <!-- Guest users -->
+            <li class="header-nav-list-item">
+                <a href="#" class="header-nav-list-item-link">Register</a>
+            </li>
+            <li class="header-nav-list-item">
+                <a href="#" class="header-nav-list-item-link">Login</a>
+            </li>
         </ul>
     </nav>
 </header>
