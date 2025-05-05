@@ -7,7 +7,7 @@ const routes = Router();
 
 routes.use("/", homeController);
 
-// routes.use("/auth", authController);
+routes.use("/auth", authController);
 
 routes.all("*", (req, res) => { return res.render("404") });
 
