@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 // import { parseErrorMessage } from "../util/parseErrorMessage.js";
-// import { isUser } from "../middlewares/authMiddleware.js";
+import { isUser } from "../middlewares/authMiddleware.js";
 // import adsService from "../services/adsService.js";
 // import { getTypeOfads } from "../util/getTypeOfads.js";
 // import { validateQuery } from "../util/validateUrls.js";
@@ -20,8 +20,13 @@ adsController.get("/:id/details", async (req, res) => {
 });
 
 // CREATE
-adsController.get("/create", (req, res) => {
+adsController.get("/create", isUser, (req, res) => {
     return res.render("ads/create");
+});
+
+// EDIT
+adsController.get("/:id/edit", isUser, async (req, res) => {
+    return res.render("ads/edit");
 });
 
 export default adsController;
