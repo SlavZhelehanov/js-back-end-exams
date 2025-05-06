@@ -14,4 +14,9 @@ adsController.get("/", async (req, res) => {
     return res.render("ads/all-ads");
 });
 
+// DETAILS
+adsController.get("/:id/details", async (req, res) => {
+    return res.render("ads/details");
+});
+
 export default adsController;
