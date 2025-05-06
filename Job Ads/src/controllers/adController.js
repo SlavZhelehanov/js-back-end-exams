@@ -19,4 +19,9 @@ adsController.get("/:id/details", async (req, res) => {
     return res.render("ads/details");
 });
 
+// CREATE
+adsController.get("/create", (req, res) => {
+    return res.render("ads/create");
+});
+
 export default adsController;
