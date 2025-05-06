@@ -29,4 +29,9 @@ adsController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("ads/edit");
 });
 
+// SEARCH
+adsController.get("/search", async (req, res) => {
+    return res.render("ads/search");
+});
+
 export default adsController;
