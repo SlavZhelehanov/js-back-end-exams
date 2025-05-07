@@ -78,8 +78,16 @@ adsController.get("/:id/delete", isUser, isValidId, async (req, res) => {
 });
 
 // EDIT
-adsController.get("/:id/edit", isUser, async (req, res) => {
-    return res.render("ads/edit");
+adsController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const ad = await adService.getOneAd({ _id: req.params.id, author: req.user?.id });
+
+        if (!ad) return res.redirect("/404");
+
+        return res.render("ads/edit", { ...ad });
+    } catch (error) {
+        return res.render("ads/edit", { messages: parseErrorMessage(error) });
+    }
 });
 
 // SEARCH

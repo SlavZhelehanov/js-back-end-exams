@@ -16,5 +16,13 @@ export default {
     },
     deleteOneAd(_id, author) {
         return Ad.findOneAndDelete({ _id, author });
+    },
+    updateOneAd(_id, author, ad, formData) {
+        const options = {};
+
+        for (const key in formData) if (formData[key].trim() != ad[key]) options[key] = formData[key].trim();
+
+        if (0 === Object.keys(options).length) return;
+        return Ad.findOneAndUpdate({ _id, author }, options, { new: true, runValidators: true });
     }
 };
