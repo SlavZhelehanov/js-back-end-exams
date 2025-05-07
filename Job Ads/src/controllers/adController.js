@@ -3,7 +3,7 @@ import { Router } from "express";
 import { parseErrorMessage } from "../util/parseErrorMessage.js";
 import { isUser } from "../middlewares/authMiddleware.js";
 import adService from "../services/adService.js";
-// import { isValidId } from "../middlewares/utlParamsMiddleware.js";
+import { isValidId } from "../middlewares/utlParamsMiddleware.js";
 
 const adsController = Router();
 
@@ -19,8 +19,19 @@ adsController.get("/", async (req, res) => {
 });
 
 // DETAILS
-adsController.get("/:id/details", async (req, res) => {
-    return res.render("ads/details");
+adsController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const ad = await adService.getOneAd({ _id: req.params.id });
+
+        if (!ad) return res.redirect("/404");
+
+        const isAuthor = ad.author._id.equals(req.user?.id);
+        const isApplied = req.user && !isAuthor && ad.usersApplied.some(user => user._id.equals(req.user.id));
+
+        return res.render("ads/details", { ...ad, isAuthor, isApplied });
+    } catch (error) {
+        return res.render("ads/details", { messages: parseErrorMessage(error) });
+    }
 });
 
 // CREATE
