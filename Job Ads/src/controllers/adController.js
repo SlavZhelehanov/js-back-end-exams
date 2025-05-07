@@ -107,7 +107,15 @@ adsController.post("/:id/edit", isUser, isValidId, async (req, res) => {
 
 // SEARCH
 adsController.get("/search", async (req, res) => {
-    return res.render("ads/search");
+    const email = req.query.email?.trim() || "";
+
+    try {
+        const ads = await adService.getAllAds(email);
+
+        return res.render("ads/search", { ads: 0 < email.length ? ads.filter(f => f.author?.email?.toLowerCase().includes(email.toLowerCase())) : ads, email });
+    } catch (error) {
+        return res.render("ads/search", { messages: parseErrorMessage(error), email });
+    }
 });
 
 export default adsController;

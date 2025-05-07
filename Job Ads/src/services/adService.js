@@ -1,7 +1,10 @@
 import Ad from "../models/Ad.js";
 
 export default {
-    getAllAds() {
+    getAllAds(email = null) {
+        // const search = email ? { email: { $regex: email, $options: "i" } } : {};
+        if (email) return Ad.find({}, "headline company").populate("author", "email");
+
         return Ad.find({}, "headline company location");
     },
     getOneAd(params) {
