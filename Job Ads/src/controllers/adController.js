@@ -64,6 +64,19 @@ adsController.get("/:id/apply", isUser, isValidId, async (req, res) => {
     }
 });
 
+// DELETE
+adsController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const query = await adService.deleteOneAd(req.params.id, req.user.id);
+
+        if (!query) return res.redirect("/404");
+
+        return res.redirect("/ads");
+    } catch (error) {
+        return res.render("ads/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // EDIT
 adsController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("ads/edit");

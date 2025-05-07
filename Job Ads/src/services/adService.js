@@ -13,5 +13,8 @@ export default {
     },
     applyToAd(adId, newFanId) {
         return Ad.findByIdAndUpdate(adId, { $push: { usersApplied: newFanId } }, { new: true });
+    },
+    deleteOneAd(_id, author) {
+        return Ad.findOneAndDelete({ _id, author });
     }
 };
