@@ -49,6 +49,21 @@ adsController.post("/create", isUser, async (req, res) => {
     }
 });
 
+// APPLY
+adsController.get("/:id/apply", isUser, isValidId, async (req, res) => {
+    try {
+        const ad = await adService.getOneAd({ _id: req.params.id });
+
+        if (!ad || !req.user || ad.author._id.equals(req.user.id) || ad.usersApplied.some(user => user._id.equals(req.user.id))) return res.redirect("/404");
+
+        await adService.applyToAd(req.params.id, req.user.id);
+
+        return res.redirect(`/ads/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("ads/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // EDIT
 adsController.get("/:id/edit", isUser, async (req, res) => {
     return res.render("ads/edit");
