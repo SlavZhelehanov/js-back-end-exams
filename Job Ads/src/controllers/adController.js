@@ -3,8 +3,6 @@ import { Router } from "express";
 import { parseErrorMessage } from "../util/parseErrorMessage.js";
 import { isUser } from "../middlewares/authMiddleware.js";
 import adService from "../services/adService.js";
-// import { getTypeOfads } from "../util/getTypeOfads.js";
-// import { validateQuery } from "../util/validateUrls.js";
 // import { isValidId } from "../middlewares/utlParamsMiddleware.js";
 
 const adsController = Router();
@@ -28,6 +26,16 @@ adsController.get("/:id/details", async (req, res) => {
 // CREATE
 adsController.get("/create", isUser, (req, res) => {
     return res.render("ads/create");
+});
+adsController.post("/create", isUser, async (req, res) => {
+    const { headline, location, company, description } = req.body;
+
+    try {
+        await adService.createAd({ headline, location, company, description, author: req.user.id });
+        return res.redirect("/ads");
+    } catch (error) {
+        return res.render("ads/create", { messages: parseErrorMessage(error), headline, location, company, description });
+    }
 });
 
 // EDIT
