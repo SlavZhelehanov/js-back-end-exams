@@ -43,19 +43,19 @@ authController.get("/login", isGuest, (req, res) => {
 });
 
 authController.post("/login", isGuest, async (req, res) => {
-    let { name, password } = req.body;
+    let { username, password } = req.body;
 
-    name = name.trim();
+    username = username.trim();
     password = password.trim();
 
     try {
-        const user = await authService.login({ name, password });
+        const user = await authService.login({ username, password });
         const token = generateToken(user);
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
         return res.redirect("/");
     } catch (error) {
-        return res.render("auth/login", { name, messages: parseErrorMessage(error) });
+        return res.render("auth/login", { username, messages: parseErrorMessage(error) });
     }
 });
 
