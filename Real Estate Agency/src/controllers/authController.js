@@ -13,7 +13,7 @@ function generateToken(user) {
     const payload = {
         id: user._id,
         username: user.username,
-        email: user.email
+        name: user.name
     }
     return jwt.sign(payload, SUPER_SECRET, { expiresIn: "2h" });
 }
@@ -24,16 +24,16 @@ authController.get("/register", isGuest, (req, res) => {
 });
 
 authController.post("/register", isGuest, async (req, res) => {
-    const { username, email, password, rePassword } = req.body;
+    const { username, name, password, rePassword } = req.body;
 
     try {
-        const user = await authService.register({ username, email, password, rePassword });
+        const user = await authService.register({ username, name, password, rePassword });
         const token = generateToken(user);
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
         return res.redirect("/");
     } catch (error) {
-        return res.render("auth/register", { username, email, messages: parseErrorMessage(error) });
+        return res.render("auth/register", { username, name, messages: parseErrorMessage(error) });
     }
 });
 
@@ -43,19 +43,19 @@ authController.get("/login", isGuest, (req, res) => {
 });
 
 authController.post("/login", isGuest, async (req, res) => {
-    let { email, password } = req.body;
+    let { name, password } = req.body;
 
-    email = email.trim();
+    name = name.trim();
     password = password.trim();
 
     try {
-        const user = await authService.login({ email, password });
+        const user = await authService.login({ name, password });
         const token = generateToken(user);
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
         return res.redirect("/");
     } catch (error) {
-        return res.render("auth/login", { email, messages: parseErrorMessage(error) });
+        return res.render("auth/login", { name, messages: parseErrorMessage(error) });
     }
 });
 
