@@ -29,4 +29,9 @@ housingController.get("/:id/edit", async (req, res) => {
     return res.render("housing/edit");
 });
 
+// SEARCH
+housingController.get("/search", async (req, res) => {
+    return res.render("housing/search");
+});
+
 export default housingController;
