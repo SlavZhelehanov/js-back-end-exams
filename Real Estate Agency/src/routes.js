@@ -2,12 +2,15 @@ import { Router } from "express";
 
 import homeController from "./controllers/homeController.js";
 import authController from "./controllers/authController.js";
+import housingController from "./controllers/housingRouter.js";
 
 const routes = Router();
 
 routes.use("/", homeController);
 
 routes.use("/auth", authController);
+
+routes.use("/housings", housingController);
 
 routes.all("*", (req, res) => { return res.render("404") });
 
