@@ -24,4 +24,9 @@ housingController.get("/create", isUser, (req, res) => {
     return res.render("housing/create");
 });
 
+// EDIT
+housingController.get("/:id/edit", async (req, res) => {
+    return res.render("housing/edit");
+});
+
 export default housingController;
