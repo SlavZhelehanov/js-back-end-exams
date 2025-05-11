@@ -14,4 +14,9 @@ housingController.get("/", async (req, res) => {
     return res.render("housing/catalog");
 });
 
+// DETAILS
+housingController.get("/:id/details", async (req, res) => {
+    return res.render("housing/details");
+});
+
 export default housingController;
