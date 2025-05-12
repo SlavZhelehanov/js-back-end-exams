@@ -78,4 +78,17 @@ housingController.get("/search", async (req, res) => {
     return res.render("housing/search");
 });
 
+// DELETE
+housingController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const query = await housingService.deleteOneHousing(req.params.id, req.user.id);
+
+        if (!query) return res.redirect("/404");
+
+        return res.redirect("/housings");
+    } catch (error) {
+        return res.render("housing/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 export default housingController;

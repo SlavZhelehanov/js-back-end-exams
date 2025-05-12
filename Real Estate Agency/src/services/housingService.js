@@ -13,5 +13,8 @@ export default {
     },
     rentHousing(housingId, newFanId) {
         return Housing.findByIdAndUpdate(housingId, { $push: { rentedAhome: newFanId } }, { new: true });
+    },
+    deleteOneHousing(_id, owner) {
+        return Housing.findOneAndDelete({ _id, owner });
     }
 };
