@@ -30,7 +30,7 @@ housingController.get("/:id/details", isValidId, async (req, res) => {
         const isOwner = housing.owner.equals(req.user?.id);
         const isRented = req.user && !isOwner && housing.rentedAhome.some(guest => guest._id.equals(req.user.id));
         const availablePieces = 0 < housing.pieces ? housing.pieces : null;
-        const tenants = 0 < housing.rentedAhome.length ? housing.rentedAhome.map(g => g.name).join(", ") : null;        
+        const tenants = 0 < housing.rentedAhome.length ? housing.rentedAhome.map(g => g.name).join(", ") : null;
 
         return res.render("housing/details", { ...housing, isOwner, isRented, availablePieces, tenants });
     } catch (error) {
@@ -98,7 +98,15 @@ housingController.post("/:id/edit", isUser, isValidId, async (req, res) => {
 
 // SEARCH
 housingController.get("/search", async (req, res) => {
-    return res.render("housing/search");
+    const type = req.query?.search?.trim() || null;
+
+    try {
+        const housings = type && await housingService.getAllHousings(type);
+
+        return res.render("housing/search", { search: type, housings });
+    } catch (error) {
+        return res.render("housing/search", { messages: parseErrorMessage(error), search: type });
+    }
 });
 
 // DELETE

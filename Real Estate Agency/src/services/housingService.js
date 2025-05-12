@@ -1,8 +1,10 @@
 import Housing from "../models/Housing.js";
 
 export default {
-    getAllHousings() {
-        return Housing.find({}, "name description image location typeOfHousing");
+    getAllHousings(type = null) {
+        const filter = type ? { type: { $regex: type, $options: "i" } } : {};
+
+        return Housing.find(filter, "name description image location typeOfHousing");
     },
     createHousing(housingData) {
         for (const key in housingData) housingData[key] = housingData[key].trim();
