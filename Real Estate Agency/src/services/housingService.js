@@ -7,5 +7,8 @@ export default {
     createHousing(housingData) {
         for (const key in housingData) housingData[key] = housingData[key].trim();
         return Housing.create(housingData);
+    },
+    getOneHousing(params) {
+        return Housing.findOne(params);
     }
 };
