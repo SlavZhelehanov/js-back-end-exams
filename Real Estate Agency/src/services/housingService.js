@@ -16,5 +16,13 @@ export default {
     },
     deleteOneHousing(_id, owner) {
         return Housing.findOneAndDelete({ _id, owner });
+    },
+    updateOneHousing(_id, owner, housing, formData) {
+        const options = {};
+
+        for (const key in formData) if (formData[key].trim() != housing[key]) options[key] = formData[key].trim();
+
+        if (0 === Object.keys(options).length) return;
+        return Housing.findOneAndUpdate({ _id, owner }, options, { new: true, runValidators: true });
     }
 };
