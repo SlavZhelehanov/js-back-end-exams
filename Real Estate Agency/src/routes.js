@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import homeController from "./controllers/homeController.js";
 import authController from "./controllers/authController.js";
-import housingController from "./controllers/housingRouter.js";
+import housingController from "./controllers/housingController.js";
 
 const routes = Router();
 

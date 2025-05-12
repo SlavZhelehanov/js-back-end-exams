@@ -1,8 +1,8 @@
 import { Router } from "express";
 
-// import { parseErrorMessage } from "../util/parseErrorMessage.js";
+import { parseErrorMessage } from "../util/parseErrorMessage.js";
 import { isUser } from "../middlewares/authMiddleware.js";
-// import housingsService from "../services/housingsService.js";
+import housingService from "../services/housingService.js";
 // import { getTypeOfhousings } from "../util/getTypeOfhousings.js";
 // import { validateQuery } from "../util/validateUrls.js";
 // import { isValidId } from "../middlewares/utlParamsMiddleware.js";
@@ -11,7 +11,13 @@ const housingController = Router();
 
 // CATALOG
 housingController.get("/", async (req, res) => {
-    return res.render("housing/catalog");
+    try {
+        const housings = await housingService.getAllHousings();
+
+        return res.render("housing/catalog", { housings });
+    } catch (error) {
+        return res.render("housing/catalog", { messages: parseErrorMessage(error) });
+    }
 });
 
 // DETAILS
