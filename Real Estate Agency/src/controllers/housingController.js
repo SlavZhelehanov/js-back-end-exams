@@ -69,8 +69,16 @@ housingController.post("/create", isUser, async (req, res) => {
 });
 
 // EDIT
-housingController.get("/:id/edit", async (req, res) => {
-    return res.render("housing/edit");
+housingController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const housing = await housingService.getOneHousing({ _id: req.params.id, owner: req.user?.id }).lean();
+
+        if (!housing) return res.redirect("/404");
+
+        return res.render("housing/edit", { ...housing });
+    } catch (error) {
+        return res.render("housing/edit", { messages: parseErrorMessage(error) });
+    }
 });
 
 // SEARCH
