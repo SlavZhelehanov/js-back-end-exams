@@ -10,5 +10,8 @@ export default {
     },
     getOneHousing(params) {
         return Housing.findOne(params);
+    },
+    rentHousing(housingId, newFanId) {
+        return Housing.findByIdAndUpdate(housingId, { $push: { rentedAhome: newFanId } }, { new: true });
     }
 };

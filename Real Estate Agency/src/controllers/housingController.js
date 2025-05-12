@@ -28,11 +28,26 @@ housingController.get("/:id/details", isValidId, async (req, res) => {
         if (!housing) return res.redirect("/404");
 
         const isOwner = housing.owner.equals(req.user?.id);
-        const isRented = req.user && !isOwner && housing.rentedAhome.some(id => id.equals(req.user.id));
+        const isRented = req.user && !isOwner && housing.rentedAhome.some(guest => guest._id.equals(req.user.id));
         const availablePieces = 0 < housing.pieces ? housing.pieces : null;
-        const tenants = 0 < housing.rentedAhome.length ? housing.rentedAhome.join(", ") : null;
+        const tenants = 0 < housing.rentedAhome.length ? housing.rentedAhome.map(g => g.name).join(", ") : null;        
 
         return res.render("housing/details", { ...housing, isOwner, isRented, availablePieces, tenants });
+    } catch (error) {
+        return res.render("housing/details", { messages: parseErrorMessage(error) });
+    }
+});
+
+// RENT
+housingController.get("/:id/rent", isUser, isValidId, async (req, res) => {
+    try {
+        const housing = await housingService.getOneHousing({ _id: req.params.id });
+
+        if (!housing || !req.user || housing.owner.equals(req.user.id) || housing.rentedAhome.some(id => id.equals(req.user.id))) return res.redirect("/404");
+
+        await housingService.rentHousing(req.params.id, req.user.id);
+
+        return res.redirect(`/housings/${req.params.id}/details`);
     } catch (error) {
         return res.render("housing/details", { messages: parseErrorMessage(error) });
     }
