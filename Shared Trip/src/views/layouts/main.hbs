@@ -1,0 +1,27 @@
+<html lang="en">
+
+<head>
+    <!-- Do not forget to change the path to the css file -->
+    <link rel="stylesheet" href="../../css/style.css">
+    <title>{{pageTitle}}</title>
+</head>
+
+<body>
+    {{#if messages}}
+        {{> messages}}
+    {{/if}}
+
+    {{> header}}
+
+    <main>
+        {{{body}}}
+    </main>
+
+    <footer id="sticky-footer" class="bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Shared Trip 2021</p>
+        </div>
+    </footer>
+</body>
+
+</html>
