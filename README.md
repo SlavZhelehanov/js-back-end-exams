@@ -18,3 +18,4 @@ Solutions to Softuni's JS-Back-End exams
 - [x] 15. Auction House - exam 19.04.2022
 - [x] 16. Job Ads - exam 26.02.2022
 - [x] 17. Real Estate Agency - exam 21.08.2021
+- [ ] 18. Shared Trip - exam 27.06.2021
