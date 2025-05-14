@@ -14,23 +14,24 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/trips/shared">Shared Trips</a>
                 </li>
-                <!-- Logged users -->
-                <li class="nav-item">
-                    <a class="nav-link" href="/trips/create">Offer Trip</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/trips/profile">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/auth/logout">Logout as [ test@abv.bg ]</a>
-                </li>
-                <!-- Guest users -->
-                <li class="nav-item">
-                    <a class="nav-link" href="/auth/login">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/auth/register">Register</a>
-                </li>
+                {{#if user}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/trips/create">Offer Trip</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/trips/profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/logout">Logout as [ {{user.email}} ]</a>
+                    </li>
+                {{else}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/register">Register</a>
+                    </li>
+                {{/if}}
             </ul>
         </div>
     </div>
