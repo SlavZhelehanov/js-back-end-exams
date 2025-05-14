@@ -2,17 +2,28 @@ import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 
 const userSchema = new Schema({
-    name: {
+    gender: {
         type: String,
-        required: [true, "The name's field can't be empty"],
-        minLength: [2, "The name should be between 2 and 20 characters long"],
-        maxLength: [20, "The name should be between 2 and 20 characters long"]
+        required: [true, "The gender's field can't be empty"],
+        enum: {
+            values: ["male", "female"],
+            message: "The gender should be either 'male' or 'female'"
+        }
     },
     email: {
         type: String,
         required: [true, "The email's field can't be empty"],
-        minLength: [10, "The email should be at least 10 characters long"]
+        match: [
+            /^[a-z]+@[a-z]+\.[a-z]+$/,
+            'The email should be in the following format (mailboxname @ domainname) - "username@domain.bg"'
+        ]
     },
+    tripsHistory: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Trip"
+        }
+    ],
     password: {
         type: String,
         required: [true, "The password's field can't be empty"]

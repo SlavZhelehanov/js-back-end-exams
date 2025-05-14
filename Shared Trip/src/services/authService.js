@@ -2,7 +2,7 @@ import User from "../models/User.js";
 
 export default {
     async register(userData) {
-        for (const key in userData) userData[key] = userData[key].trim();
+        for (const key in userData) if (userData[key]) userData[key] = userData[key].trim();
 
         if (userData.password != userData.rePassword) throw new Error("Password and repeat password must match!");
 
@@ -18,11 +18,11 @@ export default {
         if (0 < messages.length) throw messages;
 
         const user = await User.findOne({ email: userData.email });
-        if (!user) throw new Error("Wrong email or password");        
+        if (!user) throw new Error("Wrong email or password");
 
-        const isValidPassword = await user.comparePassword(userData.password);        
+        const isValidPassword = await user.comparePassword(userData.password);
         if (!isValidPassword) throw new Error("Wrong email or password");
-        
+
         return user;
     }
 };
