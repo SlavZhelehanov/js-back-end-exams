@@ -15,13 +15,18 @@ tripController.get("/", async (req, res) => {
 });
 
 // CREATE
-tripController.get("/create", isUser, async (req, res) => {
+tripController.get("/create", isUser, (req, res) => {
     return res.render("trip/create");
 });
 
 // DETAILS
 tripController.get("/:id/details", async (req, res) => {
     return res.render("trip/details");
+});
+
+// EDIT
+tripController.get("/:id/edit", async (req, res) => {
+    return res.render("trip/edit");
 });
 
 export default tripController;
