@@ -29,4 +29,9 @@ tripController.get("/:id/edit", async (req, res) => {
     return res.render("trip/edit");
 });
 
+// EDIT
+tripController.get("/profile", async (req, res) => {
+    return res.render("trip/profile");
+});
+
 export default tripController;
