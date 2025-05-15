@@ -19,4 +19,9 @@ tripController.get("/create", isUser, async (req, res) => {
     return res.render("trip/create");
 });
 
+// DETAILS
+tripController.get("/:id/details", async (req, res) => {
+    return res.render("trip/details");
+});
+
 export default tripController;
