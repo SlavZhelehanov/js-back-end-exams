@@ -20,5 +20,7 @@ export default {
     getOneTrip(params) {
         return Trip.findOne(params);
     },
+    joinToTrip(tripId, newFanId) {
+        return Trip.findByIdAndUpdate(tripId, { $push: { buddies: newFanId }, $inc: { seats: -1 } }, { new: true });
     }
 };
