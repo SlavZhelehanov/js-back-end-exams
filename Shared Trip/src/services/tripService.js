@@ -22,5 +22,8 @@ export default {
     },
     joinToTrip(tripId, newFanId) {
         return Trip.findByIdAndUpdate(tripId, { $push: { buddies: newFanId }, $inc: { seats: -1 } }, { new: true });
+    },
+    deleteOneTrip(_id, creator) {
+        return Trip.findOneAndDelete({ _id, creator });
     }
 };

@@ -70,6 +70,19 @@ tripController.get("/:id/join", isUser, isValidId, async (req, res) => {
     }
 });
 
+// DELETE
+tripController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const query = await tripService.deleteOneTrip(req.params.id, req.user.id);
+
+        if (!query) return res.redirect("/404");
+
+        return res.redirect("/trips");
+    } catch (error) {
+        return res.render("trip/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // EDIT
 tripController.get("/:id/edit", async (req, res) => {
     return res.render("trip/edit");
