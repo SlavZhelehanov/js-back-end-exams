@@ -25,5 +25,13 @@ export default {
     },
     deleteOneTrip(_id, creator) {
         return Trip.findOneAndDelete({ _id, creator });
+    },
+    updateOneTrip(_id, creator, trip, formData) {
+        const options = {};
+
+        for (const key in formData) if (formData[key].trim() != trip[key]) options[key] = formData[key].trim();
+
+        if (0 === Object.keys(options).length) return;
+        return Trip.findOneAndUpdate({ _id, creator }, options, { new: true, runValidators: true });
     }
 };
