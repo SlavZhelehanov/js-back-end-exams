@@ -5,7 +5,7 @@ import { isUser } from "../middlewares/authMiddleware.js";
 import tripService from "../services/tripService.js";
 // import { getTypeOftrip } from "../util/getTypeOftrip.js";
 // import { validateQuery } from "../util/validateUrls.js";
-// import { isValidId } from "../middlewares/utlParamsMiddleware.js";
+import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
 
 const tripController = Router();
 
@@ -36,8 +36,23 @@ tripController.post("/create", isUser, async (req, res) => {
 });
 
 // DETAILS
-tripController.get("/:id/details", async (req, res) => {
-    return res.render("trip/details");
+tripController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const trip = await tripService.getOneTrip({ _id: req.params.id }).populate("buddies", "email").populate("creator", "email").lean();
+
+        if (!trip) return res.redirect("/404");
+
+        const isCreator = trip.creator._id.equals(req.user?.id);
+        const isJoined = req.user && !isCreator && trip.buddies.some(buddie => buddie._id.equals(req.user.id));
+        const passengers = 0 < trip.buddies.length ? trip.buddies.map(buddie => buddie = buddie.email).join(", ") : null;
+        const availableSeats = 0 < trip.seats ? trip.seats : null;
+
+        return res.render("trip/details", { ...trip, isCreator, isJoined, passengers, availableSeats });
+    } catch (error) {
+        return res.render("trip/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 });
 
 // EDIT
