@@ -24,5 +24,8 @@ export default {
         if (!isValidPassword) throw new Error("Wrong email or password");
 
         return user;
+    },
+    profile(userId) {
+        return User.findById(userId).populate("tripsHistory", "startPoint endPoint date time");
     }
 };

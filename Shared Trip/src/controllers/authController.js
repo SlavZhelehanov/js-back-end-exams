@@ -14,7 +14,7 @@ authController.get("/register", isGuest, (req, res) => {
     return res.render("auth/register");
 });
 authController.post("/register", isGuest, async (req, res) => {
-    const { gender, email, password, rePassword } = req.body;    
+    const { gender, email, password, rePassword } = req.body;
 
     try {
         const user = await authService.register({ gender, email, password, rePassword });
@@ -52,6 +52,17 @@ authController.post("/login", isGuest, async (req, res) => {
 authController.get("/logout", isUser, (req, res) => {
     res.clearCookie(COOKIE_NAME);
     return res.redirect("/");
+});
+
+// PROFILE
+authController.get("/profile", isUser, async (req, res) => {
+    try {
+        const user = await authService.profile(req.user.id).lean();
+        
+        return res.render("auth/profile", { ...user });
+    } catch (error) {
+        return res.render("auth/profile", { messages: parseErrorMessage(error) });
+    }
 });
 
 export default authController;

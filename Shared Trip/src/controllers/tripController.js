@@ -111,9 +111,4 @@ tripController.post("/:id/edit", isUser, isValidId, async (req, res) => {
     }
 });
 
-// EDIT
-tripController.get("/profile", async (req, res) => {
-    return res.render("trip/profile");
-});
-
 export default tripController;
