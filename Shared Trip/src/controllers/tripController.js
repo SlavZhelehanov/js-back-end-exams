@@ -84,8 +84,16 @@ tripController.get("/:id/delete", isUser, isValidId, async (req, res) => {
 });
 
 // EDIT
-tripController.get("/:id/edit", async (req, res) => {
-    return res.render("trip/edit");
+tripController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const trip = await tripService.getOneTrip({ _id: req.params.id, creator: req.user?.id }).lean();
+
+        if (!trip) return res.redirect("/404");
+
+        return res.render("trip/edit", { ...trip });
+    } catch (error) {
+        return res.render("trip/edit", { messages: parseErrorMessage(error) });
+    }
 });
 
 // EDIT
