@@ -11,5 +11,8 @@ export default {
         if (0 < messages.length) throw messages;
         
         return Trip.create(tripData);
+    },
+    getAllTrips() {
+        return Trip.find({}, "price time date startPoint endPoint image");
     }
 };

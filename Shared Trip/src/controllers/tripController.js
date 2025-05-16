@@ -11,7 +11,13 @@ const tripController = Router();
 
 // SHARED TRIPS
 tripController.get("/", async (req, res) => {
-    return res.render("trip/shared-trips");
+    try {
+        const trips = await tripService.getAllTrips();
+
+        return res.render("trip/shared-trips", { trips });
+    } catch (error) {
+        return res.render("trip/shared-trips", { messages: parseErrorMessage(error) });
+    }
 });
 
 // CREATE
