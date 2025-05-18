@@ -19,3 +19,4 @@ Solutions to Softuni's JS-Back-End exams
 - [x] 16. Job Ads - exam 26.02.2022
 - [x] 17. Real Estate Agency - exam 21.08.2021
 - [x] 18. Shared Trip - exam 27.06.2021
+- [ ] 19. Art Gallery - retake exam 14.12.2021
