@@ -2,26 +2,20 @@ import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 
 const userSchema = new Schema({
-    gender: {
+    username: {
         type: String,
-        required: [true, "The gender's field can't be empty"],
-        enum: {
-            values: ["male", "female"],
-            message: "The gender should be either 'male' or 'female'"
-        }
+        required: [true, "The username's field can't be empty"],
+        minLength: [4, "The username should be at least 4 characters long"]
     },
-    email: {
+    address: {
         type: String,
-        required: [true, "The email's field can't be empty"],
-        match: [
-            /^[a-z]+@[a-z]+\.[a-z]+$/,
-            'The email should be in the following format (mailboxname @ domainname) - "username@domain.bg"'
-        ]
+        required: [true, "The address's field can't be empty"],
+        maxLength: [20, "The address should be a maximum of 20 characters long"]
     },
-    tripsHistory: [
+    myPublications: [
         {
             type: Schema.Types.ObjectId,
-            ref: "Trip"
+            ref: "Publication"
         }
     ],
     password: {
@@ -32,7 +26,7 @@ const userSchema = new Schema({
 
 userSchema.pre("save", async function () {
     if (this.password.length === 0) throw ["The password's field can't be empty"];
-    if (this.password.length < 4) throw ["The password should be at least 4 characters long"];
+    if (this.password.length < 3) throw ["The password should be at least 3 characters long"];
 
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
