@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 // import parseErrorMessage from "../util/parseErrorMessage.js";
-// import { isUser } from "../middlewares/authMiddleware.js";
+import { isUser } from "../middlewares/authMiddleware.js";
 // import publicationService from "../services/publicationService.js";
 // import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
 
@@ -15,6 +15,11 @@ publicationController.get("/", async (req, res) => {
 // DETAILS
 publicationController.get("/:id/details", async (req, res) => {
     return res.render("publication/details");
+});
+
+// CREATE
+publicationController.get("/create", isUser, (req, res) => {
+    return res.render("publication/create");
 });
 
 export default publicationController;
