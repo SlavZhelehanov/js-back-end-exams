@@ -22,4 +22,9 @@ publicationController.get("/create", isUser, (req, res) => {
     return res.render("publication/create");
 });
 
+// EDIT
+publicationController.get("/:id/edit", isUser, async (req, res) => {
+    return res.render("publication/edit");
+});
+
 export default publicationController;
