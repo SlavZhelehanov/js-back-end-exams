@@ -12,6 +12,9 @@ publicationController.get("/", async (req, res) => {
     return res.render("publication/gallery");
 });
 
-
+// DETAILS
+publicationController.get("/:id/details", async (req, res) => {
+    return res.render("publication/details");
+});
 
 export default publicationController;
