@@ -9,7 +9,13 @@ const publicationController = Router();
 
 // GALLERY
 publicationController.get("/", async (req, res) => {
-    return res.render("publication/gallery");
+    try {
+        const publications = await publicationService.getAllPublications();
+
+        return res.render("publication/gallery", { publications });
+    } catch (error) {
+        return res.render("publication/gallery", { messages: parseErrorMessage(error) });
+    }
 });
 
 // DETAILS
