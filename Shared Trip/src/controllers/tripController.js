@@ -58,9 +58,7 @@ tripController.get("/:id/join", isUser, isValidId, async (req, res) => {
     try {
         const trip = await tripService.getOneTrip({ _id: req.params.id });
 
-        if (!trip) return res.redirect("/404");
-
-        if (!req.user || trip.creator.equals(req.user.id) || trip.buddies.some(id => id.equals(req.user.id))) return res.redirect("/404");
+        if (!trip || !req.user || trip.creator.equals(req.user.id) || trip.buddies.some(id => id.equals(req.user.id))) return res.redirect("/404");
 
         await tripService.joinToTrip(req.params.id, req.user.id);
 
