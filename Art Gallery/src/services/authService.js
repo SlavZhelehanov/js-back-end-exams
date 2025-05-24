@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import Publication from "../models/Publication.js";
 
 export default {
     async register(userData) {
@@ -25,7 +26,19 @@ export default {
 
         return user;
     },
-    profile(userId) {
-        return User.findById(userId).populate("tripsHistory", "startPoint endPoint date time");
+    async profile(userId) {
+        const user = await User.findById(userId, "username address myPublications");
+
+        const [authored, shared] = await Promise.all([
+            Publication.find({ _id: { $in: user.myPublications } }).select('title').lean(),
+            Publication.find({ usersShared: userId }).select('title').lean()
+        ]);
+
+        return {
+            username: user.username,
+            address: user.address,
+            authoredTitles: authored.map(p => p.title).join(", "),
+            sharedTitles: shared.map(p => p.title).join(", ")
+        };
     }
 };

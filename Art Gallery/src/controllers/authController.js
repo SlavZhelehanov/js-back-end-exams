@@ -56,7 +56,13 @@ authController.get("/logout", isUser, (req, res) => {
 
 // PROFILE
 authController.get("/profile", isUser, async (req, res) => {
-    return res.render("auth/profile");
+    try {
+        const user = await authService.profile(req.user.id);
+        
+        return res.render("auth/profile", { ...user });
+    } catch (error) {
+        return res.render("auth/profile", { messages: parseErrorMessage(error) });
+    }
 });
 
 export default authController;

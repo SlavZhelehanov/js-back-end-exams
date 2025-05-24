@@ -1,19 +1,21 @@
+import User from "../models/User.js";
 import Publication from "../models/Publication.js";
 
 export default {
     getAllPublications() {
         return Publication.find({}, "title usersShared picture certificate");
     },
-    createPublication(publicationData) {
+    async createPublication(publicationData) {
         for (const key in publicationData) publicationData[key] = publicationData[key].trim();
 
-        return Publication.create(publicationData);
+        const publication = await Publication.create(publicationData);
+        return await User.findByIdAndUpdate(publicationData.author, { $push: { myPublications: publication._id } }, { new: true });
     },
     getOnePublication(params) {
         return Publication.findOne(params);
     },
     sharePublication(publicationId, newFanId) {
-        return Publication.findByIdAndUpdate(publicationId, { $push: { usersShared: newFanId }, $inc: { seats: -1 } }, { new: true });
+        return Publication.findByIdAndUpdate(publicationId, { $push: { usersShared: newFanId } }, { new: true });
     },
     updateOnePublication(_id, author, publication, formData) {
         const options = {};
