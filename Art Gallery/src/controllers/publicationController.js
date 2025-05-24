@@ -76,5 +76,20 @@ publicationController.get("/:id/edit", isUser, isValidId, async (req, res) => {
         return res.render("publication/edit", { messages: parseErrorMessage(error) });
     }
 });
+publicationController.post("/:id/edit", isUser, isValidId, async (req, res) => {
+    const formData = req.body;
+
+    try {
+        const publication = await publicationService.getOnePublication({ _id: req.params.id, author: req.user?.id });
+
+        if (!publication) return res.redirect("/404");
+
+        await publicationService.updateOnePublication(req.params.id, req.user.id, publication, formData);
+
+        return res.redirect(`/publications/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("publication/edit", { ...formData, messages: parseErrorMessage(error) });
+    }
+});
 
 export default publicationController;
