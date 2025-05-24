@@ -34,6 +34,21 @@ publicationController.get("/:id/details", isValidId, async (req, res) => {
     }
 });
 
+// SHARE
+publicationController.get("/:id/share", isUser, isValidId, async (req, res) => {
+    try {
+        const publication = await publicationService.getOnePublication({ _id: req.params.id });
+
+        if (!publication || !req.user || publication.author.equals(req.user.id) || publication.usersShared.some(id => id.equals(req.user.id))) return res.redirect("/404");
+
+        await publicationService.sharePublication(req.params.id, req.user.id);
+
+        return res.redirect(`/publications/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("publication/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 // CREATE
 publicationController.get("/create", isUser, (req, res) => {
     return res.render("publication/create");

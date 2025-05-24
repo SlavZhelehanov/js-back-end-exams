@@ -11,5 +11,8 @@ export default {
     },
     getOnePublication(params) {
         return Publication.findOne(params);
+    },
+    sharePublication(publicationId, newFanId) {
+        return Publication.findByIdAndUpdate(publicationId, { $push: { usersShared: newFanId }, $inc: { seats: -1 } }, { new: true });
     }
 };
