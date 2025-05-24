@@ -3,7 +3,7 @@ import { Router } from "express";
 import parseErrorMessage from "../util/parseErrorMessage.js";
 import { isUser } from "../middlewares/authMiddleware.js";
 import publicationService from "../services/publicationService.js";
-// import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
+import { isValidId } from "../middlewares/verifyIsValidObjectId.js";
 
 const publicationController = Router();
 
@@ -19,8 +19,19 @@ publicationController.get("/", async (req, res) => {
 });
 
 // DETAILS
-publicationController.get("/:id/details", async (req, res) => {
-    return res.render("publication/details");
+publicationController.get("/:id/details", isValidId, async (req, res) => {
+    try {
+        const publication = await publicationService.getOnePublication({ _id: req.params.id }).populate("author").lean();
+
+        if (!publication) return res.redirect("/404");
+
+        const isAuthor = publication.author._id.equals(req.user?.id);
+        const isShared = req.user && !isAuthor && publication.usersShared.some(id => id.equals(req.user.id));
+
+        return res.render("publication/details", { ...publication, isAuthor, isShared });
+    } catch (error) {
+        return res.render("publication/details", { messages: parseErrorMessage(error) });
+    }
 });
 
 // CREATE

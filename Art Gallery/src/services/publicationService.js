@@ -9,4 +9,7 @@ export default {
 
         return Publication.create(publicationData);
     },
+    getOnePublication(params) {
+        return Publication.findOne(params);
+    }
 };
