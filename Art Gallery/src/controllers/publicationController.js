@@ -65,8 +65,16 @@ publicationController.post("/create", isUser, async (req, res) => {
 });
 
 // EDIT
-publicationController.get("/:id/edit", isUser, async (req, res) => {
-    return res.render("publication/edit");
+publicationController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const publication = await publicationService.getOnePublication({ _id: req.params.id, author: req.user?.id }).lean();
+
+        if (!publication) return res.redirect("/404");
+
+        return res.render("publication/edit", { ...publication });
+    } catch (error) {
+        return res.render("publication/edit", { messages: parseErrorMessage(error) });
+    }
 });
 
 export default publicationController;
