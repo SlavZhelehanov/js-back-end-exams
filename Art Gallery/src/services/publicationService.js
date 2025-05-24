@@ -22,5 +22,8 @@ export default {
 
         if (0 === Object.keys(options).length) return;
         return Publication.findOneAndUpdate({ _id, author }, options, { new: true, runValidators: true });
+    },
+    deleteOnePublication(_id, author) {
+        return Publication.findOneAndDelete({ _id, author });
     }
 };

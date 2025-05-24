@@ -92,4 +92,17 @@ publicationController.post("/:id/edit", isUser, isValidId, async (req, res) => {
     }
 });
 
+// DELETE
+publicationController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const query = await publicationService.deleteOnePublication(req.params.id, req.user.id);
+
+        if (!query) return res.redirect("/404");
+
+        return res.redirect("/publications");
+    } catch (error) {
+        return res.render("publication/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 export default publicationController;
