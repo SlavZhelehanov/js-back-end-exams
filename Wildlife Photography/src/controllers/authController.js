@@ -39,7 +39,7 @@ authController.post("/login", isGuest, async (req, res) => {
 
     try {
         const user = await authService.login({ email, password });
-        const token = await jwt.sign({ id: user.id, fullName: `${firstName} ${lastName}`, email }, SUPER_SECRET, { expiresIn: "2h" });
+        const token = await jwt.sign({ id: user.id, fullName: `${user.firstName} ${user.lastName}`, email }, SUPER_SECRET, { expiresIn: "2h" });
 
         res.cookie(COOKIE_NAME, token, { httpOnly: true });
         return res.redirect("/");
