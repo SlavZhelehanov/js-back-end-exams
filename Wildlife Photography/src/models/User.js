@@ -2,17 +2,27 @@ import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
 
 const userSchema = new Schema({
-    username: {
+    firstName: {
         type: String,
-        required: [true, "The username's field can't be empty"],
-        minLength: [4, "The username should be at least 4 characters long"]
+        required: [true, "The first name's field can't be empty"],
+        minLength: [3, "The first name should be at least 3 characters long"],
+        match: [/^[A-Za-z]+$/, "The first name should contain only English letters"]
     },
-    address: {
+    lastName: {
         type: String,
-        required: [true, "The address's field can't be empty"],
-        maxLength: [20, "The address should be a maximum of 20 characters long"]
+        required: [true, "The last name's field can't be empty"],
+        minLength: [5, "The last name should be at least 5 characters long"],
+        match: [/^[A-Za-z]+$/, "The last name should contain only English letters"]
     },
-    myPublications: [
+    email: {
+        type: String,
+        required: [true, "The email's field can't be empty"],
+        match: [
+            /^[A-Za-z]+@[A-Za-z]+\.[A-Za-z]+$/,
+            'The email should be in the following format: <name>@<domain>.<extension> (e.g., "petar@softuni.bg") and only Latin letters are allowed.'
+        ]
+    },
+    myPosts: [
         {
             type: Schema.Types.ObjectId,
             ref: "Publication"
@@ -26,7 +36,7 @@ const userSchema = new Schema({
 
 userSchema.pre("save", async function () {
     if (this.password.length === 0) throw ["The password's field can't be empty"];
-    if (this.password.length < 3) throw ["The password should be at least 3 characters long"];
+    if (this.password.length < 4) throw ["The password should be at least 4 characters long"];
 
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
