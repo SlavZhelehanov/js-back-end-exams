@@ -24,4 +24,9 @@ postController.get("/create", isUser, (req, res) => {
     return res.render("post/create");
 });
 
+// EDIT
+postController.get("/:id/edit", isUser, async (req, res) => {
+    return res.render("post/edit");
+});
+
 export default postController;
