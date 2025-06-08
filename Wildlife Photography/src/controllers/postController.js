@@ -14,4 +14,9 @@ postController.get("/", async (req, res) => {
     return res.render("post/all-posts");
 });
 
+// DETAILS
+postController.get("/:id/details", async (req, res) => {
+    return res.render("post/details");
+});
+
 export default postController;
