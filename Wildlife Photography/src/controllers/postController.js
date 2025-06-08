@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 // import parseErrorMessage from "../util/parseErrorMessage.js";
-// import { isUser } from "../middlewares/authMiddleware.js";
+import { isUser } from "../middlewares/authMiddleware.js";
 // import postService from "../services/postService.js";
 // import { getTypeOfpost } from "../util/getTypeOfpost.js";
 // import { validateQuery } from "../util/validateUrls.js";
@@ -17,6 +17,11 @@ postController.get("/", async (req, res) => {
 // DETAILS
 postController.get("/:id/details", async (req, res) => {
     return res.render("post/details");
+});
+
+// CREATE
+postController.get("/create", isUser, (req, res) => {
+    return res.render("post/create");
 });
 
 export default postController;
