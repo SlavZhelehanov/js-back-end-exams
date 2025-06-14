@@ -84,8 +84,16 @@ postController.get("/:id/voteDown", isUser, isValidId, async (req, res) => {
 });
 
 // EDIT
-postController.get("/:id/edit", isUser, async (req, res) => {
-    return res.render("post/edit");
+postController.get("/:id/edit", isUser, isValidId, async (req, res) => {
+    try {
+        const post = await postService.getOnePost({ _id: req.params.id, author: req.user?.id }).lean();
+
+        if (!post) return res.redirect("/404");
+
+        return res.render("post/edit", { ...post });
+    } catch (error) {
+        return res.render("post/edit", { messages: parseErrorMessage(error) });
+    }
 });
 
 export default postController;
