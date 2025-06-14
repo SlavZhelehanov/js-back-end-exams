@@ -8,5 +8,8 @@ export default {
     },
     getAllPosts() {
         return Post.find({}, "image keyword title description");
+    },
+    getOnePost(params) {
+        return Post.findOne(params);
     }
 };
