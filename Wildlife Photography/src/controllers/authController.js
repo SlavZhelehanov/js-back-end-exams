@@ -7,6 +7,7 @@ import jwt from "../lib/jsonwebtoken.js";
 import { COOKIE_NAME, SUPER_SECRET } from "../util/envConstants.js";
 import { isGuest, isUser } from "../middlewares/authMiddleware.js";
 import parseErrorMessage from "../util/parseErrorMessage.js";
+import postService from "../services/postService.js";
 
 
 // REGISTER
@@ -56,7 +57,14 @@ authController.get("/logout", isUser, (req, res) => {
 
 // MY POSTS
 authController.get("/my-posts", isUser, async (req, res) => {
-    return res.render("auth/my-posts");
+    try {
+        const posts = await postService.getAllPosts(req.user.id).populate("author", "firstName lastName").lean();
+        console.log(posts);
+        
+        return res.render("auth/my-posts", { posts });
+    } catch (error) {
+        return res.render("auth/my-posts", { messages: parseErrorMessage(error) });
+    }
 });
 
 export default authController;

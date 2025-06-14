@@ -6,8 +6,9 @@ export default {
 
        return  Post.create(postData);
     },
-    getAllPosts() {
-        return Post.find({}, "image keyword title description");
+    getAllPosts(author = null) {
+        const filter = author ? { author } : {};
+        return Post.find(filter, "image keyword title description rating");
     },
     getOnePost(params) {
         return Post.findOne(params);
