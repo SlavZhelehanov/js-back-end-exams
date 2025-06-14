@@ -25,5 +25,8 @@ export default {
 
         if (0 === Object.keys(options).length) return;
         return Post.findOneAndUpdate({ _id, author }, options, { new: true, runValidators: true });
+    },
+    deleteOnePost(_id, author) {
+        return Post.findOneAndDelete({ _id, author });
     }
 };

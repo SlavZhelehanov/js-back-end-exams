@@ -111,4 +111,16 @@ postController.post("/:id/edit", isUser, isValidId, async (req, res) => {
     }
 });
 
+// DELETE
+postController.get("/:id/delete", isUser, isValidId, async (req, res) => {
+    try {
+        const query = await postService.deleteOnePost(req.params.id, req.user.id);
+
+        if (!query) return res.redirect("/404");
+
+        return res.redirect("/posts");
+    } catch (error) {
+        return res.render("post/details", { messages: parseErrorMessage(error) });
+    }
+});
 export default postController;
