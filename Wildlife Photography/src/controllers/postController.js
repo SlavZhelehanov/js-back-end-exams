@@ -25,18 +25,14 @@ postController.get("/:id/details", isValidId, async (req, res) => {
     try {
         const post = await postService.getOnePost({ _id: req.params.id }).populate("author", "firstName lastName").populate("votes", "email").lean();
 
-        
-        console.log(post);
-        
-
         if (!post) return res.redirect("/404");
 
         const isAuthor = post.author._id.equals(req?.user?.id);
         const isVoted = req.user && !isAuthor && post.votes.some(buddie => buddie._id.equals(req.user.id));
 
-        post.votes = post.votes.join(", ");
+        // post.votes = post.votes.join(", ");
 
-        return res.render("post/details", { ...post, isAuthor, isVoted });
+        return res.render("post/details", { ...post, voters: post.votes.map(v => v = v.email).join(", "), isAuthor, isVoted });
     } catch (error) {
         return res.render("post/details", { messages: parseErrorMessage(error) });
     }
@@ -56,6 +52,22 @@ postController.post("/create", isUser, async (req, res) => {
         return res.render("post/create", { messages: parseErrorMessage(error), title, keyword, location, date, description, image });
     }
 });
+
+// VOTE UP
+postController.get("/:id/voteUp", isUser, isValidId, async (req, res) => {
+    try {
+        const post = await postService.getOnePost({ _id: req.params.id });
+
+        if (!post || !req.user || post.author.equals(req.user.id) || post.votes.some(id => id.equals(req.user.id))) return res.redirect("/404");
+
+        await postService.voteUp(req.params.id, req.user.id);
+
+        return res.redirect(`/posts/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("post/details", { messages: parseErrorMessage(error) });
+    }
+});
+
 
 // EDIT
 postController.get("/:id/edit", isUser, async (req, res) => {

@@ -11,5 +11,9 @@ export default {
     },
     getOnePost(params) {
         return Post.findOne(params);
+    },
+    voteUp(postId, newFanId) {
+        return Post.findByIdAndUpdate(postId, { $push: { votes: newFanId }, $inc: { rating: 1 } }, { new: true });
+    },
     }
 };
