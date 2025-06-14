@@ -11,7 +11,13 @@ const postController = Router();
 
 // ALL POSTS
 postController.get("/", async (req, res) => {
-    return res.render("post/all-posts");
+    try {
+        const posts = await postService.getAllPosts();
+
+        return res.render("post/all-posts", { posts });
+    } catch (error) {
+        return res.render("post/all-posts", { messages: parseErrorMessage(error) });
+    }
 });
 
 // DETAILS
