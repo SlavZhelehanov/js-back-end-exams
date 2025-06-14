@@ -15,5 +15,7 @@ export default {
     voteUp(postId, newFanId) {
         return Post.findByIdAndUpdate(postId, { $push: { votes: newFanId }, $inc: { rating: 1 } }, { new: true });
     },
+    voteDown(postId, newHaterId) {
+        return Post.findByIdAndUpdate(postId, { $push: { votes: newHaterId }, $inc: { rating: -1 } }, { new: true });
     }
 };

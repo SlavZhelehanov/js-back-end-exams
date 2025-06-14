@@ -68,6 +68,20 @@ postController.get("/:id/voteUp", isUser, isValidId, async (req, res) => {
     }
 });
 
+// VOTE DOWN
+postController.get("/:id/voteDown", isUser, isValidId, async (req, res) => {
+    try {
+        const post = await postService.getOnePost({ _id: req.params.id });
+
+        if (!post || !req.user || post.author.equals(req.user.id) || post.votes.some(id => id.equals(req.user.id))) return res.redirect("/404");
+
+        await postService.voteDown(req.params.id, req.user.id);
+
+        return res.redirect(`/posts/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("post/details", { messages: parseErrorMessage(error) });
+    }
+});
 
 // EDIT
 postController.get("/:id/edit", isUser, async (req, res) => {
