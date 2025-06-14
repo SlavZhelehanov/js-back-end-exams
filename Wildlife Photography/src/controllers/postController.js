@@ -95,5 +95,20 @@ postController.get("/:id/edit", isUser, isValidId, async (req, res) => {
         return res.render("post/edit", { messages: parseErrorMessage(error) });
     }
 });
+postController.post("/:id/edit", isUser, isValidId, async (req, res) => {
+    const formData = req.body;
+
+    try {
+        const post = await postService.getOnePost({ _id: req.params.id, author: req.user?.id });
+
+        if (!post) return res.redirect("/404");
+
+        await postService.updateOnePost(req.params.id, req.user.id, post, formData);
+
+        return res.redirect(`/posts/${req.params.id}/details`);
+    } catch (error) {
+        return res.render("post/edit", { ...formData, messages: parseErrorMessage(error) });
+    }
+});
 
 export default postController;
